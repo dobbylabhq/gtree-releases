@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>gtree 博客 —— 多开 Claude Code、git worktree 与 AI 协作</title>
+  <link>https://gtree.dobbylab.com/zh/blog/</link>
+  <description>怎么同时跑好几个 Claude Code、用 git worktree 隔离、不让两个 Agent 改到同一个文件 —— gtree 的功能讲解和实用做法。</description>
+  <language>zh-CN</language>
+  <atom:link href="https://gtree.dobbylab.com/zh/blog/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>为什么 gtree 不用 Electron:24 MB 安装包,0.2 秒开窗</title>
+    <link>https://gtree.dobbylab.com/zh/blog/gtree-native-app-not-electron/</link>
+    <guid isPermaLink="true">https://gtree.dobbylab.com/zh/blog/gtree-native-app-not-electron/</guid>
+    <pubDate>Sun, 25 Oct 2026 00:00:00 GMT</pubDate>
+    <description>gtree 用 Rust 写,界面由 Zed 编辑器的 GPU 渲染框架 GPUI 绘制,不带浏览器、不带 Node。这篇讲原生能换来什么,附实测数字和测法。</description>
+  </item>
+  <item>
+    <title>撤销 Claude Code 的改动:回到任意一轮,关掉的会话也行</title>
+    <link>https://gtree.dobbylab.com/zh/blog/undo-claude-code-changes/</link>
+    <guid isPermaLink="true">https://gtree.dobbylab.com/zh/blog/undo-claude-code-changes/</guid>
+    <pubDate>Thu, 22 Oct 2026 00:00:00 GMT</pubDate>
+    <description>AI agent 三轮之前把东西改坏了?对比三种撤销办法:git、Claude Code 的 /rewind,以及 gtree 的「AI 每一轮」—— 任意一轮的文件都能恢复,新会话还记得上次做到哪。</description>
+  </item>
+  <item>
+    <title>两个 AI agent 改同一个文件:怎么让它们先商量、不互相覆盖</title>
+    <link>https://gtree.dobbylab.com/zh/blog/ai-agents-editing-same-file/</link>
+    <guid isPermaLink="true">https://gtree.dobbylab.com/zh/blog/ai-agents-editing-same-file/</guid>
+    <pubDate>Mon, 19 Oct 2026 00:00:00 GMT</pubDate>
+    <description>多开 Claude Code 或 Codex 时,两个 AI agent 改到同一个文件怎么提前发现?手动用 git 检查的命令,以及 gtree 怎么让 agent 先互相打招呼、商量谁先改。</description>
+  </item>
+  <item>
+    <title>Claude Code 在等你授权?怎么第一时间知道</title>
+    <link>https://gtree.dobbylab.com/zh/blog/claude-code-waiting-for-approval-notifications/</link>
+    <guid isPermaLink="true">https://gtree.dobbylab.com/zh/blog/claude-code-waiting-for-approval-notifications/</guid>
+    <pubDate>Tue, 13 Oct 2026 00:00:00 GMT</pubDate>
+    <description>Claude Code 一要授权就停下来干等。教你用 Notification hook 发系统通知,以及多开时怎么一屏看清哪个 Claude 在跑、哪个在等你。</description>
+  </item>
+  <item>
+    <title>Claude Code 多开:用 git worktree 同时跑多个 AI</title>
+    <link>https://gtree.dobbylab.com/zh/blog/run-multiple-claude-code-git-worktree/</link>
+    <guid isPermaLink="true">https://gtree.dobbylab.com/zh/blog/run-multiple-claude-code-git-worktree/</guid>
+    <pubDate>Sat, 10 Oct 2026 00:00:00 GMT</pubDate>
+    <description>想同时开好几个 Claude Code 改同一个仓库?给每个会话一个 git worktree 就不会互相覆盖。这里有能直接用的命令、常见的坑,以及怎么省掉这些重复操作。</description>
+  </item>
+</channel>
+</rss>

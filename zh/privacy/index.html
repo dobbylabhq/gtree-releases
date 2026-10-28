@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="zh-CN" data-lang="zh" data-root="../../" data-path="privacy/" data-prerendered>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="../../favicon.png" />
+    <link rel="apple-touch-icon" href="../../logo.png" />
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0A0A0A" media="(prefers-color-scheme: dark)" />
+    <title>隐私政策 · gtree</title>
+    <meta name="description" content="gtree 在你的 Mac 本地运行,不会上传你的代码。只发送匿名使用统计(随机 ID、版本、CPU 架构、macOS 版本),随时可以关闭。" />
+    <link rel="canonical" href="https://gtree.dobbylab.com/zh/privacy/" />
+    <link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/privacy/" />
+    <link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/privacy/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/privacy/" />
+    <link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/privacy/" />
+    <link rel="alternate" type="application/rss+xml" title="博客 · gtree" href="https://gtree.dobbylab.com/zh/blog/feed.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="gtree" />
+    <meta property="og:title" content="隐私政策 · gtree" />
+    <meta property="og:description" content="gtree 在你的 Mac 本地运行,不会上传你的代码。只发送匿名使用统计(随机 ID、版本、CPU 架构、macOS 版本),随时可以关闭。" />
+    <meta property="og:url" content="https://gtree.dobbylab.com/zh/privacy/" />
+    <meta property="og:image" content="https://gtree.dobbylab.com/og-zh.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="ja_JP" />
+    <link rel="alternate" type="text/markdown" href="https://gtree.dobbylab.com/zh/privacy/index.md" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@dobbylabhq" />
+    <meta name="twitter:title" content="隐私政策 · gtree" />
+    <meta name="twitter:description" content="gtree 在你的 Mac 本地运行,不会上传你的代码。只发送匿名使用统计(随机 ID、版本、CPU 架构、macOS 版本),随时可以关闭。" />
+    <meta name="twitter:image" content="https://gtree.dobbylab.com/og-zh.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://dobbylab.com/#org","name":"DobbyLab","url":"https://dobbylab.com/","logo":"https://gtree.dobbylab.com/logo.png","email":"mailto:support@dobbylab.com","sameAs":["https://x.com/dobbylabhq","https://discord.gg/EnPJxrUEK5","https://github.com/dobbylabhq"]},{"@type":"WebPage","@id":"https://gtree.dobbylab.com/zh/privacy/#page","name":"隐私政策","description":"gtree 在你的 Mac 本地运行,不会上传你的代码。只发送匿名使用统计(随机 ID、版本、CPU 架构、macOS 版本),随时可以关闭。","inLanguage":"zh-CN","dateModified":"2026-10-16","publisher":{"@id":"https://dobbylab.com/#org"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://gtree.dobbylab.com/zh/"},{"@type":"ListItem","position":2,"name":"隐私政策","item":"https://gtree.dobbylab.com/zh/privacy/"}]}]}</script>
+    <script>
+      // 首次绘制前:① 套上用户选过的深浅色(没选过 = 跟随系统),避免闪屏;
+      // ② 语言:每种语言是独立的预渲染页面(/、/ja/、/zh/)。?lang=xx 视为显式选择 —— 记下并跳到对应页面;
+      //    子页面(/zh/blog/… 等)同理,跳到同一页面的另一种语言。
+      //    没有 ?lang 时,只有用户在页面上选过语言(localStorage 有值)且和当前页不同才跳。
+      //    没选过就不跳(不按浏览器语言猜);爬虫没有 localStorage,不会被重定向。
+      //    开发模式没有 data-prerendered,这段不跳(dev 用 ?lang= 由 main.jsx 读)。
+      try { var t = localStorage.getItem('gtree:theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t } catch (e) {}
+      try {
+        var d = document.documentElement, L = ['en', 'ja', 'zh'], cur = d.getAttribute('data-lang') || 'en'
+        if (d.hasAttribute('data-prerendered')) {
+          var q = new URLSearchParams(location.search).get('lang'), want = null
+          if (L.indexOf(q) >= 0) { want = q; try { localStorage.setItem('gtree:lang', q) } catch (e) {} }
+          else { var s = null; try { s = localStorage.getItem('gtree:lang') } catch (e) {} if (L.indexOf(s) >= 0) want = s }
+          // data-root:当前页到站点根的相对前缀;data-path:页面在语言根下的路径(博客文章等子页面换语言时留在同一页)
+          var root = d.getAttribute('data-root') || (cur === 'en' ? './' : '../'), sub = d.getAttribute('data-path') || ''
+          if (want && want !== cur) location.replace(new URL(root + (want === 'en' ? '' : want + '/') + sub + location.hash, location.href).href)
+          else if (L.indexOf(q) >= 0) history.replaceState(null, '', location.pathname + location.hash)
+        }
+      } catch (e) {}
+    </script>
+    <script>
+      // Cloudflare Web Analytics:按访客去重的访问量,不用 cookie。只在正式域名上加载 —— 本地开发、预览不上报。
+      // 官网在 GitHub Pages、DNS 不走代理,Cloudflare 没法自动注入,所以手动嵌(站点在控制台 Web Analytics 里)
+      if (location.hostname === 'gtree.dobbylab.com') {
+        var b = document.createElement('script')
+        b.defer = true
+        b.src = 'https://static.cloudflareinsights.com/beacon.min.js'
+        b.setAttribute('data-cf-beacon', '{"token": "db95a1c82680427f93b860b29b317f24"}')
+        document.head.appendChild(b)
+      }
+    </script>
+    <script type="module" crossorigin src="../../assets/index-DpQD1bb3.js"></script>
+    <link rel="stylesheet" crossorigin href="../../assets/index-B057dae2.css">
+  </head>
+  <body>
+    <div id="root"><header class="nav"><div class="wrap"><a class="brand" href="../../zh/" aria-label="gtree"><img src="../../logo.png" alt="" width="26" height="26"/>gtree</a><nav class="nav-links" aria-label="页面导航"><a href="../../zh/#features" class="">能力</a><a href="../../zh/#compare" class="">对比</a><a href="../../zh/#pricing" class="">定价</a><a href="../../zh/#faq" class="">FAQ</a></nav><div class="nav-right"><span class="social"><a class="theme-btn" href="https://discord.gg/EnPJxrUEK5" target="_blank" rel="noopener noreferrer" aria-label="Discord 群 —— 报 bug、提问题" title="Discord 群 —— 报 bug、提问题"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.007.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg></a><a class="theme-btn" href="https://x.com/dobbylabhq" target="_blank" rel="noopener noreferrer" aria-label="在 X 上关注 @dobbylabhq" title="在 X 上关注 @dobbylabhq"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg></a></span><div class="lang  "><button type="button" class="lang-btn " aria-haspopup="menu" aria-expanded="false" aria-label="语言" title="语言"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg><span>中文</span><svg viewBox="0 0 24 24" class="chev" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button><div class="lang-menu " role="menu" aria-label="语言"><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../privacy/" hrefLang="en" lang="en"><span>English</span></a><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../ja/privacy/" hrefLang="ja" lang="ja"><span>日本語</span></a><a role="menuitemradio" aria-checked="true" tabindex="-1" href="../../zh/privacy/" hrefLang="zh-CN" lang="zh-CN"><span>中文</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></a></div></div><button type="button" class="theme-btn" title="主题:跟随系统(点一下切到浅色)" aria-label="主题:跟随系统(点一下切到浅色)"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"></rect><path d="M8 21h8"></path><path d="M12 17v4"></path></svg></button><a class="btn" href="../../zh/#download">免费下载 Mac 版<svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M12 4v12"></path><path d="m7 11 5 5 5-5"></path><path d="M5 20h14"></path></svg></a><button class="nav-burger" type="button" aria-expanded="false" aria-label="菜单"><svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path></svg></button></div></div><div class="nav-sheet "><a href="../../zh/#features">能力</a><a href="../../zh/#compare">对比</a><a href="../../zh/#pricing">定价</a><a href="../../zh/#faq">FAQ</a><a href="../../zh/#download">免费下载 Mac 版</a><a class="nav-sheet-social" href="https://discord.gg/EnPJxrUEK5" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.007.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg>Discord 群 —— 报 bug、提问题</a><a class="nav-sheet-social" href="https://x.com/dobbylabhq" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg>在 X 上关注 @dobbylabhq</a></div></header><main id="top"><article class="doc wrap-doc"><nav class="doc-crumbs" aria-label="当前位置"><ol><li><a href="../../zh/">首页</a></li><li><span aria-current="page">隐私政策</span></li></ol></nav><header class="doc-head"><h1>隐私政策</h1><p class="doc-meta">最后更新<!-- --> <time dateTime="2026-10-16">2026年10月16日</time></p></header><div class="prose"><h2 id="概要">概要<a class="h-anchor" href="#概要" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>gtree 是一款完全在你的电脑上运行的桌面应用,没有 gtree 账号,也不需要登录。<strong>gtree 从不上传你的源代码</strong>,也不会把文件名、路径、仓库名、git 配置、Claude Code 或 Codex 的对话发给我们。应用发给 DobbyLab 的唯一内容,是附在常规「检查更新」请求上的匿名使用统计,点一下就能关掉。</p>
+<p>本政策适用于 gtree 应用、官网 <a href="https://gtree.dobbylab.com">https://gtree.dobbylab.com</a> 和下载服务器 <a href="https://gtree-dl.dobbylab.com。它们由" target="_blank" rel="noopener">https://gtree-dl.dobbylab.com。它们由</a> <strong>DobbyLab</strong> 运营 —— 这是个人开发者 tzyito 的名号,不是注册公司。</p>
+<h2 id="应用会发送什么">应用会发送什么<a class="h-anchor" href="#应用会发送什么" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>gtree 启动 10 秒后检查一次更新,之后每 6 小时检查一次(只有正式版会这样做)。检查更新就是从 <code>gtree-dl.dobbylab.com</code> 取一个很小的版本清单文件;如果连不上,会直接从 GitHub 取同一个文件,这时不带任何统计信息。</p>
+<p>匿名使用统计打开时,检查更新的请求会额外带上四项:</p>
+<ul>
+<li><strong>随机设备 ID</strong>:第一次使用时在你的 Mac 上随机生成的 32 位十六进制串,存在 <code>~/.gtree/device-id</code>。它不是从硬件、你的名字或 Apple ID 推出来的。</li>
+<li><strong>gtree 版本号</strong>(例如 <code>0.4.1</code>)</li>
+<li><strong>CPU 架构</strong>(<code>aarch64</code> 或 <code>x86_64</code>)</li>
+<li><strong>macOS 版本</strong>(例如 <code>15.3</code>)</li>
+</ul>
+<p>我们只用这些数字来统计每天有多少台设备在用、新增了多少台、各版本的分布。除此之外什么都不带。</p>
+<p><strong>先告知,后上报。</strong> 正式版第一次启动时,侧栏会出现一张「匿名使用统计」卡片。在这张卡片显示之前,不会上报任何统计。</p>
+<p>下载更新时同样经过 <code>gtree-dl.dobbylab.com</code>,这会让当天这个版本的下载计数加一,另按国家再计一份。</p>
+<h2 id="应用不会发送什么">应用不会发送什么<a class="h-anchor" href="#应用不会发送什么" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>gtree 从不向 DobbyLab 发送:</p>
+<ul>
+<li>源代码、diff 或文件内容</li>
+<li>文件名、文件夹路径、仓库名或远端地址</li>
+<li>git 配置、用户名、邮箱或提交历史</li>
+<li>你对 Claude 的提问、Claude 的回答或会话记录</li>
+<li>崩溃报告(gtree 没有崩溃上报功能)</li>
+</ul>
+<h2 id="怎么关闭统计">怎么关闭统计<a class="h-anchor" href="#怎么关闭统计" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>以下任一方式都可以。关掉后照常检查更新,只是不再带上面那四项。</p>
+<ul>
+<li>在首次启动的卡片上点 <strong>关闭统计</strong></li>
+<li>打开 <strong>设置</strong>(⌘,),关掉 <strong>匿名使用统计</strong></li>
+<li>新建一个空文件 <code>~/.gtree/telemetry-off</code></li>
+<li>用环境变量 <code>GTREE_NO_TELEMETRY=1</code> 启动 gtree</li>
+</ul>
+<p>如果想连检查更新也一起停掉(也就是完全不和我们的服务器通信),用 <code>GTREE_NO_UPDATE=1</code> 启动 gtree。这样就需要你手动更新了。</p>
+<h2 id="只存在你-mac-上的数据">只存在你 Mac 上的数据<a class="h-anchor" href="#只存在你-mac-上的数据" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>gtree 的工作数据都存在本地,不会发给 DobbyLab。</p>
+<ul>
+<li><strong><code>~/.gtree/</code></strong>:设置、设备 ID,以及一个本地数据库(<code>gtree.db</code>)。数据库里记着你的项目列表;如果你配合 Claude Code 使用,还会记下 Claude 每一轮的记录(你的提问、Claude 最后的总结、改动了哪些文件),方便后来的会话接着之前的进度干。</li>
+<li><strong>各仓库的 git 目录里</strong>:Claude 会话的状态文件(<code>.git/gtree/</code>)和 <code>refs/gtree/agent/</code> 下的检查点提交。gtree 不会把这些 ref 推送到任何地方。</li>
+<li><strong>Claude Code 集成</strong>:安装后,gtree 会在 <code>~/.claude/settings.json</code> 里加上自己的 hook 条目,放三个小脚本(默认在 <code>~/.claude/gtree/</code>),并给 Claude Code 注册一个本地 MCP 服务。hook 只把事件交给你 Mac 上的 gtree,不连接任何服务器。gtree 只增删自己的条目,绝不碰你自己或其他工具注册的条目。</li>
+<li><strong>Codex 集成</strong>:连上 Codex 时,gtree 会在 <code>~/.codex/hooks.json</code> 里加上自己的 hook 条目,在 <code>~/.codex/gtree/</code> 放三个小脚本,通过 Codex 自己的命令注册一个本地 MCP 服务,并在 <code>~/.codex/config.toml</code> 里把这几条 hook 标成已信任(省得你在 Codex 里逐条批准)。在 gtree 里打开 Codex 前,还会替你把这个仓库写成 Codex 的受信任项目(<code>config.toml</code> 里的 <code>[projects.&quot;&lt;仓库路径&gt;&quot;]</code>,已有这一项的不动)。和 Claude Code 一样,hook 只把事件交给你 Mac 上的 gtree,不连接任何服务器;gtree 只增删自己的条目,不碰你自己或其他工具的。「历史对话」搜索和回放 Codex 会话时,读的是本机 <code>~/.codex/sessions/</code> 下的记录。</li>
+<li><strong>通知</strong>通过 Mac 的通知中心显示,发之前会先征求你的同意。</li>
+</ul>
+<p>用 <strong>设置 → 删除 gtree</strong> 可以删掉 Claude Code 和 Codex 集成、各仓库里的 gtree 数据和 <code>~/.gtree/</code>;也可以选择保留数据。写进 Codex 的项目信任会保留,不需要的话可以在 <code>~/.codex/config.toml</code> 里删掉。</p>
+<h2 id="ai-功能-claude-code-与-codex">AI 功能、Claude Code 与 Codex<a class="h-anchor" href="#ai-功能-claude-code-与-codex" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>gtree 没有自带的 AI 模型,也不直接调用任何 AI 服务。它只是在你 Mac 的终端里启动<strong>你自己的</strong> <code>claude</code> 或 <code>codex</code> 命令行工具。你对 Claude 说的话、Claude 读到的代码,都由 Claude Code 按你和 Anthropic 之间的条款处理;用 Codex 时同理,由 Codex 按你和 OpenAI 之间的条款处理。这些都不经过 DobbyLab。</p>
+<p>为了让多个会话互相知道彼此,gtree 会把你 Mac 上的一部分信息交给你的 Claude Code 或 Codex 会话:别的会话正在做什么、改了哪些文件、之前几轮的提问和总结,有时也包括你其他项目的这些信息。这些内容会成为那段对话的一部分,和你对 AI 说的其他话一样,按你与 Anthropic(Claude Code)或 OpenAI(Codex)之间的条款处理。它们不会发给 DobbyLab。</p>
+<h2 id="git-操作">git 操作<a class="h-anchor" href="#git-操作" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>fetch、pull、push 等操作,gtree 调用的是你系统里的 <code>git</code>。仓库打开期间,gtree 会在后台大约每 3 分钟 <code>git fetch</code> 一次。这些连接用你自己的凭证,从你的 Mac 直接连到你配置的远端(GitHub、GitLab、自建服务器等),DobbyLab 看不到。</p>
+<h2 id="队友-默认关闭">队友(默认关闭)<a class="h-anchor" href="#队友-默认关闭" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>「队友」让你和队友互相看到还在写的代码。它<strong>默认关闭</strong>,按仓库单独开启:只有最近有别人提交过的仓库才会在侧栏出现「队友」一节,你点「开启」、读完说明再点「开始同步」才会生效。开关记在这个仓库的 git 配置里(<code>gtree.shareLive</code>)。</p>
+<p>开启后:</p>
+<ul>
+<li><strong>同步什么</strong>:这个仓库里还没交给团队的代码 —— 没提交的改动、新建的文件、还没推送的提交 —— 连同分支名,会推送到<strong>你们团队自己的 git 远端</strong>上一个不显示为分支的位置(<code>refs/gtree/</code>)。被 <code>.gitignore</code> 忽略的文件、1MB 以上的未跟踪文件和 AI 临时工作区不同步。gtree 会在你改完后自动推送、并定期拉取队友的。</li>
+<li><strong>谁看得到</strong>:对这个远端有读权限的人(以及托管它的平台,如 GitHub、GitLab)都能看到同步上去的代码内容。DobbyLab 不经手,也没有自己的服务器参与。</li>
+<li><strong>身份</strong>:为了防止有人冒充,gtree 会在你的 Mac 上为你的 git 邮箱生成一把钥匙(私钥存在 <code>~/.gtree/team-keys/</code>,只有你本人可读,不会离开这台电脑),并把公钥连同你的名字和邮箱推送到同一个远端。同步的内容都带你的签名。</li>
+<li><strong>留言</strong>:你的 AI 给队友的留言,同样经这个远端传递,<strong>端到端加密</strong>,只有收件人能解开;仓库里的其他人只能看到有一条发给谁的留言,看不到内容。新的留言要等收件人本人看过、确认后,才会交给他的 AI;对你的 AI 先前提问的回复,会直接回到发问的那个 AI。交给 AI 之后,按收件人与 AI 服务商之间的条款处理。</li>
+<li><strong>关闭</strong>:随时可以关。关闭后不再同步,已推送的内容会从远端撤回;队友已经拉取过的副本无法收回。</li>
+</ul>
+<h2 id="官网">官网<a class="h-anchor" href="#官网" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul>
+<li>官网是静态网站,托管在 <strong>GitHub Pages</strong>。</li>
+<li>用 <strong>Cloudflare Web Analytics</strong> 统计访问量,不使用 cookie,只在 <code>gtree.dobbylab.com</code> 上加载。</li>
+<li>页面打开时会向 <code>gtree-dl.dobbylab.com</code> 查询最新版本号,这会让当天的页面打开计数(按国家)加一。</li>
+<li>官网会在浏览器的 localStorage 里记三样东西:深浅色主题、语言选择、是否已加入早鸟名单。这些只留在你的浏览器里,不会发给我们。</li>
+<li>官网自己不设置任何 cookie。</li>
+</ul>
+<h2 id="下载服务器">下载服务器<a class="h-anchor" href="#下载服务器" aria-hidden="true" tabindex="-1">#</a></h2>
+<p><code>gtree-dl.dobbylab.com</code> 是一个 Cloudflare Worker,负责转发我们公开的 GitHub Release 里的安装包和安装脚本。每来一个请求,就按类型(下载、安装脚本、检查版本、页面打开)、版本和国家把<strong>当天的计数</strong>加一。</p>
+<ul>
+<li>国家是 Cloudflare 根据 IP 地址判断的两位代码。<strong>我们不保存 IP 地址。</strong></li>
+<li>计数按天汇总,不保留单次下载的记录。</li>
+<li>按设备存的数据只有两样,都来自上文的检查更新:「每台设备每天一行」(设备 ID、版本、CPU 类型、macOS 版本和国家),以及每台设备一行、记它第一次出现的日期,用来统计新增设备。</li>
+</ul>
+<h2 id="团队版早鸟名单">团队版早鸟名单<a class="h-anchor" href="#团队版早鸟名单" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>在官网加入团队版早鸟名单时,我们会保存:</p>
+<ul>
+<li>你的邮箱</li>
+<li>你选的团队规模(可不选)</li>
+<li>报名日期</li>
+<li>国家(Cloudflare 根据 IP 判断;IP 本身不保存)</li>
+</ul>
+<p>邮箱只用来通知你团队版上线,不会给第三方。没有任何网页或 API 能读取这份名单,只有运营者本人能导出。同一个邮箱重复报名不会多存一条。</p>
+<h2 id="第三方服务">第三方服务<a class="h-anchor" href="#第三方服务" aria-hidden="true" tabindex="-1">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>在 gtree 里做什么</th>
+<th>能接触到什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cloudflare</td>
+<td>运行下载服务器及其数据库(D1)、Web Analytics、DNS,转发发往 <code>support@dobbylab.com</code> 的邮件</td>
+<td>发往 <code>gtree-dl.dobbylab.com</code> 的请求、官网访问(Web Analytics)、早鸟名单、发给客服的邮件</td>
+</tr>
+<tr>
+<td>GitHub</td>
+<td>托管官网(GitHub Pages)和发布文件</td>
+<td>官网访问;直接回退到 GitHub 的请求</td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td>提供 Claude Code(由你自己安装和登录)</td>
+<td>你在 Claude Code 里分享的内容,按 Anthropic 的条款处理;DobbyLab 不参与</td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>提供 Codex(由你自己安装和登录)</td>
+<td>你在 Codex 里分享的内容,按 OpenAI 的条款处理;DobbyLab 不参与</td>
+</tr>
+</tbody></table>
+<p>这些服务各自按自己的隐私政策处理数据。</p>
+<h2 id="数据保存多久">数据保存多久<a class="h-anchor" href="#数据保存多久" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul>
+<li><strong>Cloudflare D1 里按天汇总的计数和按设备存的数据</strong>:目前没有自动删除,会一直保留到我们手动删除。</li>
+<li><strong>早鸟名单</strong>:保留到团队版上线、不再需要为止,或者你要求删除为止。</li>
+<li><strong>Cloudflare Web Analytics、Cloudflare 基础设施日志、GitHub Pages 日志</strong>:按 Cloudflare 和 GitHub 各自的政策保存。</li>
+<li><strong>你 Mac 上的数据</strong>:保留到你自己删除或卸载 gtree 为止。</li>
+</ul>
+<h2 id="你的选择和权利">你的选择和权利<a class="h-anchor" href="#你的选择和权利" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul>
+<li><strong>统计</strong>:随时可以按上面的方法关掉。</li>
+<li><strong>早鸟名单</strong>:用报名时的邮箱发信到 <a href="mailto:support@dobbylab.com">support@dobbylab.com</a>,我们会把它删掉。</li>
+<li><strong>设备 ID</strong>:这个 ID 是随机的、和你本人对不上,所以我们自己没法找出「你的」数据。如果想删除它的记录,把 <code>~/.gtree/device-id</code> 的内容发给我们即可。删掉这个文件后,gtree 下次会生成一个新的 ID。</li>
+</ul>
+<h2 id="儿童">儿童<a class="h-anchor" href="#儿童" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>gtree 是面向开发者的工具,不面向 13 岁以下的儿童,我们也不会有意收集儿童的个人信息。如果你认为有儿童加入了早鸟名单,请联系我们,我们会删除。</p>
+<h2 id="政策变更">政策变更<a class="h-anchor" href="#政策变更" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>如果 gtree 收集的内容有变化,我们会在变更发布之前更新本页和顶部的日期。应用里的数据收集,今后也同样坚持先告知、后上报。</p>
+<h2 id="联系我们">联系我们<a class="h-anchor" href="#联系我们" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul>
+<li>邮箱:<a href="mailto:support@dobbylab.com">support@dobbylab.com</a></li>
+<li>X:<a href="https://x.com/dobbylabhq" target="_blank" rel="noopener">@dobbylabhq</a></li>
+<li>官网:<a href="https://gtree.dobbylab.com">https://gtree.dobbylab.com</a></li>
+</ul>
+</div></article></main><footer class="site-footer"><div class="wrap"><div class="ft-top"><div class="ft-brand"><a class="brand" href="../../zh/" aria-label="gtree"><img src="../../logo.png" alt="" width="22" height="22"/>gtree</a><p>gtree 是 DobbyLab 出品的桌面应用,给同时开好几个 AI 编程助手的人用。本地运行,gtree 不上传你的代码。</p></div><nav class="ft-col" aria-label="产品"><h2>产品</h2><ul><li><a href="../../zh/#download">下载</a></li><li><a href="../../zh/#pricing">定价</a></li><li><a href="../../zh/release-notes/">版本说明</a></li></ul></nav><nav class="ft-col" aria-label="资源"><h2>资源</h2><ul><li><a href="../../zh/blog/">博客</a></li><li><a href="../../zh/#faq">常见问题</a></li><li><a href="../../llms.txt">llms.txt</a></li></ul></nav><nav class="ft-col" aria-label="关于"><h2>关于</h2><ul><li><a href="../../zh/privacy/">隐私政策</a></li><li><a href="mailto:support@dobbylab.com">support@dobbylab.com</a></li><li><a href="https://x.com/dobbylabhq" target="_blank" rel="noopener" class="x-link"><svg class="x-logo" viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>@<!-- -->dobbylabhq</a></li></ul></nav></div><div class="ft-bottom"><span>© 2026 <a href="https://dobbylab.com/">DobbyLab</a> · <!-- -->保留所有权利</span><div class="lang up ft-lang"><button type="button" class="lang-btn " aria-haspopup="menu" aria-expanded="false" aria-label="语言" title="语言"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg><span>中文</span><svg viewBox="0 0 24 24" class="chev" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button><div class="lang-menu " role="menu" aria-label="语言"><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../privacy/" hrefLang="en" lang="en"><span>English</span></a><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../ja/privacy/" hrefLang="ja" lang="ja"><span>日本語</span></a><a role="menuitemradio" aria-checked="true" tabindex="-1" href="../../zh/privacy/" hrefLang="zh-CN" lang="zh-CN"><span>中文</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></a></div></div></div></div></footer></div>
+    <script id="page-data" type="application/json">{"kind":"privacy","path":"privacy/","title":"隐私政策","updated":"2026-10-16","html":"\u003ch2 id=\"概要\">概要\u003ca class=\"h-anchor\" href=\"#概要\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>gtree 是一款完全在你的电脑上运行的桌面应用,没有 gtree 账号,也不需要登录。\u003cstrong>gtree 从不上传你的源代码\u003c/strong>,也不会把文件名、路径、仓库名、git 配置、Claude Code 或 Codex 的对话发给我们。应用发给 DobbyLab 的唯一内容,是附在常规「检查更新」请求上的匿名使用统计,点一下就能关掉。\u003c/p>\n\u003cp>本政策适用于 gtree 应用、官网 \u003ca href=\"https://gtree.dobbylab.com\">https://gtree.dobbylab.com\u003c/a> 和下载服务器 \u003ca href=\"https://gtree-dl.dobbylab.com。它们由\" target=\"_blank\" rel=\"noopener\">https://gtree-dl.dobbylab.com。它们由\u003c/a> \u003cstrong>DobbyLab\u003c/strong> 运营 —— 这是个人开发者 tzyito 的名号,不是注册公司。\u003c/p>\n\u003ch2 id=\"应用会发送什么\">应用会发送什么\u003ca class=\"h-anchor\" href=\"#应用会发送什么\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>gtree 启动 10 秒后检查一次更新,之后每 6 小时检查一次(只有正式版会这样做)。检查更新就是从 \u003ccode>gtree-dl.dobbylab.com\u003c/code> 取一个很小的版本清单文件;如果连不上,会直接从 GitHub 取同一个文件,这时不带任何统计信息。\u003c/p>\n\u003cp>匿名使用统计打开时,检查更新的请求会额外带上四项:\u003c/p>\n\u003cul>\n\u003cli>\u003cstrong>随机设备 ID\u003c/strong>:第一次使用时在你的 Mac 上随机生成的 32 位十六进制串,存在 \u003ccode>~/.gtree/device-id\u003c/code>。它不是从硬件、你的名字或 Apple ID 推出来的。\u003c/li>\n\u003cli>\u003cstrong>gtree 版本号\u003c/strong>(例如 \u003ccode>0.4.1\u003c/code>)\u003c/li>\n\u003cli>\u003cstrong>CPU 架构\u003c/strong>(\u003ccode>aarch64\u003c/code> 或 \u003ccode>x86_64\u003c/code>)\u003c/li>\n\u003cli>\u003cstrong>macOS 版本\u003c/strong>(例如 \u003ccode>15.3\u003c/code>)\u003c/li>\n\u003c/ul>\n\u003cp>我们只用这些数字来统计每天有多少台设备在用、新增了多少台、各版本的分布。除此之外什么都不带。\u003c/p>\n\u003cp>\u003cstrong>先告知,后上报。\u003c/strong> 正式版第一次启动时,侧栏会出现一张「匿名使用统计」卡片。在这张卡片显示之前,不会上报任何统计。\u003c/p>\n\u003cp>下载更新时同样经过 \u003ccode>gtree-dl.dobbylab.com\u003c/code>,这会让当天这个版本的下载计数加一,另按国家再计一份。\u003c/p>\n\u003ch2 id=\"应用不会发送什么\">应用不会发送什么\u003ca class=\"h-anchor\" href=\"#应用不会发送什么\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>gtree 从不向 DobbyLab 发送:\u003c/p>\n\u003cul>\n\u003cli>源代码、diff 或文件内容\u003c/li>\n\u003cli>文件名、文件夹路径、仓库名或远端地址\u003c/li>\n\u003cli>git 配置、用户名、邮箱或提交历史\u003c/li>\n\u003cli>你对 Claude 的提问、Claude 的回答或会话记录\u003c/li>\n\u003cli>崩溃报告(gtree 没有崩溃上报功能)\u003c/li>\n\u003c/ul>\n\u003ch2 id=\"怎么关闭统计\">怎么关闭统计\u003ca class=\"h-anchor\" href=\"#怎么关闭统计\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>以下任一方式都可以。关掉后照常检查更新,只是不再带上面那四项。\u003c/p>\n\u003cul>\n\u003cli>在首次启动的卡片上点 \u003cstrong>关闭统计\u003c/strong>\u003c/li>\n\u003cli>打开 \u003cstrong>设置\u003c/strong>(⌘,),关掉 \u003cstrong>匿名使用统计\u003c/strong>\u003c/li>\n\u003cli>新建一个空文件 \u003ccode>~/.gtree/telemetry-off\u003c/code>\u003c/li>\n\u003cli>用环境变量 \u003ccode>GTREE_NO_TELEMETRY=1\u003c/code> 启动 gtree\u003c/li>\n\u003c/ul>\n\u003cp>如果想连检查更新也一起停掉(也就是完全不和我们的服务器通信),用 \u003ccode>GTREE_NO_UPDATE=1\u003c/code> 启动 gtree。这样就需要你手动更新了。\u003c/p>\n\u003ch2 id=\"只存在你-mac-上的数据\">只存在你 Mac 上的数据\u003ca class=\"h-anchor\" href=\"#只存在你-mac-上的数据\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>gtree 的工作数据都存在本地,不会发给 DobbyLab。\u003c/p>\n\u003cul>\n\u003cli>\u003cstrong>\u003ccode>~/.gtree/\u003c/code>\u003c/strong>:设置、设备 ID,以及一个本地数据库(\u003ccode>gtree.db\u003c/code>)。数据库里记着你的项目列表;如果你配合 Claude Code 使用,还会记下 Claude 每一轮的记录(你的提问、Claude 最后的总结、改动了哪些文件),方便后来的会话接着之前的进度干。\u003c/li>\n\u003cli>\u003cstrong>各仓库的 git 目录里\u003c/strong>:Claude 会话的状态文件(\u003ccode>.git/gtree/\u003c/code>)和 \u003ccode>refs/gtree/agent/\u003c/code> 下的检查点提交。gtree 不会把这些 ref 推送到任何地方。\u003c/li>\n\u003cli>\u003cstrong>Claude Code 集成\u003c/strong>:安装后,gtree 会在 \u003ccode>~/.claude/settings.json\u003c/code> 里加上自己的 hook 条目,放三个小脚本(默认在 \u003ccode>~/.claude/gtree/\u003c/code>),并给 Claude Code 注册一个本地 MCP 服务。hook 只把事件交给你 Mac 上的 gtree,不连接任何服务器。gtree 只增删自己的条目,绝不碰你自己或其他工具注册的条目。\u003c/li>\n\u003cli>\u003cstrong>Codex 集成\u003c/strong>:连上 Codex 时,gtree 会在 \u003ccode>~/.codex/hooks.json\u003c/code> 里加上自己的 hook 条目,在 \u003ccode>~/.codex/gtree/\u003c/code> 放三个小脚本,通过 Codex 自己的命令注册一个本地 MCP 服务,并在 \u003ccode>~/.codex/config.toml\u003c/code> 里把这几条 hook 标成已信任(省得你在 Codex 里逐条批准)。在 gtree 里打开 Codex 前,还会替你把这个仓库写成 Codex 的受信任项目(\u003ccode>config.toml\u003c/code> 里的 \u003ccode>[projects.&quot;&lt;仓库路径&gt;&quot;]\u003c/code>,已有这一项的不动)。和 Claude Code 一样,hook 只把事件交给你 Mac 上的 gtree,不连接任何服务器;gtree 只增删自己的条目,不碰你自己或其他工具的。「历史对话」搜索和回放 Codex 会话时,读的是本机 \u003ccode>~/.codex/sessions/\u003c/code> 下的记录。\u003c/li>\n\u003cli>\u003cstrong>通知\u003c/strong>通过 Mac 的通知中心显示,发之前会先征求你的同意。\u003c/li>\n\u003c/ul>\n\u003cp>用 \u003cstrong>设置 → 删除 gtree\u003c/strong> 可以删掉 Claude Code 和 Codex 集成、各仓库里的 gtree 数据和 \u003ccode>~/.gtree/\u003c/code>;也可以选择保留数据。写进 Codex 的项目信任会保留,不需要的话可以在 \u003ccode>~/.codex/config.toml\u003c/code> 里删掉。\u003c/p>\n\u003ch2 id=\"ai-功能-claude-code-与-codex\">AI 功能、Claude Code 与 Codex\u003ca class=\"h-anchor\" href=\"#ai-功能-claude-code-与-codex\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>gtree 没有自带的 AI 模型,也不直接调用任何 AI 服务。它只是在你 Mac 的终端里启动\u003cstrong>你自己的\u003c/strong> \u003ccode>claude\u003c/code> 或 \u003ccode>codex\u003c/code> 命令行工具。你对 Claude 说的话、Claude 读到的代码,都由 Claude Code 按你和 Anthropic 之间的条款处理;用 Codex 时同理,由 Codex 按你和 OpenAI 之间的条款处理。这些都不经过 DobbyLab。\u003c/p>\n\u003cp>为了让多个会话互相知道彼此,gtree 会把你 Mac 上的一部分信息交给你的 Claude Code 或 Codex 会话:别的会话正在做什么、改了哪些文件、之前几轮的提问和总结,有时也包括你其他项目的这些信息。这些内容会成为那段对话的一部分,和你对 AI 说的其他话一样,按你与 Anthropic(Claude Code)或 OpenAI(Codex)之间的条款处理。它们不会发给 DobbyLab。\u003c/p>\n\u003ch2 id=\"git-操作\">git 操作\u003ca class=\"h-anchor\" href=\"#git-操作\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>fetch、pull、push 等操作,gtree 调用的是你系统里的 \u003ccode>git\u003c/code>。仓库打开期间,gtree 会在后台大约每 3 分钟 \u003ccode>git fetch\u003c/code> 一次。这些连接用你自己的凭证,从你的 Mac 直接连到你配置的远端(GitHub、GitLab、自建服务器等),DobbyLab 看不到。\u003c/p>\n\u003ch2 id=\"队友-默认关闭\">队友(默认关闭)\u003ca class=\"h-anchor\" href=\"#队友-默认关闭\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>「队友」让你和队友互相看到还在写的代码。它\u003cstrong>默认关闭\u003c/strong>,按仓库单独开启:只有最近有别人提交过的仓库才会在侧栏出现「队友」一节,你点「开启」、读完说明再点「开始同步」才会生效。开关记在这个仓库的 git 配置里(\u003ccode>gtree.shareLive\u003c/code>)。\u003c/p>\n\u003cp>开启后:\u003c/p>\n\u003cul>\n\u003cli>\u003cstrong>同步什么\u003c/strong>:这个仓库里还没交给团队的代码 —— 没提交的改动、新建的文件、还没推送的提交 —— 连同分支名,会推送到\u003cstrong>你们团队自己的 git 远端\u003c/strong>上一个不显示为分支的位置(\u003ccode>refs/gtree/\u003c/code>)。被 \u003ccode>.gitignore\u003c/code> 忽略的文件、1MB 以上的未跟踪文件和 AI 临时工作区不同步。gtree 会在你改完后自动推送、并定期拉取队友的。\u003c/li>\n\u003cli>\u003cstrong>谁看得到\u003c/strong>:对这个远端有读权限的人(以及托管它的平台,如 GitHub、GitLab)都能看到同步上去的代码内容。DobbyLab 不经手,也没有自己的服务器参与。\u003c/li>\n\u003cli>\u003cstrong>身份\u003c/strong>:为了防止有人冒充,gtree 会在你的 Mac 上为你的 git 邮箱生成一把钥匙(私钥存在 \u003ccode>~/.gtree/team-keys/\u003c/code>,只有你本人可读,不会离开这台电脑),并把公钥连同你的名字和邮箱推送到同一个远端。同步的内容都带你的签名。\u003c/li>\n\u003cli>\u003cstrong>留言\u003c/strong>:你的 AI 给队友的留言,同样经这个远端传递,\u003cstrong>端到端加密\u003c/strong>,只有收件人能解开;仓库里的其他人只能看到有一条发给谁的留言,看不到内容。新的留言要等收件人本人看过、确认后,才会交给他的 AI;对你的 AI 先前提问的回复,会直接回到发问的那个 AI。交给 AI 之后,按收件人与 AI 服务商之间的条款处理。\u003c/li>\n\u003cli>\u003cstrong>关闭\u003c/strong>:随时可以关。关闭后不再同步,已推送的内容会从远端撤回;队友已经拉取过的副本无法收回。\u003c/li>\n\u003c/ul>\n\u003ch2 id=\"官网\">官网\u003ca class=\"h-anchor\" href=\"#官网\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cul>\n\u003cli>官网是静态网站,托管在 \u003cstrong>GitHub Pages\u003c/strong>。\u003c/li>\n\u003cli>用 \u003cstrong>Cloudflare Web Analytics\u003c/strong> 统计访问量,不使用 cookie,只在 \u003ccode>gtree.dobbylab.com\u003c/code> 上加载。\u003c/li>\n\u003cli>页面打开时会向 \u003ccode>gtree-dl.dobbylab.com\u003c/code> 查询最新版本号,这会让当天的页面打开计数(按国家)加一。\u003c/li>\n\u003cli>官网会在浏览器的 localStorage 里记三样东西:深浅色主题、语言选择、是否已加入早鸟名单。这些只留在你的浏览器里,不会发给我们。\u003c/li>\n\u003cli>官网自己不设置任何 cookie。\u003c/li>\n\u003c/ul>\n\u003ch2 id=\"下载服务器\">下载服务器\u003ca class=\"h-anchor\" href=\"#下载服务器\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>\u003ccode>gtree-dl.dobbylab.com\u003c/code> 是一个 Cloudflare Worker,负责转发我们公开的 GitHub Release 里的安装包和安装脚本。每来一个请求,就按类型(下载、安装脚本、检查版本、页面打开)、版本和国家把\u003cstrong>当天的计数\u003c/strong>加一。\u003c/p>\n\u003cul>\n\u003cli>国家是 Cloudflare 根据 IP 地址判断的两位代码。\u003cstrong>我们不保存 IP 地址。\u003c/strong>\u003c/li>\n\u003cli>计数按天汇总,不保留单次下载的记录。\u003c/li>\n\u003cli>按设备存的数据只有两样,都来自上文的检查更新:「每台设备每天一行」(设备 ID、版本、CPU 类型、macOS 版本和国家),以及每台设备一行、记它第一次出现的日期,用来统计新增设备。\u003c/li>\n\u003c/ul>\n\u003ch2 id=\"团队版早鸟名单\">团队版早鸟名单\u003ca class=\"h-anchor\" href=\"#团队版早鸟名单\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>在官网加入团队版早鸟名单时,我们会保存:\u003c/p>\n\u003cul>\n\u003cli>你的邮箱\u003c/li>\n\u003cli>你选的团队规模(可不选)\u003c/li>\n\u003cli>报名日期\u003c/li>\n\u003cli>国家(Cloudflare 根据 IP 判断;IP 本身不保存)\u003c/li>\n\u003c/ul>\n\u003cp>邮箱只用来通知你团队版上线,不会给第三方。没有任何网页或 API 能读取这份名单,只有运营者本人能导出。同一个邮箱重复报名不会多存一条。\u003c/p>\n\u003ch2 id=\"第三方服务\">第三方服务\u003ca class=\"h-anchor\" href=\"#第三方服务\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003ctable>\n\u003cthead>\n\u003ctr>\n\u003cth>服务\u003c/th>\n\u003cth>在 gtree 里做什么\u003c/th>\n\u003cth>能接触到什么\u003c/th>\n\u003c/tr>\n\u003c/thead>\n\u003ctbody>\u003ctr>\n\u003ctd>Cloudflare\u003c/td>\n\u003ctd>运行下载服务器及其数据库(D1)、Web Analytics、DNS,转发发往 \u003ccode>support@dobbylab.com\u003c/code> 的邮件\u003c/td>\n\u003ctd>发往 \u003ccode>gtree-dl.dobbylab.com\u003c/code> 的请求、官网访问(Web Analytics)、早鸟名单、发给客服的邮件\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>GitHub\u003c/td>\n\u003ctd>托管官网(GitHub Pages)和发布文件\u003c/td>\n\u003ctd>官网访问;直接回退到 GitHub 的请求\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>Anthropic\u003c/td>\n\u003ctd>提供 Claude Code(由你自己安装和登录)\u003c/td>\n\u003ctd>你在 Claude Code 里分享的内容,按 Anthropic 的条款处理;DobbyLab 不参与\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>OpenAI\u003c/td>\n\u003ctd>提供 Codex(由你自己安装和登录)\u003c/td>\n\u003ctd>你在 Codex 里分享的内容,按 OpenAI 的条款处理;DobbyLab 不参与\u003c/td>\n\u003c/tr>\n\u003c/tbody>\u003c/table>\n\u003cp>这些服务各自按自己的隐私政策处理数据。\u003c/p>\n\u003ch2 id=\"数据保存多久\">数据保存多久\u003ca class=\"h-anchor\" href=\"#数据保存多久\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cul>\n\u003cli>\u003cstrong>Cloudflare D1 里按天汇总的计数和按设备存的数据\u003c/strong>:目前没有自动删除,会一直保留到我们手动删除。\u003c/li>\n\u003cli>\u003cstrong>早鸟名单\u003c/strong>:保留到团队版上线、不再需要为止,或者你要求删除为止。\u003c/li>\n\u003cli>\u003cstrong>Cloudflare Web Analytics、Cloudflare 基础设施日志、GitHub Pages 日志\u003c/strong>:按 Cloudflare 和 GitHub 各自的政策保存。\u003c/li>\n\u003cli>\u003cstrong>你 Mac 上的数据\u003c/strong>:保留到你自己删除或卸载 gtree 为止。\u003c/li>\n\u003c/ul>\n\u003ch2 id=\"你的选择和权利\">你的选择和权利\u003ca class=\"h-anchor\" href=\"#你的选择和权利\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cul>\n\u003cli>\u003cstrong>统计\u003c/strong>:随时可以按上面的方法关掉。\u003c/li>\n\u003cli>\u003cstrong>早鸟名单\u003c/strong>:用报名时的邮箱发信到 \u003ca href=\"mailto:support@dobbylab.com\">support@dobbylab.com\u003c/a>,我们会把它删掉。\u003c/li>\n\u003cli>\u003cstrong>设备 ID\u003c/strong>:这个 ID 是随机的、和你本人对不上,所以我们自己没法找出「你的」数据。如果想删除它的记录,把 \u003ccode>~/.gtree/device-id\u003c/code> 的内容发给我们即可。删掉这个文件后,gtree 下次会生成一个新的 ID。\u003c/li>\n\u003c/ul>\n\u003ch2 id=\"儿童\">儿童\u003ca class=\"h-anchor\" href=\"#儿童\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>gtree 是面向开发者的工具,不面向 13 岁以下的儿童,我们也不会有意收集儿童的个人信息。如果你认为有儿童加入了早鸟名单,请联系我们,我们会删除。\u003c/p>\n\u003ch2 id=\"政策变更\">政策变更\u003ca class=\"h-anchor\" href=\"#政策变更\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>如果 gtree 收集的内容有变化,我们会在变更发布之前更新本页和顶部的日期。应用里的数据收集,今后也同样坚持先告知、后上报。\u003c/p>\n\u003ch2 id=\"联系我们\">联系我们\u003ca class=\"h-anchor\" href=\"#联系我们\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cul>\n\u003cli>邮箱:\u003ca href=\"mailto:support@dobbylab.com\">support@dobbylab.com\u003c/a>\u003c/li>\n\u003cli>X:\u003ca href=\"https://x.com/dobbylabhq\" target=\"_blank\" rel=\"noopener\">@dobbylabhq\u003c/a>\u003c/li>\n\u003cli>官网:\u003ca href=\"https://gtree.dobbylab.com\">https://gtree.dobbylab.com\u003c/a>\u003c/li>\n\u003c/ul>\n"}</script>
+  </body>
+</html>

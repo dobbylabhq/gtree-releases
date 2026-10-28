@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="ja" data-lang="ja" data-root="../../../" data-path="blog/undo-claude-code-changes/" data-prerendered>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="../../../favicon.png" />
+    <link rel="apple-touch-icon" href="../../../logo.png" />
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0A0A0A" media="(prefers-color-scheme: dark)" />
+    <title>Claude Code の変更を元に戻す方法 — 閉じたセッションのターンも復元 · gtree</title>
+    <meta name="description" content="AI エージェントが 3 ターン前に何かを壊した? git、Claude Code の /rewind、そして gtree の「AI の各ターン」の 3 つの取り消し方を比較します。gtree ならどのターンのファイルも復元でき、新しいセッションは前回の続きを覚えています。" />
+    <link rel="canonical" href="https://gtree.dobbylab.com/ja/blog/undo-claude-code-changes/" />
+    <link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/undo-claude-code-changes/" />
+    <link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/undo-claude-code-changes/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/undo-claude-code-changes/" />
+    <link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/undo-claude-code-changes/" />
+    <link rel="alternate" type="application/rss+xml" title="ブログ · gtree" href="https://gtree.dobbylab.com/ja/blog/feed.xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="gtree" />
+    <meta property="og:title" content="Claude Code の変更を元に戻す方法 — 閉じたセッションのターンも復元" />
+    <meta property="og:description" content="AI エージェントが 3 ターン前に何かを壊した? git、Claude Code の /rewind、そして gtree の「AI の各ターン」の 3 つの取り消し方を比較します。gtree ならどのターンのファイルも復元でき、新しいセッションは前回の続きを覚えています。" />
+    <meta property="og:url" content="https://gtree.dobbylab.com/ja/blog/undo-claude-code-changes/" />
+    <meta property="og:image" content="https://gtree.dobbylab.com/og-ja.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="zh_CN" />
+    <meta property="article:published_time" content="2026-10-22" />
+    <link rel="alternate" type="text/markdown" href="https://gtree.dobbylab.com/ja/blog/undo-claude-code-changes/index.md" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@dobbylabhq" />
+    <meta name="twitter:title" content="Claude Code の変更を元に戻す方法 — 閉じたセッションのターンも復元" />
+    <meta name="twitter:description" content="AI エージェントが 3 ターン前に何かを壊した? git、Claude Code の /rewind、そして gtree の「AI の各ターン」の 3 つの取り消し方を比較します。gtree ならどのターンのファイルも復元でき、新しいセッションは前回の続きを覚えています。" />
+    <meta name="twitter:image" content="https://gtree.dobbylab.com/og-ja.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://dobbylab.com/#org","name":"DobbyLab","url":"https://dobbylab.com/","logo":"https://gtree.dobbylab.com/logo.png","email":"mailto:support@dobbylab.com","sameAs":["https://x.com/dobbylabhq","https://discord.gg/EnPJxrUEK5","https://github.com/dobbylabhq"]},{"@type":"BlogPosting","@id":"https://gtree.dobbylab.com/ja/blog/undo-claude-code-changes/#post","headline":"Claude Code の変更を元に戻す方法 — 閉じたセッションのターンも復元","description":"AI エージェントが 3 ターン前に何かを壊した? git、Claude Code の /rewind、そして gtree の「AI の各ターン」の 3 つの取り消し方を比較します。gtree ならどのターンのファイルも復元でき、新しいセッションは前回の続きを覚えています。","datePublished":"2026-10-22","dateModified":"2026-10-22","inLanguage":"ja","image":"https://gtree.dobbylab.com/og-ja.png","url":"https://gtree.dobbylab.com/ja/blog/undo-claude-code-changes/","mainEntityOfPage":"https://gtree.dobbylab.com/ja/blog/undo-claude-code-changes/","keywords":"claude-code, codex, undo, git","author":{"@id":"https://dobbylab.com/#org"},"publisher":{"@id":"https://dobbylab.com/#org"},"about":{"@id":"https://gtree.dobbylab.com/#app"},"isPartOf":{"@id":"https://gtree.dobbylab.com/ja/blog/#blog"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://gtree.dobbylab.com/ja/"},{"@type":"ListItem","position":2,"name":"ブログ","item":"https://gtree.dobbylab.com/ja/blog/"},{"@type":"ListItem","position":3,"name":"Claude Code の変更を元に戻す方法 — 閉じたセッションのターンも復元","item":"https://gtree.dobbylab.com/ja/blog/undo-claude-code-changes/"}]}]}</script>
+    <script>
+      // 首次绘制前:① 套上用户选过的深浅色(没选过 = 跟随系统),避免闪屏;
+      // ② 语言:每种语言是独立的预渲染页面(/、/ja/、/zh/)。?lang=xx 视为显式选择 —— 记下并跳到对应页面;
+      //    子页面(/zh/blog/… 等)同理,跳到同一页面的另一种语言。
+      //    没有 ?lang 时,只有用户在页面上选过语言(localStorage 有值)且和当前页不同才跳。
+      //    没选过就不跳(不按浏览器语言猜);爬虫没有 localStorage,不会被重定向。
+      //    开发模式没有 data-prerendered,这段不跳(dev 用 ?lang= 由 main.jsx 读)。
+      try { var t = localStorage.getItem('gtree:theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t } catch (e) {}
+      try {
+        var d = document.documentElement, L = ['en', 'ja', 'zh'], cur = d.getAttribute('data-lang') || 'en'
+        if (d.hasAttribute('data-prerendered')) {
+          var q = new URLSearchParams(location.search).get('lang'), want = null
+          if (L.indexOf(q) >= 0) { want = q; try { localStorage.setItem('gtree:lang', q) } catch (e) {} }
+          else { var s = null; try { s = localStorage.getItem('gtree:lang') } catch (e) {} if (L.indexOf(s) >= 0) want = s }
+          // data-root:当前页到站点根的相对前缀;data-path:页面在语言根下的路径(博客文章等子页面换语言时留在同一页)
+          var root = d.getAttribute('data-root') || (cur === 'en' ? './' : '../'), sub = d.getAttribute('data-path') || ''
+          if (want && want !== cur) location.replace(new URL(root + (want === 'en' ? '' : want + '/') + sub + location.hash, location.href).href)
+          else if (L.indexOf(q) >= 0) history.replaceState(null, '', location.pathname + location.hash)
+        }
+      } catch (e) {}
+    </script>
+    <script>
+      // Cloudflare Web Analytics:按访客去重的访问量,不用 cookie。只在正式域名上加载 —— 本地开发、预览不上报。
+      // 官网在 GitHub Pages、DNS 不走代理,Cloudflare 没法自动注入,所以手动嵌(站点在控制台 Web Analytics 里)
+      if (location.hostname === 'gtree.dobbylab.com') {
+        var b = document.createElement('script')
+        b.defer = true
+        b.src = 'https://static.cloudflareinsights.com/beacon.min.js'
+        b.setAttribute('data-cf-beacon', '{"token": "db95a1c82680427f93b860b29b317f24"}')
+        document.head.appendChild(b)
+      }
+    </script>
+    <script type="module" crossorigin src="../../../assets/index-DpQD1bb3.js"></script>
+    <link rel="stylesheet" crossorigin href="../../../assets/index-B057dae2.css">
+  </head>
+  <body>
+    <div id="root"><header class="nav"><div class="wrap"><a class="brand" href="../../../ja/" aria-label="gtree"><img src="../../../logo.png" alt="" width="26" height="26"/>gtree</a><nav class="nav-links" aria-label="ページ内ナビゲーション"><a href="../../../ja/#features" class="">機能</a><a href="../../../ja/#compare" class="">比較</a><a href="../../../ja/#pricing" class="">料金</a><a href="../../../ja/#faq" class="">FAQ</a></nav><div class="nav-right"><span class="social"><a class="theme-btn" href="https://discord.gg/EnPJxrUEK5" target="_blank" rel="noopener noreferrer" aria-label="Discord — バグ報告・質問はこちら" title="Discord — バグ報告・質問はこちら"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.007.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg></a><a class="theme-btn" href="https://x.com/dobbylabhq" target="_blank" rel="noopener noreferrer" aria-label="X で @dobbylabhq をフォロー" title="X で @dobbylabhq をフォロー"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg></a></span><div class="lang  "><button type="button" class="lang-btn " aria-haspopup="menu" aria-expanded="false" aria-label="言語" title="言語"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg><span>日本語</span><svg viewBox="0 0 24 24" class="chev" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button><div class="lang-menu " role="menu" aria-label="言語"><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../blog/undo-claude-code-changes/" hrefLang="en" lang="en"><span>English</span></a><a role="menuitemradio" aria-checked="true" tabindex="-1" href="../../../ja/blog/undo-claude-code-changes/" hrefLang="ja" lang="ja"><span>日本語</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></a><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../zh/blog/undo-claude-code-changes/" hrefLang="zh-CN" lang="zh-CN"><span>中文</span></a></div></div><button type="button" class="theme-btn" title="テーマ:システムに合わせる(クリックでライトに切り替え)" aria-label="テーマ:システムに合わせる(クリックでライトに切り替え)"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"></rect><path d="M8 21h8"></path><path d="M12 17v4"></path></svg></button><a class="btn" href="../../../ja/#download">Mac 版を無料ダウンロード<svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M12 4v12"></path><path d="m7 11 5 5 5-5"></path><path d="M5 20h14"></path></svg></a><button class="nav-burger" type="button" aria-expanded="false" aria-label="メニュー"><svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path></svg></button></div></div><div class="nav-sheet "><a href="../../../ja/#features">機能</a><a href="../../../ja/#compare">比較</a><a href="../../../ja/#pricing">料金</a><a href="../../../ja/#faq">FAQ</a><a href="../../../ja/#download">Mac 版を無料ダウンロード</a><a class="nav-sheet-social" href="https://discord.gg/EnPJxrUEK5" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.007.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg>Discord — バグ報告・質問はこちら</a><a class="nav-sheet-social" href="https://x.com/dobbylabhq" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg>X で @dobbylabhq をフォロー</a></div></header><main id="top"><article class="doc wrap-doc"><nav class="doc-crumbs" aria-label="現在の位置"><ol><li><a href="../../../ja/">ホーム</a></li><li><a href="../../../ja/blog/">ブログ</a></li><li><span aria-current="page">Claude Code の変更を元に戻す方法 — 閉じたセッションのターンも復元</span></li></ol></nav><header class="doc-head"><h1>Claude Code の変更を元に戻す方法 — 閉じたセッションのターンも復元</h1><p class="doc-meta"><time dateTime="2026-10-22">2026年10月22日</time> · DobbyLab<!-- --> · <span class="doc-tag">claude-code</span><span class="doc-tag">codex</span><span class="doc-tag">undo</span><span class="doc-tag">git</span></p></header><div class="prose"><p>Claude Code が加えた変更を元に戻す方法は 3 つあります。<strong>git</strong> は未コミットの編集を破棄できます(<code>git restore &lt;ファイル&gt;</code>)が、戻れるのは直前のコミットまでです。<strong>Claude Code 内蔵の巻き戻し</strong>(<code>/rewind</code>)は会話の途中の時点までコードを戻せますが、対象はファイル編集ツールで行った変更だけです。<strong>gtree</strong> はエージェントがターンを終えるたびに worktree のチェックポイントを保存するので、どのターンが何を変えたかを確認し、2 回のクリックでそのファイルを元に戻せます。どのセッションのターンでも、先週閉じたセッションのものでもかまいません。さらに新しいセッションは、前回どこまで進んだかを知った状態で始まります。</p>
+<!-- TODO 截图:0.3.14 主图(日文界面)—— 右面板「変更」(⌃⇧G)下半「AI の各ターン」列表(每轮两行:提问 + 时间;「3 ファイル · session.ts など」),中间是选中那一轮的详情(提问、回复 4 行 + すべて表示、diff),右上角「このターンに復元」。确认后可加 frontmatter image: -->
+
+<h2 id="ai-の変更を戻すのは-なぜ自分の変更より難しいのか">AI の変更を戻すのは、なぜ自分の変更より難しいのか<a class="h-anchor" href="#ai-の変更を戻すのは-なぜ自分の変更より難しいのか" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>自分でコードを書くとき、コミットはおおむね考えの流れに沿っています。AI のセッションはそうではありません。20 分の間にエージェントが 8 ターン進め、15 ファイルを触り、十数個のコマンドを実行する。それがすべて、あなたの 2 つのコミットの間で起きます。そして 6 ターン目でテストが壊れます。6 ターン目の変更だけを取り消して、1〜5 ターン目の成果は残したいところです。</p>
+<p>git だけではこれを表現できません。git から見れば、直前のコミットから今までの間には何も起きていないからです。</p>
+<h2 id="git-で-claude-code-の変更を元に戻すには">git で Claude Code の変更を元に戻すには?<a class="h-anchor" href="#git-で-claude-code-の変更を元に戻すには" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>AI が作業を始めてから一度もコミットしていなければ、すべて捨てるには git がいちばん手早い方法です。</p>
+<pre><code class="language-bash">git status                     # 何が変わったか
+git diff                       # どう変わったか
+
+git restore src/auth.ts        # 追跡中の 1 ファイルの変更を破棄
+git restore .                  # 追跡中の全ファイルの変更を破棄
+
+git clean -n                   # 削除される未追跡ファイルを事前に確認
+git clean -fd                  # 実際に削除(元に戻せないので注意)
+</code></pre>
+<p>AI にタスクを渡す前に逃げ道を用意するなら、先に退避しておきます。</p>
+<pre><code class="language-bash">git stash push -u -m &quot;AI に渡す前&quot;   # 新規ファイルも含めて手元の変更を退避
+git stash apply                       # あとで戻す(stash は残る)
+</code></pre>
+<p>あるいはプロンプトを送る前に毎回コミットする方法もあります。機能はしますが、履歴が「wip」コミットで埋まって後で squash が必要になりますし、忘れるのはたいてい一番困るときです。</p>
+<h2 id="claude-code-の-rewind-はどう動く">Claude Code の /rewind はどう動く?<a class="h-anchor" href="#claude-code-の-rewind-はどう動く" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>Claude Code は会話の途中で独自にチェックポイントを保存しています。<code>/rewind</code>(または入力欄が空の状態で Esc を 2 回)で以前のメッセージを選ぶと、会話・コード・その両方をその時点に戻せます。「直前の 2 ターンは方向が違った」というときには、最も手早い手段です。</p>
+<p>チェックポイントは会話と一緒に保存されるので、<code>claude --resume</code> で過去の会話に戻っても <code>/rewind</code> を使えます。セッションごとに直近 100 個のチェックポイントが保持され、既定では約 30 日で削除されます。</p>
+<p>Claude Code のドキュメントによると、次の変更は記録されません。</p>
+<ul>
+<li><strong>シェルコマンドで変更したファイル</strong>:<code>rm</code>、<code>mv</code>、<code>cp</code>、<code>sed</code> の一行、フォーマッタ、コード生成ツールなど</li>
+<li><strong>サブエージェントによる編集</strong>(通常は記録されません)</li>
+<li><strong>セッション外での変更</strong>:手作業の編集や、同時に動いている別のセッションによる変更</li>
+</ul>
+<p>手軽なローカルの取り消し手段であって、バージョン管理の代わりではない、という位置づけです。</p>
+<h2 id="gtree-ならどのターンにもロールバックできる">gtree ならどのターンにもロールバックできる<a class="h-anchor" href="#gtree-ならどのターンにもロールバックできる" aria-hidden="true" tabindex="-1">#</a></h2>
+<p><a href="https://gtree.dobbylab.com/ja/">gtree</a> は別のアプローチを取ります。個々の編集を追跡するのではなく、結果をスナップショットします。Claude Code と Codex に対応しています。</p>
+<h3 id="ターンが終わるたびにチェックポイント">ターンが終わるたびにチェックポイント<a class="h-anchor" href="#ターンが終わるたびにチェックポイント" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>Claude Code(または Codex)に接続すると、エージェントがターンを終えるたびに、gtree は worktree の状態を<strong>チェックポイント</strong>として保存します。編集操作ではなくファイルそのものを記録するので、シェルコマンドによる変更や新しく作られたファイルも含まれます。git で無視されている新規ファイルや 1 MB を超える新規ファイルは対象外です。</p>
+<p>チェックポイントはリポジトリ内の通常の git オブジェクトとして、専用の参照の下に保存されます。どのブランチにも属さず、保存の際にブランチ、ステージングエリア、ファイルに触れることはありません。保存期間は 30 日です。</p>
+<h3 id="各ターンの変更を確認-変更-ai-の各ターン">各ターンの変更を確認:「変更 › AI の各ターン」<a class="h-anchor" href="#各ターンの変更を確認-変更-ai-の各ターン" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>右パネルの**「変更」<strong>タブ(⌃⇧G)を開きます。上半分は未コミットのファイル、下半分が</strong>「AI の各ターン」**で、現在の worktree のすべてのターンが並びます。各ターンは 2 行で、1 行目にプロンプトと時刻、2 行目に変更したファイル数とファイル名(「3 ファイル · session.ts など」)が出ます。ほとんどのターンは質問と回答だけなので、標準ではファイルを変更したターンだけを表示します。「⋯」メニューから残りも表示できます。</p>
+<p>ターンをクリックすると、中央に詳細が開きます。</p>
+<ul>
+<li>あなたのプロンプトと、エージェントの最後の返答(最初の 4 行。「すべて表示」で全文)</li>
+<li>そのすぐ下に、そのターンで何が変わったかの差分</li>
+</ul>
+<p>セッションをまたいで使えます。昨日閉じた会話のターンも一覧に残っているので、「昨夜 AI は何を変えたのか」に答えられます。</p>
+<h3 id="このターンに復元-で何が起きるか">「このターンに復元」で何が起きるか<a class="h-anchor" href="#このターンに復元-で何が起きるか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>ターンを選んで**「このターンに復元」<strong>をクリックします。ボタンが赤くなり</strong>「もう一度クリックで復元」**に変わるので、うっかりクリックで何かを上書きすることはありません。</p>
+<!-- TODO 截图:0.3.14 日文界面「もう一度クリックで復元」确认态(en/zh 已有 ai-turn-restore-confirm-*-light.webp,缺日文版) -->
+
+<p>2 回目のクリックで、<strong>そのターンで変更されたファイル</strong>が、ターン終了時の状態にそのまま書き戻されます。その時点で存在しなかったファイルは削除されます。完了すると「このターンの 2 ファイルを終了時の状態に戻しました」のように表示されます。</p>
+<p>触れるのはそのターンで変更されたファイルだけです。作業フォルダ全体をその時点まで巻き戻すわけではなく、ブランチやステージングエリアもそのままです。</p>
+<h3 id="問題のターンを取り消すには">問題のターンを取り消すには<a class="h-anchor" href="#問題のターンを取り消すには" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>先ほどの例で、6 ターン目がテストを壊したとします。</p>
+<ol>
+<li><strong>まず 6 ターン目を選び</strong>、変更されたファイルを確認します。これが戻すべきファイルの一覧です。</li>
+<li><strong>それより前で、同じファイルを最後に変更したターンを探し</strong>(たとえば 4 ターン目)、選んで「このターンに復元」を 2 回クリックします。これらのファイルは 4 ターン目の終了時、つまり 6 ターン目が始まる前の状態に戻ります。</li>
+<li><strong>4 ターン目がほかに何を変更したかも確認します。</strong> 復元では 4 ターン目が触れたファイルがすべて書き戻されるため、そのうちのどれかを 5 ターン目でも変更していた場合、5 ターン目の変更も一緒に元に戻ります。クリックする前に確認してください。</li>
+<li><strong>それより前のどのターンも変更していないファイル</strong>は、まず <code>git diff &lt;ファイル&gt;</code> で確認し、6 ターン目の変更だけなら <code>git restore &lt;ファイル&gt;</code> で戻します。6 ターン目で新しく作られたファイルは削除します。</li>
+</ol>
+<p>それ以外はそのままです。ほかのファイル、ステージングエリア、ブランチ、コミットには触れません。復元自体は作業フォルダへの通常の変更なので、上の未コミットの変更で確認することも、そのままコミットすることもできます。</p>
+<h3 id="コミットグラフで-ai-のターンを見る">コミットグラフで AI のターンを見る<a class="h-anchor" href="#コミットグラフで-ai-のターンを見る" aria-hidden="true" tabindex="-1">#</a></h3>
+<p><strong>「コミット履歴」</strong>(⌘3)では、ツールバーの**「AI の各ターン」**スイッチをオンにすると、直近 3 日間のチェックポイントが現在のコミットから伸びる追加のコミットとして描かれ、そのターンのプロンプトがタイトルになります。クリックすれば、通常のコミットと同じように変更内容を確認できます。</p>
+<!-- TODO 截图:0.3.14「コミット履歴」(⌘3)图(日文界面),工具条「AI の各ターン」开关打开,最上面几行是 AI 检查点(旧图 history-graph-ai-turns 是 0.3.8 的 4 项导航,不能用) -->
+
+<h3 id="変更の背景にある会話を探す">変更の背景にある会話を探す<a class="h-anchor" href="#変更の背景にある会話を探す" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>取り消す前に、<em>なぜ</em>その変更がされたのかを知りたいこともあります。AI ページで <strong>⌘Y</strong> を押すと、上部に小さな「履歴」ウィンドウが降りてきて、リポジトリのすべての worktree の過去の会話が「今日」「昨日」「過去 7 日間」「それ以前」に分かれて並びます。入力するだけで全体を検索できます。Claude Code の会話なら <strong>↩</strong> でその worktree で会話を続け、<strong>⌘↩</strong> で一致箇所がハイライトされた読み取り専用のリプレイを開きます。続けたくなったら、そこにある「このセッションを続ける」から再開できます。(Codex のターンも「AI の各ターン」に並び、復元できます。ここから過去の会話を続けられるのは、現時点では Claude Code のセッションです。)</p>
+<!-- TODO 截图:0.3.14 ⌘Y 履歴小窗(日文界面)—— 输入框「会話履歴を検索…」里打了关键词,结果高亮,底部提示「↩ 続ける · ⌘↩ 見るだけ」 -->
+
+<h3 id="新しいセッションは前回の続きを覚えている">新しいセッションは前回の続きを覚えている?<a class="h-anchor" href="#新しいセッションは前回の続きを覚えている" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>取り消しで解決できるのは「元に戻したい」まで。もう半分の「前回どこまでやったっけ?」に応えるのがこの仕組みです。worktree で新しいセッションを始めると、エージェントはそこでの前のセッションの短い要約を自動的に受け取ります。いつ終わったか、最近のプロンプト、最後に何を言ったか、どのファイルに触れたか。だから一から手探りするのではなく、前回止まったところから続けられ、何をすでに試したかもわかっています。</p>
+<p>エージェントは自分でさらに遡ることもできます。gtree の <code>recall</code> ツールは、すべてのプロジェクトにわたって直近 30 日間のターンのプロンプトと結論を検索するので、「先週トークンの更新はどう直したんだっけ?」にもエージェント自身が答えを見つけられます。</p>
+<h2 id="git-rewind-gtree-どれを使う">git・/rewind・gtree、どれを使う?<a class="h-anchor" href="#git-rewind-gtree-どれを使う" aria-hidden="true" tabindex="-1">#</a></h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>git</th>
+<th>Claude Code <code>/rewind</code></th>
+<th>gtree</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>取り消しの単位</td>
+<td>コミット / ファイル全体</td>
+<td>会話内のメッセージ</td>
+<td>完了したターン</td>
+</tr>
+<tr>
+<td>シェルコマンドによる変更</td>
+<td>可(未コミット分)</td>
+<td>追跡しない</td>
+<td>可</td>
+</tr>
+<tr>
+<td>過去のセッション</td>
+<td>コミットしていれば</td>
+<td>その会話を再開すれば可(約 30 日)</td>
+<td>全セッション、30 日間、再開不要</td>
+</tr>
+<tr>
+<td>新しいセッションが前回の内容を知っている</td>
+<td>いいえ</td>
+<td>いいえ</td>
+<td>はい</td>
+</tr>
+<tr>
+<td>各ステップの変更内容</td>
+<td>コミット間のみ</td>
+<td>会話の中で</td>
+<td>ターンごとの diff</td>
+</tr>
+<tr>
+<td>ブランチ / ステージングへの影響</td>
+<td><code>reset</code> や <code>stash</code> はあり</td>
+<td>なし</td>
+<td>なし</td>
+</tr>
+</tbody></table>
+<p>3 つは組み合わせて使えます。会話中の「いや、そうじゃない」には <code>/rewind</code>、シェルコマンドによる変更や、後になって気づいてどのセッションの変更か思い出せないときは gtree、コミット済みのものは git、という使い分けです。</p>
+<h2 id="取り消しを楽にする習慣">取り消しを楽にする習慣<a class="h-anchor" href="#取り消しを楽にする習慣" aria-hidden="true" tabindex="-1">#</a></h2>
+<ol>
+<li><strong>タスクが動いたらコミットする。</strong> 毎ターンコミットする必要はありません。ターンごとのチェックポイントがあれば、保険としての「wip」コミットは不要です。</li>
+<li><strong>1 タスク 1 worktree。</strong> あるタスクのターンを戻しても、別タスクのファイルには影響しません。<a href="/ja/blog/run-multiple-claude-code-git-worktree/">git worktree で Claude Code を複数並列で動かす方法</a>も参考にしてください。</li>
+<li><strong>復元の前に diff を見る。</strong> そのターンの diff が、復元で書き換わるファイルの一覧です。</li>
+<li><strong>2 つのセッションに無自覚に 1 つのフォルダを共有させない。</strong> 一方のターンを戻すと、もう一方の作業に影響することがあります。<a href="/ja/blog/ai-agents-editing-same-file/">2 つの AI エージェントが同じファイルを編集するとき</a>もご覧ください。</li>
+</ol>
+<h2 id="よくある質問">よくある質問<a class="h-anchor" href="#よくある質問" aria-hidden="true" tabindex="-1">#</a></h2>
+<h3 id="セッションを閉じた後でも-claude-code-の変更を戻せますか">セッションを閉じた後でも Claude Code の変更を戻せますか?<a class="h-anchor" href="#セッションを閉じた後でも-claude-code-の変更を戻せますか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>戻せます。Claude Code 自体なら、<code>claude --resume</code> でその会話に戻れば <code>/rewind</code> が使えますが、対象はファイル編集ツールによる変更だけです。gtree なら、直近 30 日間のターンはどのセッションのものでも「AI の各ターン」に残り、シェルコマンドで変更したファイルも含まれます。git の場合は、変更がまだ未コミットか、変更前にコミットしていた場合に限られます。</p>
+<h3 id="復元したのに-問題のターンで変わったファイルが戻りません-なぜですか">復元したのに、問題のターンで変わったファイルが戻りません。なぜですか?<a class="h-anchor" href="#復元したのに-問題のターンで変わったファイルが戻りません-なぜですか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>復元で書き戻されるのは、<strong>そのターン</strong>で変更されたファイルです。5 ターン目を取り消すために 4 ターン目へ復元すると、書き戻されるのは 4 ターン目で変更されたファイルです。5 ターン目で変更されていても、4 ターン目が触れていないファイルはそのまま残ります。5 ターン目を開いて対象ファイルを確認し、git で戻すか、それらを変更していたもっと前のターンから復元してください。</p>
+<h3 id="復元するとコミットやブランチは変わりますか">復元するとコミットやブランチは変わりますか?<a class="h-anchor" href="#復元するとコミットやブランチは変わりますか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>変わりません。書き換えるのは作業フォルダ内のファイルだけで、コミット、ブランチ、ステージングエリアはそのままです。結果をコミットするかどうかはあなたが決めます。</p>
+<h3 id="codex-でも使えますか">Codex でも使えますか?<a class="h-anchor" href="#codex-でも使えますか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>使えます。Codex のセッションでもターンごとに同じようにチェックポイントが保存されるので、そのターンも「AI の各ターン」に並び、同じ方法で復元できます。⌘Y から過去の会話を続けられるのは、現時点では Claude Code のセッションです。</p>
+<h3 id="新しいセッションは前のセッションの内容を知っていますか">新しいセッションは前のセッションの内容を知っていますか?<a class="h-anchor" href="#新しいセッションは前のセッションの内容を知っていますか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>gtree を使えば知っています。worktree で新しいセッションを始めると、そこでの前のセッションの要約(最近のプロンプト、最後の返答、触れたファイル)を自動で受け取ります。それより前のことは、エージェントが <code>recall</code> ツールで検索できます。</p>
+<h3 id="チェックポイントには自分で編集した内容も含まれますか">チェックポイントには自分で編集した内容も含まれますか?<a class="h-anchor" href="#チェックポイントには自分で編集した内容も含まれますか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>含まれます。チェックポイントはターン終了時の作業フォルダ全体を記録するため、前のターン以降に手で編集した内容も入ります。</p>
+<p>gtree のローカル機能は無料で、登録も不要です。gtree があなたのコードをアップロードすることはありません。<a href="https://gtree.dobbylab.com/ja/">gtree をダウンロード</a>して Claude Code か Codex に接続すれば、次にターンが失敗しても、何が変わったかを確かめて、そのファイルを元に戻せます。</p>
+</div><aside class="doc-cta"><div><h2>gtree を試す</h2><p>AI コーディングエージェントのための無料デスクトップアプリです。ローカル機能はずっと無料、ログイン不要、gtree はコードをアップロードしません。</p></div><a class="btn primary" href="../../../ja/#download"><svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M12 4v12"></path><path d="m7 11 5 5 5-5"></path><path d="M5 20h14"></path></svg>Mac 版を無料ダウンロード</a></aside><nav class="doc-more" aria-label="ほかの記事"><h2>ほかの記事</h2><ul><li><a href="../../../ja/blog/gtree-native-app-not-electron/">gtree が Electron を使わない理由 — 24 MB、0.2 秒でウィンドウ表示</a> <span class="doc-meta"><time dateTime="2026-10-25">2026年10月25日</time></span></li><li><a href="../../../ja/blog/ai-agents-editing-same-file/">2 つの AI エージェントが同じファイルを編集するとき — 互いに上書きさせない方法</a> <span class="doc-meta"><time dateTime="2026-10-19">2026年10月19日</time></span></li><li><a href="../../../ja/blog/claude-code-waiting-for-approval-notifications/">Claude Code の承認待ちにすぐ気づく方法 — 通知と状態の見える化</a> <span class="doc-meta"><time dateTime="2026-10-13">2026年10月13日</time></span></li></ul></nav></article></main><footer class="site-footer"><div class="wrap"><div class="ft-top"><div class="ft-brand"><a class="brand" href="../../../ja/" aria-label="gtree"><img src="../../../logo.png" alt="" width="22" height="22"/>gtree</a><p>gtree は DobbyLab が開発する、複数の AI コーディングエージェントを同時に動かす人のためのデスクトップアプリです。ローカルで動き、gtree があなたのコードをアップロードすることはありません。</p></div><nav class="ft-col" aria-label="製品"><h2>製品</h2><ul><li><a href="../../../ja/#download">ダウンロード</a></li><li><a href="../../../ja/#pricing">料金</a></li><li><a href="../../../ja/release-notes/">リリースノート</a></li></ul></nav><nav class="ft-col" aria-label="リソース"><h2>リソース</h2><ul><li><a href="../../../ja/blog/">ブログ</a></li><li><a href="../../../ja/#faq">よくある質問</a></li><li><a href="../../../llms.txt">llms.txt</a></li></ul></nav><nav class="ft-col" aria-label="運営"><h2>運営</h2><ul><li><a href="../../../ja/privacy/">プライバシーポリシー</a></li><li><a href="mailto:support@dobbylab.com">support@dobbylab.com</a></li><li><a href="https://x.com/dobbylabhq" target="_blank" rel="noopener" class="x-link"><svg class="x-logo" viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>@<!-- -->dobbylabhq</a></li></ul></nav></div><div class="ft-bottom"><span>© 2026 <a href="https://dobbylab.com/">DobbyLab</a> · <!-- -->All rights reserved</span><div class="lang up ft-lang"><button type="button" class="lang-btn " aria-haspopup="menu" aria-expanded="false" aria-label="言語" title="言語"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg><span>日本語</span><svg viewBox="0 0 24 24" class="chev" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button><div class="lang-menu " role="menu" aria-label="言語"><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../blog/undo-claude-code-changes/" hrefLang="en" lang="en"><span>English</span></a><a role="menuitemradio" aria-checked="true" tabindex="-1" href="../../../ja/blog/undo-claude-code-changes/" hrefLang="ja" lang="ja"><span>日本語</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></a><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../zh/blog/undo-claude-code-changes/" hrefLang="zh-CN" lang="zh-CN"><span>中文</span></a></div></div></div></div></footer></div>
+    <script id="page-data" type="application/json">{"kind":"post","path":"blog/undo-claude-code-changes/","slug":"undo-claude-code-changes","title":"Claude Code の変更を元に戻す方法 — 閉じたセッションのターンも復元","date":"2026-10-22","tags":["claude-code","codex","undo","git"],"html":"\u003cp>Claude Code が加えた変更を元に戻す方法は 3 つあります。\u003cstrong>git\u003c/strong> は未コミットの編集を破棄できます(\u003ccode>git restore &lt;ファイル&gt;\u003c/code>)が、戻れるのは直前のコミットまでです。\u003cstrong>Claude Code 内蔵の巻き戻し\u003c/strong>(\u003ccode>/rewind\u003c/code>)は会話の途中の時点までコードを戻せますが、対象はファイル編集ツールで行った変更だけです。\u003cstrong>gtree\u003c/strong> はエージェントがターンを終えるたびに worktree のチェックポイントを保存するので、どのターンが何を変えたかを確認し、2 回のクリックでそのファイルを元に戻せます。どのセッションのターンでも、先週閉じたセッションのものでもかまいません。さらに新しいセッションは、前回どこまで進んだかを知った状態で始まります。\u003c/p>\n\u003c!-- TODO 截图:0.3.14 主图(日文界面)—— 右面板「変更」(⌃⇧G)下半「AI の各ターン」列表(每轮两行:提问 + 时间;「3 ファイル · session.ts など」),中间是选中那一轮的详情(提问、回复 4 行 + すべて表示、diff),右上角「このターンに復元」。确认后可加 frontmatter image: -->\n\n\u003ch2 id=\"ai-の変更を戻すのは-なぜ自分の変更より難しいのか\">AI の変更を戻すのは、なぜ自分の変更より難しいのか\u003ca class=\"h-anchor\" href=\"#ai-の変更を戻すのは-なぜ自分の変更より難しいのか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>自分でコードを書くとき、コミットはおおむね考えの流れに沿っています。AI のセッションはそうではありません。20 分の間にエージェントが 8 ターン進め、15 ファイルを触り、十数個のコマンドを実行する。それがすべて、あなたの 2 つのコミットの間で起きます。そして 6 ターン目でテストが壊れます。6 ターン目の変更だけを取り消して、1〜5 ターン目の成果は残したいところです。\u003c/p>\n\u003cp>git だけではこれを表現できません。git から見れば、直前のコミットから今までの間には何も起きていないからです。\u003c/p>\n\u003ch2 id=\"git-で-claude-code-の変更を元に戻すには\">git で Claude Code の変更を元に戻すには?\u003ca class=\"h-anchor\" href=\"#git-で-claude-code-の変更を元に戻すには\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>AI が作業を始めてから一度もコミットしていなければ、すべて捨てるには git がいちばん手早い方法です。\u003c/p>\n\u003cpre>\u003ccode class=\"language-bash\">git status                     # 何が変わったか\ngit diff                       # どう変わったか\n\ngit restore src/auth.ts        # 追跡中の 1 ファイルの変更を破棄\ngit restore .                  # 追跡中の全ファイルの変更を破棄\n\ngit clean -n                   # 削除される未追跡ファイルを事前に確認\ngit clean -fd                  # 実際に削除(元に戻せないので注意)\n\u003c/code>\u003c/pre>\n\u003cp>AI にタスクを渡す前に逃げ道を用意するなら、先に退避しておきます。\u003c/p>\n\u003cpre>\u003ccode class=\"language-bash\">git stash push -u -m &quot;AI に渡す前&quot;   # 新規ファイルも含めて手元の変更を退避\ngit stash apply                       # あとで戻す(stash は残る)\n\u003c/code>\u003c/pre>\n\u003cp>あるいはプロンプトを送る前に毎回コミットする方法もあります。機能はしますが、履歴が「wip」コミットで埋まって後で squash が必要になりますし、忘れるのはたいてい一番困るときです。\u003c/p>\n\u003ch2 id=\"claude-code-の-rewind-はどう動く\">Claude Code の /rewind はどう動く?\u003ca class=\"h-anchor\" href=\"#claude-code-の-rewind-はどう動く\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>Claude Code は会話の途中で独自にチェックポイントを保存しています。\u003ccode>/rewind\u003c/code>(または入力欄が空の状態で Esc を 2 回)で以前のメッセージを選ぶと、会話・コード・その両方をその時点に戻せます。「直前の 2 ターンは方向が違った」というときには、最も手早い手段です。\u003c/p>\n\u003cp>チェックポイントは会話と一緒に保存されるので、\u003ccode>claude --resume\u003c/code> で過去の会話に戻っても \u003ccode>/rewind\u003c/code> を使えます。セッションごとに直近 100 個のチェックポイントが保持され、既定では約 30 日で削除されます。\u003c/p>\n\u003cp>Claude Code のドキュメントによると、次の変更は記録されません。\u003c/p>\n\u003cul>\n\u003cli>\u003cstrong>シェルコマンドで変更したファイル\u003c/strong>:\u003ccode>rm\u003c/code>、\u003ccode>mv\u003c/code>、\u003ccode>cp\u003c/code>、\u003ccode>sed\u003c/code> の一行、フォーマッタ、コード生成ツールなど\u003c/li>\n\u003cli>\u003cstrong>サブエージェントによる編集\u003c/strong>(通常は記録されません)\u003c/li>\n\u003cli>\u003cstrong>セッション外での変更\u003c/strong>:手作業の編集や、同時に動いている別のセッションによる変更\u003c/li>\n\u003c/ul>\n\u003cp>手軽なローカルの取り消し手段であって、バージョン管理の代わりではない、という位置づけです。\u003c/p>\n\u003ch2 id=\"gtree-ならどのターンにもロールバックできる\">gtree ならどのターンにもロールバックできる\u003ca class=\"h-anchor\" href=\"#gtree-ならどのターンにもロールバックできる\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>\u003ca href=\"https://gtree.dobbylab.com/ja/\">gtree\u003c/a> は別のアプローチを取ります。個々の編集を追跡するのではなく、結果をスナップショットします。Claude Code と Codex に対応しています。\u003c/p>\n\u003ch3 id=\"ターンが終わるたびにチェックポイント\">ターンが終わるたびにチェックポイント\u003ca class=\"h-anchor\" href=\"#ターンが終わるたびにチェックポイント\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>Claude Code(または Codex)に接続すると、エージェントがターンを終えるたびに、gtree は worktree の状態を\u003cstrong>チェックポイント\u003c/strong>として保存します。編集操作ではなくファイルそのものを記録するので、シェルコマンドによる変更や新しく作られたファイルも含まれます。git で無視されている新規ファイルや 1 MB を超える新規ファイルは対象外です。\u003c/p>\n\u003cp>チェックポイントはリポジトリ内の通常の git オブジェクトとして、専用の参照の下に保存されます。どのブランチにも属さず、保存の際にブランチ、ステージングエリア、ファイルに触れることはありません。保存期間は 30 日です。\u003c/p>\n\u003ch3 id=\"各ターンの変更を確認-変更-ai-の各ターン\">各ターンの変更を確認:「変更 › AI の各ターン」\u003ca class=\"h-anchor\" href=\"#各ターンの変更を確認-変更-ai-の各ターン\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>右パネルの**「変更」\u003cstrong>タブ(⌃⇧G)を開きます。上半分は未コミットのファイル、下半分が\u003c/strong>「AI の各ターン」**で、現在の worktree のすべてのターンが並びます。各ターンは 2 行で、1 行目にプロンプトと時刻、2 行目に変更したファイル数とファイル名(「3 ファイル · session.ts など」)が出ます。ほとんどのターンは質問と回答だけなので、標準ではファイルを変更したターンだけを表示します。「⋯」メニューから残りも表示できます。\u003c/p>\n\u003cp>ターンをクリックすると、中央に詳細が開きます。\u003c/p>\n\u003cul>\n\u003cli>あなたのプロンプトと、エージェントの最後の返答(最初の 4 行。「すべて表示」で全文)\u003c/li>\n\u003cli>そのすぐ下に、そのターンで何が変わったかの差分\u003c/li>\n\u003c/ul>\n\u003cp>セッションをまたいで使えます。昨日閉じた会話のターンも一覧に残っているので、「昨夜 AI は何を変えたのか」に答えられます。\u003c/p>\n\u003ch3 id=\"このターンに復元-で何が起きるか\">「このターンに復元」で何が起きるか\u003ca class=\"h-anchor\" href=\"#このターンに復元-で何が起きるか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>ターンを選んで**「このターンに復元」\u003cstrong>をクリックします。ボタンが赤くなり\u003c/strong>「もう一度クリックで復元」**に変わるので、うっかりクリックで何かを上書きすることはありません。\u003c/p>\n\u003c!-- TODO 截图:0.3.14 日文界面「もう一度クリックで復元」确认态(en/zh 已有 ai-turn-restore-confirm-*-light.webp,缺日文版) -->\n\n\u003cp>2 回目のクリックで、\u003cstrong>そのターンで変更されたファイル\u003c/strong>が、ターン終了時の状態にそのまま書き戻されます。その時点で存在しなかったファイルは削除されます。完了すると「このターンの 2 ファイルを終了時の状態に戻しました」のように表示されます。\u003c/p>\n\u003cp>触れるのはそのターンで変更されたファイルだけです。作業フォルダ全体をその時点まで巻き戻すわけではなく、ブランチやステージングエリアもそのままです。\u003c/p>\n\u003ch3 id=\"問題のターンを取り消すには\">問題のターンを取り消すには\u003ca class=\"h-anchor\" href=\"#問題のターンを取り消すには\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>先ほどの例で、6 ターン目がテストを壊したとします。\u003c/p>\n\u003col>\n\u003cli>\u003cstrong>まず 6 ターン目を選び\u003c/strong>、変更されたファイルを確認します。これが戻すべきファイルの一覧です。\u003c/li>\n\u003cli>\u003cstrong>それより前で、同じファイルを最後に変更したターンを探し\u003c/strong>(たとえば 4 ターン目)、選んで「このターンに復元」を 2 回クリックします。これらのファイルは 4 ターン目の終了時、つまり 6 ターン目が始まる前の状態に戻ります。\u003c/li>\n\u003cli>\u003cstrong>4 ターン目がほかに何を変更したかも確認します。\u003c/strong> 復元では 4 ターン目が触れたファイルがすべて書き戻されるため、そのうちのどれかを 5 ターン目でも変更していた場合、5 ターン目の変更も一緒に元に戻ります。クリックする前に確認してください。\u003c/li>\n\u003cli>\u003cstrong>それより前のどのターンも変更していないファイル\u003c/strong>は、まず \u003ccode>git diff &lt;ファイル&gt;\u003c/code> で確認し、6 ターン目の変更だけなら \u003ccode>git restore &lt;ファイル&gt;\u003c/code> で戻します。6 ターン目で新しく作られたファイルは削除します。\u003c/li>\n\u003c/ol>\n\u003cp>それ以外はそのままです。ほかのファイル、ステージングエリア、ブランチ、コミットには触れません。復元自体は作業フォルダへの通常の変更なので、上の未コミットの変更で確認することも、そのままコミットすることもできます。\u003c/p>\n\u003ch3 id=\"コミットグラフで-ai-のターンを見る\">コミットグラフで AI のターンを見る\u003ca class=\"h-anchor\" href=\"#コミットグラフで-ai-のターンを見る\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>\u003cstrong>「コミット履歴」\u003c/strong>(⌘3)では、ツールバーの**「AI の各ターン」**スイッチをオンにすると、直近 3 日間のチェックポイントが現在のコミットから伸びる追加のコミットとして描かれ、そのターンのプロンプトがタイトルになります。クリックすれば、通常のコミットと同じように変更内容を確認できます。\u003c/p>\n\u003c!-- TODO 截图:0.3.14「コミット履歴」(⌘3)图(日文界面),工具条「AI の各ターン」开关打开,最上面几行是 AI 检查点(旧图 history-graph-ai-turns 是 0.3.8 的 4 项导航,不能用) -->\n\n\u003ch3 id=\"変更の背景にある会話を探す\">変更の背景にある会話を探す\u003ca class=\"h-anchor\" href=\"#変更の背景にある会話を探す\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>取り消す前に、\u003cem>なぜ\u003c/em>その変更がされたのかを知りたいこともあります。AI ページで \u003cstrong>⌘Y\u003c/strong> を押すと、上部に小さな「履歴」ウィンドウが降りてきて、リポジトリのすべての worktree の過去の会話が「今日」「昨日」「過去 7 日間」「それ以前」に分かれて並びます。入力するだけで全体を検索できます。Claude Code の会話なら \u003cstrong>↩\u003c/strong> でその worktree で会話を続け、\u003cstrong>⌘↩\u003c/strong> で一致箇所がハイライトされた読み取り専用のリプレイを開きます。続けたくなったら、そこにある「このセッションを続ける」から再開できます。(Codex のターンも「AI の各ターン」に並び、復元できます。ここから過去の会話を続けられるのは、現時点では Claude Code のセッションです。)\u003c/p>\n\u003c!-- TODO 截图:0.3.14 ⌘Y 履歴小窗(日文界面)—— 输入框「会話履歴を検索…」里打了关键词,结果高亮,底部提示「↩ 続ける · ⌘↩ 見るだけ」 -->\n\n\u003ch3 id=\"新しいセッションは前回の続きを覚えている\">新しいセッションは前回の続きを覚えている?\u003ca class=\"h-anchor\" href=\"#新しいセッションは前回の続きを覚えている\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>取り消しで解決できるのは「元に戻したい」まで。もう半分の「前回どこまでやったっけ?」に応えるのがこの仕組みです。worktree で新しいセッションを始めると、エージェントはそこでの前のセッションの短い要約を自動的に受け取ります。いつ終わったか、最近のプロンプト、最後に何を言ったか、どのファイルに触れたか。だから一から手探りするのではなく、前回止まったところから続けられ、何をすでに試したかもわかっています。\u003c/p>\n\u003cp>エージェントは自分でさらに遡ることもできます。gtree の \u003ccode>recall\u003c/code> ツールは、すべてのプロジェクトにわたって直近 30 日間のターンのプロンプトと結論を検索するので、「先週トークンの更新はどう直したんだっけ?」にもエージェント自身が答えを見つけられます。\u003c/p>\n\u003ch2 id=\"git-rewind-gtree-どれを使う\">git・/rewind・gtree、どれを使う?\u003ca class=\"h-anchor\" href=\"#git-rewind-gtree-どれを使う\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003ctable>\n\u003cthead>\n\u003ctr>\n\u003cth>\u003c/th>\n\u003cth>git\u003c/th>\n\u003cth>Claude Code \u003ccode>/rewind\u003c/code>\u003c/th>\n\u003cth>gtree\u003c/th>\n\u003c/tr>\n\u003c/thead>\n\u003ctbody>\u003ctr>\n\u003ctd>取り消しの単位\u003c/td>\n\u003ctd>コミット / ファイル全体\u003c/td>\n\u003ctd>会話内のメッセージ\u003c/td>\n\u003ctd>完了したターン\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>シェルコマンドによる変更\u003c/td>\n\u003ctd>可(未コミット分)\u003c/td>\n\u003ctd>追跡しない\u003c/td>\n\u003ctd>可\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>過去のセッション\u003c/td>\n\u003ctd>コミットしていれば\u003c/td>\n\u003ctd>その会話を再開すれば可(約 30 日)\u003c/td>\n\u003ctd>全セッション、30 日間、再開不要\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>新しいセッションが前回の内容を知っている\u003c/td>\n\u003ctd>いいえ\u003c/td>\n\u003ctd>いいえ\u003c/td>\n\u003ctd>はい\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>各ステップの変更内容\u003c/td>\n\u003ctd>コミット間のみ\u003c/td>\n\u003ctd>会話の中で\u003c/td>\n\u003ctd>ターンごとの diff\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>ブランチ / ステージングへの影響\u003c/td>\n\u003ctd>\u003ccode>reset\u003c/code> や \u003ccode>stash\u003c/code> はあり\u003c/td>\n\u003ctd>なし\u003c/td>\n\u003ctd>なし\u003c/td>\n\u003c/tr>\n\u003c/tbody>\u003c/table>\n\u003cp>3 つは組み合わせて使えます。会話中の「いや、そうじゃない」には \u003ccode>/rewind\u003c/code>、シェルコマンドによる変更や、後になって気づいてどのセッションの変更か思い出せないときは gtree、コミット済みのものは git、という使い分けです。\u003c/p>\n\u003ch2 id=\"取り消しを楽にする習慣\">取り消しを楽にする習慣\u003ca class=\"h-anchor\" href=\"#取り消しを楽にする習慣\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003col>\n\u003cli>\u003cstrong>タスクが動いたらコミットする。\u003c/strong> 毎ターンコミットする必要はありません。ターンごとのチェックポイントがあれば、保険としての「wip」コミットは不要です。\u003c/li>\n\u003cli>\u003cstrong>1 タスク 1 worktree。\u003c/strong> あるタスクのターンを戻しても、別タスクのファイルには影響しません。\u003ca href=\"/ja/blog/run-multiple-claude-code-git-worktree/\">git worktree で Claude Code を複数並列で動かす方法\u003c/a>も参考にしてください。\u003c/li>\n\u003cli>\u003cstrong>復元の前に diff を見る。\u003c/strong> そのターンの diff が、復元で書き換わるファイルの一覧です。\u003c/li>\n\u003cli>\u003cstrong>2 つのセッションに無自覚に 1 つのフォルダを共有させない。\u003c/strong> 一方のターンを戻すと、もう一方の作業に影響することがあります。\u003ca href=\"/ja/blog/ai-agents-editing-same-file/\">2 つの AI エージェントが同じファイルを編集するとき\u003c/a>もご覧ください。\u003c/li>\n\u003c/ol>\n\u003ch2 id=\"よくある質問\">よくある質問\u003ca class=\"h-anchor\" href=\"#よくある質問\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003ch3 id=\"セッションを閉じた後でも-claude-code-の変更を戻せますか\">セッションを閉じた後でも Claude Code の変更を戻せますか?\u003ca class=\"h-anchor\" href=\"#セッションを閉じた後でも-claude-code-の変更を戻せますか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>戻せます。Claude Code 自体なら、\u003ccode>claude --resume\u003c/code> でその会話に戻れば \u003ccode>/rewind\u003c/code> が使えますが、対象はファイル編集ツールによる変更だけです。gtree なら、直近 30 日間のターンはどのセッションのものでも「AI の各ターン」に残り、シェルコマンドで変更したファイルも含まれます。git の場合は、変更がまだ未コミットか、変更前にコミットしていた場合に限られます。\u003c/p>\n\u003ch3 id=\"復元したのに-問題のターンで変わったファイルが戻りません-なぜですか\">復元したのに、問題のターンで変わったファイルが戻りません。なぜですか?\u003ca class=\"h-anchor\" href=\"#復元したのに-問題のターンで変わったファイルが戻りません-なぜですか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>復元で書き戻されるのは、\u003cstrong>そのターン\u003c/strong>で変更されたファイルです。5 ターン目を取り消すために 4 ターン目へ復元すると、書き戻されるのは 4 ターン目で変更されたファイルです。5 ターン目で変更されていても、4 ターン目が触れていないファイルはそのまま残ります。5 ターン目を開いて対象ファイルを確認し、git で戻すか、それらを変更していたもっと前のターンから復元してください。\u003c/p>\n\u003ch3 id=\"復元するとコミットやブランチは変わりますか\">復元するとコミットやブランチは変わりますか?\u003ca class=\"h-anchor\" href=\"#復元するとコミットやブランチは変わりますか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>変わりません。書き換えるのは作業フォルダ内のファイルだけで、コミット、ブランチ、ステージングエリアはそのままです。結果をコミットするかどうかはあなたが決めます。\u003c/p>\n\u003ch3 id=\"codex-でも使えますか\">Codex でも使えますか?\u003ca class=\"h-anchor\" href=\"#codex-でも使えますか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>使えます。Codex のセッションでもターンごとに同じようにチェックポイントが保存されるので、そのターンも「AI の各ターン」に並び、同じ方法で復元できます。⌘Y から過去の会話を続けられるのは、現時点では Claude Code のセッションです。\u003c/p>\n\u003ch3 id=\"新しいセッションは前のセッションの内容を知っていますか\">新しいセッションは前のセッションの内容を知っていますか?\u003ca class=\"h-anchor\" href=\"#新しいセッションは前のセッションの内容を知っていますか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>gtree を使えば知っています。worktree で新しいセッションを始めると、そこでの前のセッションの要約(最近のプロンプト、最後の返答、触れたファイル)を自動で受け取ります。それより前のことは、エージェントが \u003ccode>recall\u003c/code> ツールで検索できます。\u003c/p>\n\u003ch3 id=\"チェックポイントには自分で編集した内容も含まれますか\">チェックポイントには自分で編集した内容も含まれますか?\u003ca class=\"h-anchor\" href=\"#チェックポイントには自分で編集した内容も含まれますか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>含まれます。チェックポイントはターン終了時の作業フォルダ全体を記録するため、前のターン以降に手で編集した内容も入ります。\u003c/p>\n\u003cp>gtree のローカル機能は無料で、登録も不要です。gtree があなたのコードをアップロードすることはありません。\u003ca href=\"https://gtree.dobbylab.com/ja/\">gtree をダウンロード\u003c/a>して Claude Code か Codex に接続すれば、次にターンが失敗しても、何が変わったかを確かめて、そのファイルを元に戻せます。\u003c/p>\n","more":[{"slug":"gtree-native-app-not-electron","title":"gtree が Electron を使わない理由 — 24 MB、0.2 秒でウィンドウ表示","date":"2026-10-25"},{"slug":"ai-agents-editing-same-file","title":"2 つの AI エージェントが同じファイルを編集するとき — 互いに上書きさせない方法","date":"2026-10-19"},{"slug":"claude-code-waiting-for-approval-notifications","title":"Claude Code の承認待ちにすぐ気づく方法 — 通知と状態の見える化","date":"2026-10-13"}]}</script>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+# gtree
+
+> A native desktop app for running several AI coding agents (Claude Code, Codex). Agents working in the same worktree see each other and sort out collisions themselves, and overlaps across worktrees are flagged; any turn can be restored and new sessions remember the last one; one inbox for every project.
+
+gtree is a native desktop app for developers who run several AI coding agents in parallel, each in its own git worktree or sharing one. It works with Claude Code and Codex (Claude Code was supported first). Agents in the same worktree are warned when they edit a file the other just changed, and work out who goes first by leaving each other messages through gtree; overlaps across worktrees are flagged in the sidebar. You get pulled in only when one needs you. It is native (Rust + GPUI, GPU-rendered), not Electron or a web view: 24 MB download, the window opens in about 0.2 s, about 100 MB of memory when idle (measured on an Apple M4). Local features are free forever and need no sign-up; gtree never uploads your code. A paid Team plan is in development; its relay server only forwards sync messages and does not store your data. Currently available for macOS (Apple Silicon); Intel Mac / Windows / Linux planned.
+
+## Docs
+
+- [Full product description (en)](https://gtree.dobbylab.com/llms-full.txt): what gtree does, pricing, privacy, FAQ
+- [Full product description (ja)](https://gtree.dobbylab.com/ja/llms-full.txt): what gtree does, pricing, privacy, FAQ
+- [Full product description (zh-CN)](https://gtree.dobbylab.com/zh/llms-full.txt): what gtree does, pricing, privacy, FAQ
+
+## Pages
+
+- [Website (en)](https://gtree.dobbylab.com/)
+- [Website (ja)](https://gtree.dobbylab.com/ja/)
+- [Website (zh-CN)](https://gtree.dobbylab.com/zh/)
+- [Release notes](https://gtree.dobbylab.com/release-notes/index.md): what changed in each version
+- [Privacy policy](https://gtree.dobbylab.com/privacy/index.md): what gtree collects and what it never does
+
+## Blog
+
+- [Why gtree Isn't Electron: 24 MB, Window in 0.2 Seconds](https://gtree.dobbylab.com/blog/gtree-native-app-not-electron/index.md): A native Rust + GPUI app with no bundled browser or Node: 24 MB download, window in about 0.2 s, ~100 MB idle memory. Measured numbers and how we got them.
+- [How to Undo Claude Code Changes, Even After the Session Ends](https://gtree.dobbylab.com/blog/undo-claude-code-changes/index.md): Undo AI coding changes three ways: git, Claude Code's /rewind, and gtree's per-turn checkpoints, which restore any turn's files even after the session is closed.
+- [Two AI Agents, One File: Stop Them Overwriting Each Other](https://gtree.dobbylab.com/blog/ai-agents-editing-same-file/index.md): Two AI agents editing the same file? Spot overlaps with plain git, or let the agents message each other and agree who goes first. Works with Claude Code and Codex.
+- [How to Know When Claude Code Is Waiting for Your Approval](https://gtree.dobbylab.com/blog/claude-code-waiting-for-approval-notifications/index.md): Claude Code stops whenever it needs permission. Get notified with a Notification hook, and see which of your sessions is waiting on one screen.
+- [How to Run Multiple Claude Code Sessions with Git Worktree](https://gtree.dobbylab.com/blog/run-multiple-claude-code-git-worktree/index.md): Give each Claude Code session its own git worktree so parallel AIs never share a folder. The exact commands, the gotchas, and how to skip the busywork.
+
+## Optional
+
+- Install: `curl -fsSL https://gtree.dobbylab.com/install.sh | bash`
+- Contact: support@dobbylab.com · X: https://x.com/dobbylabhq

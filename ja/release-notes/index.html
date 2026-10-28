@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="ja" data-lang="ja" data-root="../../" data-path="release-notes/" data-prerendered>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="../../favicon.png" />
+    <link rel="apple-touch-icon" href="../../logo.png" />
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0A0A0A" media="(prefers-color-scheme: dark)" />
+    <title>gtree リリースノート — 各バージョンの変更点</title>
+    <meta name="description" content="gtree の各バージョンで追加された機能、改善、修正の一覧です。新しいバージョンはアプリが知らせ、ワンクリックで更新できます。" />
+    <link rel="canonical" href="https://gtree.dobbylab.com/ja/release-notes/" />
+    <link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/release-notes/" />
+    <link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/release-notes/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/release-notes/" />
+    <link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/release-notes/" />
+    <link rel="alternate" type="application/rss+xml" title="ブログ · gtree" href="https://gtree.dobbylab.com/ja/blog/feed.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="gtree" />
+    <meta property="og:title" content="gtree リリースノート — 各バージョンの変更点" />
+    <meta property="og:description" content="gtree の各バージョンで追加された機能、改善、修正の一覧です。新しいバージョンはアプリが知らせ、ワンクリックで更新できます。" />
+    <meta property="og:url" content="https://gtree.dobbylab.com/ja/release-notes/" />
+    <meta property="og:image" content="https://gtree.dobbylab.com/og-ja.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="zh_CN" />
+    <link rel="alternate" type="text/markdown" href="https://gtree.dobbylab.com/ja/release-notes/index.md" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@dobbylabhq" />
+    <meta name="twitter:title" content="gtree リリースノート — 各バージョンの変更点" />
+    <meta name="twitter:description" content="gtree の各バージョンで追加された機能、改善、修正の一覧です。新しいバージョンはアプリが知らせ、ワンクリックで更新できます。" />
+    <meta name="twitter:image" content="https://gtree.dobbylab.com/og-ja.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://dobbylab.com/#org","name":"DobbyLab","url":"https://dobbylab.com/","logo":"https://gtree.dobbylab.com/logo.png","email":"mailto:support@dobbylab.com","sameAs":["https://x.com/dobbylabhq","https://discord.gg/EnPJxrUEK5","https://github.com/dobbylabhq"]},{"@type":"WebPage","@id":"https://gtree.dobbylab.com/ja/release-notes/#page","name":"gtree リリースノート — 各バージョンの変更点","description":"gtree の各バージョンで追加された機能、改善、修正の一覧です。新しいバージョンはアプリが知らせ、ワンクリックで更新できます。","inLanguage":"ja","dateModified":"2026-10-28","publisher":{"@id":"https://dobbylab.com/#org"},"about":{"@type":"SoftwareApplication","@id":"https://gtree.dobbylab.com/#app","name":"gtree","softwareVersion":"0.3.19","releaseNotes":"https://gtree.dobbylab.com/ja/release-notes/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://gtree.dobbylab.com/ja/"},{"@type":"ListItem","position":2,"name":"リリースノート","item":"https://gtree.dobbylab.com/ja/release-notes/"}]}]}</script>
+    <script>
+      // 首次绘制前:① 套上用户选过的深浅色(没选过 = 跟随系统),避免闪屏;
+      // ② 语言:每种语言是独立的预渲染页面(/、/ja/、/zh/)。?lang=xx 视为显式选择 —— 记下并跳到对应页面;
+      //    子页面(/zh/blog/… 等)同理,跳到同一页面的另一种语言。
+      //    没有 ?lang 时,只有用户在页面上选过语言(localStorage 有值)且和当前页不同才跳。
+      //    没选过就不跳(不按浏览器语言猜);爬虫没有 localStorage,不会被重定向。
+      //    开发模式没有 data-prerendered,这段不跳(dev 用 ?lang= 由 main.jsx 读)。
+      try { var t = localStorage.getItem('gtree:theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t } catch (e) {}
+      try {
+        var d = document.documentElement, L = ['en', 'ja', 'zh'], cur = d.getAttribute('data-lang') || 'en'
+        if (d.hasAttribute('data-prerendered')) {
+          var q = new URLSearchParams(location.search).get('lang'), want = null
+          if (L.indexOf(q) >= 0) { want = q; try { localStorage.setItem('gtree:lang', q) } catch (e) {} }
+          else { var s = null; try { s = localStorage.getItem('gtree:lang') } catch (e) {} if (L.indexOf(s) >= 0) want = s }
+          // data-root:当前页到站点根的相对前缀;data-path:页面在语言根下的路径(博客文章等子页面换语言时留在同一页)
+          var root = d.getAttribute('data-root') || (cur === 'en' ? './' : '../'), sub = d.getAttribute('data-path') || ''
+          if (want && want !== cur) location.replace(new URL(root + (want === 'en' ? '' : want + '/') + sub + location.hash, location.href).href)
+          else if (L.indexOf(q) >= 0) history.replaceState(null, '', location.pathname + location.hash)
+        }
+      } catch (e) {}
+    </script>
+    <script>
+      // Cloudflare Web Analytics:按访客去重的访问量,不用 cookie。只在正式域名上加载 —— 本地开发、预览不上报。
+      // 官网在 GitHub Pages、DNS 不走代理,Cloudflare 没法自动注入,所以手动嵌(站点在控制台 Web Analytics 里)
+      if (location.hostname === 'gtree.dobbylab.com') {
+        var b = document.createElement('script')
+        b.defer = true
+        b.src = 'https://static.cloudflareinsights.com/beacon.min.js'
+        b.setAttribute('data-cf-beacon', '{"token": "db95a1c82680427f93b860b29b317f24"}')
+        document.head.appendChild(b)
+      }
+    </script>
+    <script type="module" crossorigin src="../../assets/index-DpQD1bb3.js"></script>
+    <link rel="stylesheet" crossorigin href="../../assets/index-B057dae2.css">
+  </head>
+  <body>
+    <div id="root"><header class="nav"><div class="wrap"><a class="brand" href="../../ja/" aria-label="gtree"><img src="../../logo.png" alt="" width="26" height="26"/>gtree</a><nav class="nav-links" aria-label="ページ内ナビゲーション"><a href="../../ja/#features" class="">機能</a><a href="../../ja/#compare" class="">比較</a><a href="../../ja/#pricing" class="">料金</a><a href="../../ja/#faq" class="">FAQ</a></nav><div class="nav-right"><span class="social"><a class="theme-btn" href="https://discord.gg/EnPJxrUEK5" target="_blank" rel="noopener noreferrer" aria-label="Discord — バグ報告・質問はこちら" title="Discord — バグ報告・質問はこちら"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.007.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg></a><a class="theme-btn" href="https://x.com/dobbylabhq" target="_blank" rel="noopener noreferrer" aria-label="X で @dobbylabhq をフォロー" title="X で @dobbylabhq をフォロー"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg></a></span><div class="lang  "><button type="button" class="lang-btn " aria-haspopup="menu" aria-expanded="false" aria-label="言語" title="言語"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg><span>日本語</span><svg viewBox="0 0 24 24" class="chev" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button><div class="lang-menu " role="menu" aria-label="言語"><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../release-notes/" hrefLang="en" lang="en"><span>English</span></a><a role="menuitemradio" aria-checked="true" tabindex="-1" href="../../ja/release-notes/" hrefLang="ja" lang="ja"><span>日本語</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></a><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../zh/release-notes/" hrefLang="zh-CN" lang="zh-CN"><span>中文</span></a></div></div><button type="button" class="theme-btn" title="テーマ:システムに合わせる(クリックでライトに切り替え)" aria-label="テーマ:システムに合わせる(クリックでライトに切り替え)"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"></rect><path d="M8 21h8"></path><path d="M12 17v4"></path></svg></button><a class="btn" href="../../ja/#download">Mac 版を無料ダウンロード<svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M12 4v12"></path><path d="m7 11 5 5 5-5"></path><path d="M5 20h14"></path></svg></a><button class="nav-burger" type="button" aria-expanded="false" aria-label="メニュー"><svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path></svg></button></div></div><div class="nav-sheet "><a href="../../ja/#features">機能</a><a href="../../ja/#compare">比較</a><a href="../../ja/#pricing">料金</a><a href="../../ja/#faq">FAQ</a><a href="../../ja/#download">Mac 版を無料ダウンロード</a><a class="nav-sheet-social" href="https://discord.gg/EnPJxrUEK5" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.007.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg>Discord — バグ報告・質問はこちら</a><a class="nav-sheet-social" href="https://x.com/dobbylabhq" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg>X で @dobbylabhq をフォロー</a></div></header><main id="top"><section class="doc wrap-doc"><nav class="doc-crumbs" aria-label="現在の位置"><ol><li><a href="../../ja/">ホーム</a></li><li><span aria-current="page">リリースノート</span></li></ol></nav><header class="doc-head"><h1>リリースノート</h1><p class="lede">各バージョンの追加・改善・修正です。gtree をお使いの場合、新しいバージョンが出るとサイドバー下部に「更新して再起動」が表示されます。</p></header><article class="release" id="v0.3.19"><header><h2><a href="#v0.3.19">v<!-- -->0.3.19</a><span class="doc-tag">最新</span></h2><p class="doc-meta"><time dateTime="2026-10-28">2026年10月28日</time> · <!-- -->ターミナルで ⌘ を押すだけで画像を表示、Git リポジトリでないフォルダも開ける、プロジェクトをドラッグで並べ替え</p></header><div class="prose"><h3 id="改善">改善<a class="h-anchor" href="#改善" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>内蔵ターミナルの画像をその場で見られるようになりました。⌘ を押しながら画像のパス(<code>/tmp/shot.png</code>、<code>~/Desktop/a.jpg</code>、今のフォルダからの相対パスなど)や、Claude Code で画像を貼り付けたときに出る「[Image #3]」にマウスを合わせると、横にプレビューが出ます。⌘ クリックで大きく開き、「Finder で表示」もできます。Agent が撮ったスクリーンショットや貼り付けた画像を、Finder で探す必要はもうありません。</li>
+<li>⌘O で Git リポジトリではない普通のフォルダも開けるようになりました。AI セッションやターミナル、ファイルの表示はそのまま使えます。スタートページと「履歴」ページの「Git リポジトリを作成」を押すと、Git プロジェクトになります。</li>
+<li>サイドバーのプロジェクトをドラッグで並べ替えられるようになりました。次に開いたときもその順番です。</li>
+<li>サイドバー下部のアップデートのカードが途中で切れなくなりました。次に新しいバージョンが出たときは、カードの「更新内容をすべて見る」から変更点を確認できます。</li>
+</ul>
+<h3 id="修正">修正<a class="h-anchor" href="#修正" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>Claude Code をダークテーマにしていると、質問の本文が gtree の明るいターミナルで白地に白い文字になり、何も表示されていないように見えていた問題を修正しました。背景に近すぎる色の文字は、ターミナルが自動で読める色に調整します。</li>
+<li>サイドバーの「マージ済み」グループの行をクリックすると、上の一覧に移動してクリックした場所から離れてしまう問題を修正しました。</li>
+<li>0.3.7 以前のバージョンから更新した後、初回の起動で一度だけ gtree が強制終了する問題を修正しました。</li>
+</ul>
+</div></article><article class="release" id="v0.3.18"><header><h2><a href="#v0.3.18">v<!-- -->0.3.18</a></h2><p class="doc-meta"><time dateTime="2026-10-28">2026年10月28日</time> · <!-- -->ファイル画面で定義へ移動、検索は右パネルへ、差分のファイル一覧は折りたたみ可能に</p></header><div class="prose"><h3 id="改善">改善<a class="h-anchor" href="#改善" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>ファイル画面で定義へ移動できるようになりました。⌘ を押しながら名前にカーソルを合わせると下線が付き、⌘ クリック、F12、右クリックメニューの「Go to Definition」でその場所へ移動して名前を選択します。定義が別のファイルにあれば、ファイル画面でそのファイルを開きます。同じ名前の定義が複数あるときは、パス、行番号、その行のコードを並べた選択画面が出ます。⌃- / ⌃⇧- で元のファイルと行へ戻る・進むことができます。Rust、JavaScript / TypeScript、Python、Go に対応し、言語サーバーのインストールは不要です。worktree ごとに初めてソースファイルを開いたとき、裏で少し準備が入ります。準備が終わるまでは移動しません。</li>
+<li>ファイルをまたいだ検索(⌘⇧F)を右パネルに移し、「ファイル / 変更 / 検索」の 3 つ目のタブにしました。読んでいるコードを覆わなくなりました。結果をクリックするとメイン画面で開き、結果はパネルに残るので、続けて次の箇所を開けます。</li>
+<li>差分、未コミットの変更、「AI の各ターン」の左にあるファイル一覧を、細い帯に折りたたんでコードに場所を譲れるようになりました。次に開いたときも折りたたんだままです。</li>
+<li>⌘T とタブバーの「+」に「ターミナルを開く」を追加しました。「Claude Code を新しく開く」「Codex を新しく開く」の後に並びます。</li>
+</ul>
+<h3 id="修正">修正<a class="h-anchor" href="#修正" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>差分の右側のファイルの順番が左のファイルツリーと合っていなかった問題を修正しました。たとえば Dockerfile が config/ フォルダより前にあるのに、ツリーでは一番下に表示されていました。</li>
+<li>長い行を横にスクロールすると、コードと背景色が右パネルの境界線まで描かれ、パネルに一部が隠れているように見えていた問題を修正しました。</li>
+<li>検索結果からファイルを開いたとき、該当する行に移動しないことがあった問題を修正しました。</li>
+</ul>
+</div></article><article class="release" id="v0.3.17"><header><h2><a href="#v0.3.17">v<!-- -->0.3.17</a></h2><p class="doc-meta"><time dateTime="2026-10-23">2026年10月23日</time> · <!-- -->差分の横スクロール、⌘⇧P コマンドパレットと Markdown / PDF プレビュー、折りたたんだプロジェクトでも使用中の worktree を表示</p></header><div class="prose"><h3 id="改善">改善<a class="h-anchor" href="#改善" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>差分の長い行が途中で切れなくなりました。内容は横にスクロールできます(トラックパッドで横にスワイプ、または下のスクロールバーをドラッグ)。行番号、ファイルの見出し、「⋯ 変更のない N 行」は左に固定され、一緒に動きません。「AI の各ターン」や未コミットの変更の詳細も同じです。</li>
+<li>⌘⇧P のコマンドパレットを追加しました。⌘P と同じ画面で、&gt; から入力するとファイルではなくコマンドを探します。各コマンドにショートカットが表示され、いま実行できるものだけが並びます。</li>
+<li>ファイル画面で Markdown(見出しで「プレビュー / ソース」を切り替え)と PDF(ページ単位で表示)をプレビューできます。「Markdown プレビュー」と「PDF プレビュー」はどちらも内蔵のプラグインで、最初から有効です。設定に新しく加わった「プラグイン」の節で無効にできます。</li>
+<li>履歴(⌘Y)の検索欄の右に「この worktree」の切り替え(⌘E)を追加しました。現在の worktree での会話だけを表示し、次回起動後も設定を覚えています。</li>
+<li>サイドバーで折りたたんだプロジェクトでも、使用中の worktree は表示されます。タブが開いているもの、AI が動いているもの、あなたを待っているものは隠れなくなり、クリックで切り替えられます。</li>
+<li>配色を見直しました。AI 関連の色を紫からロゴの深い青緑に変え、ブランチ図の各ブランチの色を少し淡くし、ダークテーマでは赤・緑・琥珀色が明るめの色になります。</li>
+</ul>
+<h3 id="修正">修正<a class="h-anchor" href="#修正" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>⌘P / ⌘⇧P の画面を閉じたあとショートカットが効かなくなる問題、⌘P・⌘Y・新しいセッションの選択画面で検索欄をクリックすると画面が閉じてしまう問題を修正しました。</li>
+<li>新しく作った(まだ git に追加していない)ディレクトリがファイルツリーで名前のない 1 つのファイルとして表示され、中のファイルが 1 つも出てこない問題を修正しました。ファイルを 1 つずつ一覧にし、.gitignore で無視されているファイルもグレーで表示します。node_modules のような無視されているディレクトリは、開いたときに中身を一覧にします。</li>
+<li>「対応待ち」(「念のため確認」、「作業中」の行の下、関係図の線)に、相手のセッションがすでに終わっていて届くことのないメッセージや、gtree が agent の代わりに送る「[auto]」の通知が並ばなくなりました。「このターンを終えました」という自動通知も、ターンごとに積み重ならなくなりました。</li>
+<li>現在のプロジェクトを折りたたむと、選択中の worktree がグレーの背景のままプロジェクト名の間に並び、プロジェクトが選択されているように見えていた問題を修正しました。</li>
+</ul>
+</div></article><article class="release" id="v0.3.16"><header><h2><a href="#v0.3.16">v<!-- -->0.3.16</a></h2><p class="doc-meta"><time dateTime="2026-10-15">2026年10月15日</time> · <!-- -->差分はすべてのファイルを一続きに、ファイル画面で画像と履歴を表示、プロジェクト名も変更可能に</p></header><div class="prose"><h3 id="改善">改善<a class="h-anchor" href="#改善" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>差分は GitHub のプルリクエストのように、変更されたすべてのファイルを一続きで表示するようになりました。下へスクロールするだけですべての変更を見られます。左のファイルをクリックするとそこへ移動し、ファイルの見出しをクリックすると折りたたみ・展開できます。「全文を表示 / 変更のみ」はファイルごとに切り替えられるようになりました。「AI の各ターン」や未コミットの変更の詳細も同じ表示になりました。</li>
+<li>差分で文字を選択すると、右上に「選択をコピー」が現れます。ファイルの見出しや「⋯ 変更のない N 行」の折りたたみ行は含めず、コードだけをコピーします。</li>
+<li>ファイル画面で画像(PNG、JPG、WebP、GIF、SVG など)を開くと、収まる大きさに縮めて画像として表示します。SVG は「ソースを表示」に切り替えられます。大きすぎる画像はプレビューしません。</li>
+<li>ファイル画面に「履歴」を追加しました。このファイルを変更したコミットを、ファイル名を変える前のものも含めて一覧にします。クリックすると、そのコミットで何が変わったかを差分で表示します。</li>
+<li>サイドバーでプロジェクトを右クリックし「名前を変更」を選ぶと、その場で名前を変えられます。↩ で保存、esc で取り消し、空欄にするとフォルダ名に戻ります。新しい名前は「対応待ち」や通知、gtree が agent に伝えるプロジェクト名にも反映されます。</li>
+</ul>
+<h3 id="修正">修正<a class="h-anchor" href="#修正" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>「対応待ち」に戻った直後の数秒間、一覧が前回の状態のままで、サイドバーのバッジと合わない問題を修正しました。</li>
+<li>worktree のフォルダからリポジトリを開くと「対応待ち」に同じリポジトリが 2 つ表示され、あなたを待っている agent も 2 回並び、agent に伝えるプロジェクト名も間違っていた問題を修正しました。</li>
+</ul>
+</div></article><article class="release" id="v0.3.15"><header><h2><a href="#v0.3.15">v<!-- -->0.3.15</a></h2><p class="doc-meta"><time dateTime="2026-10-15">2026年10月15日</time> · <!-- -->agent の作業中も軽く、agent へのメッセージは英語にも対応</p></header><div class="prose"><h3 id="改善">改善<a class="h-anchor" href="#改善" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>agent が作業している間の gtree 自身の CPU 使用量がほぼ半分になりました。agent の状態を示す回転アイコンとベルは、画面のリフレッシュレートではなく毎秒約 12 回で描き直すようになりました。3 つの agent が作業中、1 つが待っている状態の計測で、gtree は 8.6% から 4.4%(1 コア換算)に下がりました。何も動いていないときは 1% 未満のままです。</li>
+<li>gtree が agent に送る文章がアプリの言語に合わせて切り替わるようになりました。中国語表示なら中国語、それ以外は英語です。同じ worktree の別セッションがファイルを変更した直後の知らせ、別セッションからの伝言、セッション開始時の「誰が何をしているか」、gtree の MCP ツールの説明が対象です。</li>
+<li>スタートページの「Claude Code に接続されていません」の案内をカードにしました。説明を 1 行いっぱいに表示し、ボタンはその下に並びます。</li>
+<li>初回のガイドの文章を今の画面に合わせました。同じ worktree の agent は同じファイルを触る前に互いに確認します。「AI の各ターン」と ⌘Y がタイムラインの代わり、「対応待ち」がコラボビューの代わりです。</li>
+<li>状態のツールチップの先頭を「Claude ·」から「AI ·」に変えました。Codex のセッションにも使われるためです。</li>
+</ul>
+<h3 id="修正">修正<a class="h-anchor" href="#修正" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>空のリポジトリで、ファイルツリーの読み込み中の表示が消えずに動き続けていました。</li>
+<li>英語または日本語の表示で、「履歴」で再生した会話に出るツールの手順(「src/theme.ts を編集」など)が中国語になっていました。</li>
+<li>スタートページの同時変更ファイル一覧で、ファイルのパスが見えなくなるほど詰まることがありました。関係する worktree は 2 行目に移しました。</li>
+<li>「対応待ち」がもう存在しないワークベンチへ案内していたのをやめ、残りの件数だけを表示するようにしました。</li>
+<li>設定の Claude Code の各 hook の説明に、ワークベンチやタイムラインが出てこなくなりました。チームプランの説明から、すでに無料版にある「チームメンバー」を外し、中継サーバーは同期情報を転送するだけでデータは保存しないと明記しました。</li>
+</ul>
+</div></article><article class="release" id="v0.3.14"><header><h2><a href="#v0.3.14">v<!-- -->0.3.14</a></h2><p class="doc-meta"><time dateTime="2026-10-15">2026年10月15日</time> · <!-- -->閉じる前の状態を覚えて、クリックひとつで差分を表示</p></header><div class="prose"><h3 id="改善">改善<a class="h-anchor" href="#改善" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>gtree を閉じて開き直しても、開いていたプロジェクト、最後に見ていたプロジェクト、各プロジェクトで選んでいた worktree がそのまま残ります。プロジェクトを追加し直す必要はありません。</li>
+<li>スタートページの「変更を見る」や、右の「変更」でファイルをクリックすると、中央に差分が開きます。左に変更されたファイル、右に内容が表示され、新しいファイルも見られます。ステージと取り消しは行末の + / − だけで行い、ファイルをクリックしてもステージされなくなりました。</li>
+<li>スタートページの「エディタで開く」は「ファイルを開く」になりました。右側がファイルツリーに切り替わり、⌘P のファイル検索が開きます。選んだファイルは gtree の中で開き、そのまま編集・保存できます。</li>
+<li>リベース後にリモートのブランチと食い違ったときは、「プル」と「プッシュ」を両方出す代わりに「リベース後、リモートのこのブランチと食い違っています」の 1 行と「プッシュ(リモートを上書き)」ボタンを表示します。押すと確認が出ます。ほかの人が新しい変更をプッシュしているときは表示しません。</li>
+<li>ターンの詳細にある長い返信は最初 4 行だけ表示し、展開できます。下の変更が画面の外に押し出されなくなりました。</li>
+<li>サイドバーのプロジェクト、「マージ済み」「AI の一時ワークスペース」「AI の各ターン」、スタートページの同時変更ファイル一覧は、アニメーション付きで開閉し、行が順番に現れます。「AI の各ターン」を折りたたんでも見出しは動きません。</li>
+</ul>
+<h3 id="修正">修正<a class="h-anchor" href="#修正" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>全体検索でファイル範囲の欄をクリックしても検索が閉じなくなりました。⌘⇧F は常に検索を開くようになり、もう一度押しても閉じません。</li>
+<li>サイドバーで選んでいるラインが別のラインに切り替わってしまうことがある問題を修正しました。</li>
+<li>スタートページの同時変更ファイル一覧は、いまのラインに関係するものだけを表示し、別のラインに切り替えても引き継がれなくなりました。</li>
+<li>「AI の各ターン」でセッションの区切り線が次の行の文字に重なっていた問題を修正しました。</li>
+</ul>
+</div></article><article class="release" id="v0.3.13"><header><h2><a href="#v0.3.13">v<!-- -->0.3.13</a></h2><p class="doc-meta"><time dateTime="2026-10-14">2026年10月14日</time> · <!-- -->右のパネルを見やすく:わかりやすいタブと、内容に合わせて広がるコミット欄</p></header><div class="prose"><h3 id="改善">改善<a class="h-anchor" href="#改善" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>右のパネルの「ファイル」「変更」タブの見た目を変えました。選んでいるタブは文字が濃くなり下線が付くので、切り替えられることがすぐわかります。「変更」には未コミットのファイル数を表示し、「ファイル」にはリポジトリのファイル総数を表示しなくなりました。</li>
+<li>「変更」タブのレイアウトを変えました。作業ツリーがクリーンなときは上部が「未コミットの変更　変更なし」の 1 行だけになり、下の「AI の各ターン」を広く使えます。「すべて破棄」は「⋯」メニューに移しました。</li>
+<li>「AI の各ターン」は 1 ターンを 2 行で表示します。1 行目は質問と時刻、2 行目は変更したファイルの数と名前(「3 ファイル · root.rs など」)です。左の色付きの縦線をなくし、セッションの切れ目に区切り線を引くようにしました。「ファイル変更のないターンを表示」と「旧スナップショット」は「⋯」メニューに移しました。</li>
+<li>「AI の各ターン」を折りたためるようになりました。見出しをクリックするとパネル下部の 1 行だけになり、次に開いたときも折りたたんだままです。</li>
+<li>コミットメッセージ欄は入力に合わせて最大 4 行まで広がり、それ以上は欄の中でスクロールします。長めのメッセージも全文が見え、上のファイル一覧も隠れません。</li>
+<li>サイドバーと同じように、「対応待ち」でも作業中の AI の回転アイコンが回り、あなた待ちのベルが点滅するようになりました。</li>
+</ul>
+<h3 id="修正">修正<a class="h-anchor" href="#修正" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>AI ページのタブがアイコンだけに縮み、名前が見えなくなっていた問題を修正しました(0.3.12 で発生)。</li>
+</ul>
+</div></article><article class="release" id="v0.3.12"><header><h2><a href="#v0.3.12">v<!-- -->0.3.12</a></h2><p class="doc-meta"><time dateTime="2026-10-14">2026年10月14日</time> · <!-- -->新しいレイアウト:ラインを選べば次にやることがわかる、サイドバーに MR の状態</p></header><div class="prose"><h3 id="改善">改善<a class="h-anchor" href="#改善" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>画面の構成を変えました。サイドバーは「対応待ち」「コミット履歴」とプロジェクトだけになりました。プロジェクト内のラインをクリックするとそのホームが開き、セッションがあれば会話、なければそのラインのスタートページが表示されます。「ワークベンチ」はなくなりました。ショートカットは ⌘1 対応待ち、⌘2 現在の worktree、⌘3 コミット履歴です。</li>
+<li>スタートページには、そのラインの今の状況がそれぞれボタン付きで並びます。マージ済み(worktree を削除 / 新しいブランチで始める)、同じファイルを別の場所でも変更中(どれか見る)、未コミットの変更あり(変更を見る)、リモートに新しいコミット(プル)、未プッシュ(プッシュ)、開いている MR(MR を開く)、MR がまだない(MR を作成)、メインブランチより遅れている(リベース)。その下から Claude Code / Codex の新規起動、ターミナルを開く、エディタで開くができます。</li>
+<li>右のパネルを「ファイル」と「変更」の 2 つのタブにしました(⌥⌘B で開閉、⇧⌘E / ⌃⇧G で切り替え)。「変更」には未コミットのファイル(ステージとコミットはここで)と AI の各ターンが並び、ターンをクリックすると何を変えたかが中央に表示されます。これまでの「変更」ビューは「コミット履歴」に名前を変えました。</li>
+<li>サイドバーのブランチの後ろに MR の状態を表示します。マージ前はプルリクエストのアイコン、マージ済みなら薄いマージのアイコンです。マウスを乗せると番号・タイトル・リンクが見られ、クリックするとブラウザで開きます。ログイン済みの glab か gh を使い、GitLab(セルフホストを含む)と GitHub に対応しています。どちらも入っていなければ表示しません。</li>
+<li>サイドバーの各ラインの右端には目印を 1 つだけ表示します。AI セッションの状態(作業中、あなた待ちなど)、同じファイルを別の場所でも変更中(琥珀色の △)、または未コミットの変更の行数(「+24 −3」など)です。マウスを乗せると説明が出ます。</li>
+<li>ブランチがマージ済みで使っていないラインは、サイドバー下部の「マージ済み · N」にまとめます。プラットフォーム上で squash マージされ、git では判別できないものも含みます。</li>
+<li>サイドバーでラインを右クリックすると Git メニュー(プッシュ、プル、コミット、ブランチ切り替え、worktree の削除など)が開きます。worktree が多いときはプロジェクト名が上に固定され、いつでもクリックで折りたためます。</li>
+<li>AI が作業中またはあなた待ちのラインは、どのページからクリックしてもその会話が直接開きます。</li>
+<li>AI ページを開いても Claude Code が自動で起動しなくなりました。見るだけでセッションが増えることはありません。始めるときはスタートページの「Claude Code を新しく開く」をクリックするか ⌘T を押してください(Codex が入っていれば選べます)。</li>
+<li>過去の会話は AI ページ上部の小さなウィンドウ(⌘Y)で開くようになりました。入力して検索し、↩ で続きから、⌘↩ で閲覧のみ。一覧の会話をクリックしても続きから始められます。</li>
+<li>Claude Code が動いているタブを ⌘W で閉じるときは確認が出ます。「今後は確認しない」を選んでも、設定で元に戻せます。</li>
+</ul>
+<h3 id="修正">修正<a class="h-anchor" href="#修正" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>「回答済み、返信待ち」のベルは、そのターミナルのタブに切り替えれば消えるようになりました。メッセージを送る必要はありません。</li>
+<li>「対応待ち」で行をクリックすると、その件のセッションのタブに切り替わります。一覧が更新されても、キーボードで選んだ行が別の行に移らなくなりました。</li>
+<li>タイトルバーのボタンを素早くクリックしても、ウィンドウが拡大されなくなりました。</li>
+<li>ターミナルで 2 行に折り返された長い URL も、⌘ を押しながらクリックで開けるようになりました。</li>
+</ul>
+</div></article><article class="release" id="v0.3.11"><header><h2><a href="#v0.3.11">v<!-- -->0.3.11</a></h2><p class="doc-meta"><time dateTime="2026-10-13">2026年10月13日</time> · <!-- -->ワークベンチで先に見るべきものがすぐわかる、「対応待ち」を作り直し</p></header><div class="prose"><h3 id="改善">改善<a class="h-anchor" href="#改善" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>ワークベンチを worktree ごとに 1 行にし、緊急度でまとめました。対応が必要なもの(あなた待ち、マージの競合)が先頭に並び、変更がなく AI も作業していないものやブランチがマージ済みのものは折りたたまれます。1 行目にブランチ名を省略せずに表示し、2 行目に worktree 名と変更内容を表示します。ボタンはマウスを乗せたときだけ表示されます。</li>
+<li>2 つの worktree が同じファイルを変更しているときは、常時表示のオレンジのバナーではなくその行に表示され、クリックするとファイル一覧が見られます。</li>
+<li>ワークベンチ、ステータスバー、ファイルツリー、検索の状態色を 4 つの意味に絞りました。赤は対応が必要、琥珀色はリスクあり、紫はエージェントが作業中、緑はステージ済みです。</li>
+<li>Claude Code または Codex を接続していれば、エージェントはセッションの開始時(と、あなたが worktree に触れたとき)に再利用できる worktree の一覧を受け取り、新しく作らずに済みます。</li>
+<li>「対応待ち」を作り直しました。行をクリックするとそのセッションに移動でき、↑↓ と ↩ でも操作でき、⌫ で片付けられます。</li>
+<li>「対応待ち」右側の「AI のやり取り」欄はなくなり、エージェント同士の質問や伝言は関係する行の下に表示されるようになりました。「念のため確認」には、ほかのエージェントの回答を長く待っているもの、届いていない伝言、あなたの質問への回答(クリックでその場に展開)も表示されます。</li>
+<li>「対応待ち」のリストと「プロジェクトの関係図」を別々にスクロールできるようになりました。関係図は 2 本指でドラッグ、ピンチで拡大・縮小でき、空いている所をダブルクリックすると全体がウィンドウに収まります。</li>
+<li>全ファイル検索(⌘⇧F)を新しくしました。入力と同時に結果が出て、ファイルごとにまとまり、一致箇所が強調表示されます。大文字と小文字の区別、単語単位の一致、未コミットの変更があるファイルだけの検索ができ、<code>*.rs  !tests</code> のような書き方で対象を絞れます。</li>
+<li>内蔵ターミナル:⌘ を押しながらリンクをクリックすると開きます。⌘← / ⌘→ で行頭 / 行末に、⌥← / ⌥→ で単語単位に移動でき、Finder からファイルをドラッグするとパスが入力されます。ドラッグした画像は Claude Code が画像として認識します。</li>
+<li>ファイルを開くと、ファイルツリーがそのファイルまで自動で展開されます。</li>
+<li>AI ページの「履歴」を「今日」「昨日」「過去 7 日間」「それ以前」に分け、スクロール中も見出しが上部に残るようにしました。</li>
+</ul>
+<h3 id="修正">修正<a class="h-anchor" href="#修正" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>gtree を起動していないとき(⌘Q で終了したあとなど)は、別のターミナルで Claude Code や Codex を使っても gtree の通知が出なくなりました。</li>
+<li>「このセッションを続ける」は、そのセッションがすでに gtree のターミナルタブで開いていれば、そのタブに切り替わるようになりました。</li>
+<li>検索:選んだ結果を ↩ で開けるようになりました。パスに日本語などを含む結果も開けるようになり、前の検索結果が新しい結果を置き換えてしまう問題も修正しました。</li>
+<li>改行を含むセッションタイトルで履歴のリストが崩れる問題を修正しました。</li>
+<li>「プロジェクトの関係図」が横に広がって右端が切れる問題と、「/」という名前のプロジェクトが表示される問題を修正しました。</li>
+</ul>
+</div></article><article class="release" id="v0.3.10"><header><h2><a href="#v0.3.10">v<!-- -->0.3.10</a></h2><p class="doc-meta"><time dateTime="2026-10-10">2026年10月10日</time> · <!-- -->開いたファイルをその場で編集できるように</p></header><div class="prose"><h3 id="新機能">新機能<a class="h-anchor" href="#新機能" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>開いたファイルをそのまま編集できるようになりました。⌘S で保存でき、別のファイルに切り替えると自動で保存されます。</li>
+<li>開いたあとにファイルが別の場所で(エージェントなどによって)変更されていた場合、保存しても黙って上書きはしません。読み込み直す(自分の編集を破棄)か、それでも上書きするかを選べます。ファイル切り替え時の自動保存はこの場合上書きせず、保存できなかったファイルを知らせます。</li>
+<li>UTF-8 以外のファイルは読み取り専用で開きます。</li>
+</ul>
+<h3 id="改善">改善<a class="h-anchor" href="#改善" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>サイドバー、ファイルパネル、AI 履歴の折りたたみ / 展開ボタンを、同じパネルアイコンにそろえました。</li>
+</ul>
+</div></article><article class="release" id="v0.3.9"><header><h2><a href="#v0.3.9">v<!-- -->0.3.9</a></h2><p class="doc-meta"><time dateTime="2026-10-10">2026年10月10日</time> · <!-- -->Codex に対応、エージェント同士で相談、「チームメンバー」を追加</p></header><div class="prose"><h3 id="新機能">新機能<a class="h-anchor" href="#新機能" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>Codex に対応しました。設定で「Codex をつなぐ」をクリックすると、Codex のセッションも Claude Code と同じように扱えます。何をしているか、いつあなたを待っているかがひと目でわかり、待っているものは「対応待ち」に並び、ターンごとの変更も記録されてロールバックできます。Codex 側で一つずつ承認する必要はありません。</li>
+<li>AI ビューの「+」から Codex を新しく開き、内蔵ターミナルで Claude Code と並べて動かせます。「履歴」でも Codex の会話を検索・再生できます。</li>
+<li>同じ worktree で動くエージェント(Claude Code でも Codex でも)が互いを把握するようになりました。一方が、もう一方も変更したファイルを変更すると相手に自動で知らせ、同じ箇所を変更する前には伝言を残してどちらが先に進めるかを相談します。先に終えた側は相手に知らせます。</li>
+<li>「チームメンバー」を追加しました(初期設定はオフ、リポジトリごとにオン)。最近ほかの人がコミットしているリポジトリでは、サイドバーのプロジェクトの下に「チームメンバー」が表示されます。「オンにする」→「共有を始める」で、チーム自身の git リポジトリを通じて、未コミットの変更も含めた作業中のコードをメンバーと見せ合えます。ブランチをクリックすると相手の変更を確認できます。</li>
+<li>チームメンバーと同じ箇所を変更しそうなとき、あなたの AI は編集する前に手を止めてあなたに確認します。「対応待ち」にも表示され、「相手の変更を見る」ですぐ確認できます。</li>
+<li>AI からチームメンバーに伝言を残せます。相手本人が読んで「自分の AI に渡す」をクリックしたときだけ相手の AI に届き、返事は尋ねた AI に自動で戻ります。</li>
+<li>チームメンバー間のやり取りはすべて署名され、伝言は受け取る本人しか読めません。リポジトリにアクセスできるほかの人がメンバーになりすますことはできません。メンバーの身元が変わったときは、本人だと確認するまで何も受け取りません。</li>
+</ul>
+<h3 id="改善">改善<a class="h-anchor" href="#改善" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>ステータスバーの「別のターミナルで AI が開いています」をクリックすると、セッションの一覧が開きます。何を尋ねたか、どれくらい前か、何をしているかが並び、クリックで該当のターミナルへ切り替えます。開いている場所がわからないものは、その会話を再生します。</li>
+<li>ファイルツリーの右クリックから「ブラウザで開く」「既定のアプリで開く」「Finder で表示」「ターミナルで開く」(gtree の内蔵ターミナル)「パスをコピー」が使えます。</li>
+</ul>
+<h3 id="修正">修正<a class="h-anchor" href="#修正" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>ガイドのページをめくるときに別の画面が一瞬映る問題を修正しました。最後のページの動画は「Claude Code に接続」する手順に差し替えました。</li>
+<li>同じ worktree で長いコマンドを並行して実行したとき、ファイルが別のセッションのものとして扱われる問題を修正しました。テスト出力の「0 failed」もエラーと見なさなくなりました。</li>
+<li>Claude Code の接続説明から、アプリが実際には表示しない「エラー」「停止」の状態についての記述を削除しました。</li>
+</ul>
+</div></article><article class="release" id="v0.3.8"><header><h2><a href="#v0.3.8">v<!-- -->0.3.8</a></h2><p class="doc-meta"><time dateTime="2026-10-09">2026年10月9日</time> · <!-- -->「対応待ち」と通知を追加、ナビを 4 項目に整理</p></header><div class="prose"><p><figure><img src="/media/app/inbox-ja-light.webp" alt="gtree の「対応待ち」画面。上にあなたを待っているセッションが「開く →」付きで並び、「気にかけておくと良いもの」に同じファイルを変更している worktree が、いちばん下に「作業中」の AI が表示されている" loading="lazy" decoding="async" /><figcaption>新しい最初の画面「対応待ち」。誰があなたを待っているか、どこで作業が重なっているかが 1 ページでわかります</figcaption></figure></p>
+<h3 id="新機能">新機能<a class="h-anchor" href="#新機能" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>最初の画面が「対応待ち」になりました。今あなたが対応すべきことがあるかだけを伝えます。あなたを待っている AI を待ち時間の長い順に先頭に並べ、続いて 2 つのブランチが同じファイルを変更しているなど、気にかけておくと良いことを表示します。</li>
+<li>AI が止まってあなたを待っているとき(許可が必要なとき、またはターンを終えて返事を待っているとき)、macOS の通知でお知らせし、クリックでそのセッションへ移動できます。Dock アイコンには待っている件数が表示されます。</li>
+<li>同じ worktree で 2 つの Claude Code セッションが作業しているとき、もう一方が変更したばかりのファイルを編集する前に AI へ知らせ、互いに上書きしないようにします。</li>
+<li>設定から gtree をこの Mac から削除できます。Claude Code との接続を解除し、gtree のデータを削除して(再インストール予定なら残すこともできます)、アプリをゴミ箱へ移します。</li>
+</ul>
+<h3 id="改善">改善<a class="h-anchor" href="#改善" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>ナビゲーションを 7 項目から 4 項目(対応待ち・ワークベンチ・変更・AI)に整理し、⌘1–⌘4 で順に開けます。「変更」には AI の変更・コミット履歴・比較をまとめました。</li>
+<li>Claude Code への接続は、ガイド・ワークベンチのお知らせバー・空の「AI の変更」画面からワンクリックで行えます。通知の許可も同時に確認するので、ターミナルでのコマンド入力は不要です。</li>
+<li>「比較」を開くと、メインブランチと現在の worktree の差分が最初から表示されます。</li>
+</ul>
+<h3 id="修正">修正<a class="h-anchor" href="#修正" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>数百のブランチがあるリポジトリで、Mac 全体が重くなる問題を修正しました。</li>
+<li>ターミナルタブを閉じると、中で動いている Claude も終了するようになりました。同じ worktree で複数の Claude タブを開いても、状態が互いに上書きされなくなりました。</li>
+<li>ダウンロードフォルダから直接開いた gtree で、アップデートや Claude Code への接続が失敗する問題を修正しました。アプリケーションフォルダへの移動もワンクリックで行えます。</li>
+</ul>
+</div></article><article class="release" id="v0.3.7"><header><h2><a href="#v0.3.7">v<!-- -->0.3.7</a></h2><p class="doc-meta"><time dateTime="2026-10-09">2026年10月9日</time> · <!-- -->gtree をどこに移動しても Claude Code 連携はそのまま</p></header><div class="prose"><h3 id="改善">改善<a class="h-anchor" href="#改善" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>gtree.app を別のフォルダへ移動しても、Claude Code との接続が知らないうちに切れることはなくなりました。接続済みの場合は、初回起動時に自動で切り替わります。</li>
+</ul>
+<h3 id="修正">修正<a class="h-anchor" href="#修正" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>一部のターミナルでインストールコマンドが「unbound variable」で失敗する問題を修正しました。0.3.3 以降、多くの方がこのエラーでインストールできていませんでした。</li>
+</ul>
+</div></article><article class="release" id="v0.3.6"><header><h2><a href="#v0.3.6">v<!-- -->0.3.6</a></h2><p class="doc-meta"><time dateTime="2026-10-09">2026年10月9日</time> · <!-- -->新規インストールが利用統計に正しく反映されるように</p></header><div class="prose"><h3 id="修正">修正<a class="h-anchor" href="#修正" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>新しくインストールした方が、匿名の利用統計にインストール当日から正しく反映されるようになりました。これまでどおりお知らせを表示した後にのみ集計し、設定からオフにできます。</li>
+</ul>
+</div></article><article class="release" id="v0.3.5"><header><h2><a href="#v0.3.5">v<!-- -->0.3.5</a></h2><p class="doc-meta"><time dateTime="2026-10-09">2026年10月9日</time> · <!-- -->ブラウザでダウンロードしても確実に起動</p></header><div class="prose"><h3 id="修正">修正<a class="h-anchor" href="#修正" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>ブラウザでダウンロードした .zip から開くと「gtree は壊れているため開けません」と表示される問題を修正しました。アプリ全体に署名したため、初回だけ「システム設定 → プライバシーとセキュリティ → このまま開く」で許可すれば使えます。</li>
+</ul>
+</div></article><article class="release" id="v0.3.3"><header><h2><a href="#v0.3.3">v<!-- -->0.3.3</a></h2><p class="doc-meta"><time dateTime="2026-10-09">2026年10月9日</time> · <!-- -->Claude Code 連携を設定画面から導入</p></header><div class="prose"><p><figure><img src="/media/app/settings-claude-not-connected-ja-light.webp" alt="gtree の設定の「Claude Code との接続」欄。「未接続」の表示と「Claude Code に接続」ボタン、接続すると何ができるかの説明がある" loading="lazy" decoding="async" /><figcaption>設定からワンクリックで Claude Code に接続できます。何ができて何が変わるかも、その場で説明しています</figcaption></figure></p>
+<h3 id="新機能">新機能<a class="h-anchor" href="#新機能" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>設定に「Claude Code 連携」を追加しました。ワンクリックで導入でき、何のために入れるのか、何が変わるのかを平易に説明します。インストール先の変更、hook ごとの確認とオン・オフ、アンインストールもここで行えます。</li>
+<li>Claude Code 連携が未導入または更新が必要なとき、ワークベンチにお知らせバーを表示し、設定へ直接移動できます。</li>
+<li>AI タブをドラッグで並べ替えられるようになりました。タブが多いときはタブバーをスクロールできます。</li>
+<li>設定で、近日公開予定のチームプランの概要と予定価格をご案内し、アーリーバード登録もできるようにしました。</li>
+</ul>
+<h3 id="改善">改善<a class="h-anchor" href="#改善" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>タイムラインの冒頭に用途の説明を加え、既定ではファイルを変更したターンだけを表示するようにしました。システムメッセージや Markdown も読みやすく表示します。</li>
+<li>サイドバー、ファイルパネル、AI の履歴パネルの開閉をなめらかなアニメーションにしました。</li>
+<li>コマンドラインの出力と <code>gtree --help</code> が表示言語に合わせて表示されます。</li>
+</ul>
+<h3 id="修正">修正<a class="h-anchor" href="#修正" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>サイドバーの開閉中に、内容がウィンドウのボタンに重なる問題を修正しました。</li>
+<li>Claude Code のサブエージェントが終了した後も、過去の会話が「別のターミナルで開いています」のままになり再開できない問題を修正しました。</li>
+</ul>
+</div></article><article class="release" id="v0.3.2"><header><h2><a href="#v0.3.2">v<!-- -->0.3.2</a></h2><p class="doc-meta"><time dateTime="2026-10-09">2026年10月9日</time> · <!-- -->英語・日本語表示に対応、初回ガイドを追加</p></header><div class="prose"><p><figure><img src="/media/app/settings-general-notifications-ja-light.webp" alt="gtree の設定の「一般」。言語を English・日本語・中文 から選ぶ切り替えと、「ガイド」の「もう一度見る」ボタンがある" loading="lazy" decoding="async" /><figcaption>設定でいつでも表示言語を切り替えられ、ガイドもここから見直せます</figcaption></figure></p>
+<h3 id="新機能">新機能<a class="h-anchor" href="#新機能" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>画面の表示言語に英語・日本語・簡体字中国語を追加しました。macOS の言語設定に合わせて表示され、設定からすぐに切り替えられます。</li>
+<li>サイドバー左下の歯車ボタンから設定を開けます。ボタンには現在の言語が表示されます。</li>
+<li>新しく使い始める方には、初回起動時に 6 ページのガイドを表示します。設定 → 一般からいつでも見直せます。</li>
+</ul>
+<h3 id="改善">改善<a class="h-anchor" href="#改善" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>ガイドは macOS の「視差効果を減らす」設定に従い、動きを抑えたフェード表示になります。</li>
+<li>インストールコマンドの進捗表示を英語にしました。</li>
+</ul>
+<h3 id="修正">修正<a class="h-anchor" href="#修正" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>英語・日本語表示でワークベンチのパネル見出しが途中で切れる問題を修正しました。</li>
+<li>コラボ画面のカードに、質問の代わりにシステムのタグがそのまま表示される問題を修正しました。</li>
+</ul>
+</div></article><article class="release" id="v0.3.1"><header><h2><a href="#v0.3.1">v<!-- -->0.3.1</a></h2><p class="doc-meta"><time dateTime="2026-10-08">2026年10月8日</time> · <!-- -->設定パネルを追加、利用統計をいつでもオン・オフ</p></header><div class="prose"><h3 id="新機能">新機能<a class="h-anchor" href="#新機能" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>「設定」を追加しました(⌘, またはメニューバーの gtree → 設定…)。最初の項目で、匿名の利用統計をいつでもオン・オフできます。</li>
+</ul>
+<h3 id="改善">改善<a class="h-anchor" href="#改善" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>初回起動時の利用統計のお知らせを、よりわかりやすい言葉に改め、設定から変更できることを案内するようにしました。</li>
+</ul>
+</div></article><article class="release" id="v0.3.0"><header><h2><a href="#v0.3.0">v<!-- -->0.3.0</a></h2><p class="doc-meta"><time dateTime="2026-10-08">2026年10月8日</time> · <!-- -->タイムライン:AI のターンごとに見返して復元</p></header><div class="prose"><p><figure><img src="/media/app/ai-changes-timeline-ja-light.webp" alt="「AI の変更」画面。中央にファイルを変更したターンが並び、右側に選択したターンの質問、Claude の返答、変更されたファイルと diff、右上に「このターンに復元」がある" loading="lazy" decoding="async" /><figcaption>ターンごとの質問・返答・変更が残り、「このターンに復元」でそのターンのファイルを戻せます</figcaption></figure></p>
+<h3 id="新機能">新機能<a class="h-anchor" href="#新機能" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>「スナップショット」は「タイムライン」になりました。Claude Code のターンが終わるたびに質問・返答・変更されたファイルを記録し、ターンごとの差分を確認したり、そのターンで変更されたファイルを元に戻したりできます。ブランチやステージングエリアには触れません。</li>
+<li>新しい Claude Code セッションは、同じ worktree で前のセッションがどこまで進んだか(質問、最後の返答、変更したファイル)を把握した状態で始まります。</li>
+<li>AI が自分で過去のターンの記録を調べられるようになりました。ほかのプロジェクトの記録も対象です。</li>
+<li>コミットグラフに、AI の各ターン終了時の状態を、現在のコミットから伸びるブランチのように表示できます。ツールバーで表示を切り替えられます。</li>
+<li>コラボ画面の先頭に、動いている AI ごとのカードが並びます。何をしているか、前のターンで何をしたかがわかり、あなたを待っている AI が先頭に来ます。</li>
+<li>「見に行く」で、worktree で作業中の Claude へ直接移動できます。gtree 内なら AI タブへ、ご自身のターミナルで動いている場合は読み取り専用の再生を開きます。</li>
+</ul>
+<h3 id="改善">改善<a class="h-anchor" href="#改善" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul>
+<li>ダウンロードとアップデートは gtree 専用のダウンロードサーバーを経由し、つながらない場合は自動で GitHub に切り替えます。</li>
+<li>匿名の利用統計を導入しました。送信を始める前に初回起動時にお知らせし、お知らせから、または GTREE_NO_TELEMETRY=1 でオフにできます。</li>
+</ul>
+</div></article></section></main><footer class="site-footer"><div class="wrap"><div class="ft-top"><div class="ft-brand"><a class="brand" href="../../ja/" aria-label="gtree"><img src="../../logo.png" alt="" width="22" height="22"/>gtree</a><p>gtree は DobbyLab が開発する、複数の AI コーディングエージェントを同時に動かす人のためのデスクトップアプリです。ローカルで動き、gtree があなたのコードをアップロードすることはありません。</p></div><nav class="ft-col" aria-label="製品"><h2>製品</h2><ul><li><a href="../../ja/#download">ダウンロード</a></li><li><a href="../../ja/#pricing">料金</a></li><li><a href="../../ja/release-notes/">リリースノート</a></li></ul></nav><nav class="ft-col" aria-label="リソース"><h2>リソース</h2><ul><li><a href="../../ja/blog/">ブログ</a></li><li><a href="../../ja/#faq">よくある質問</a></li><li><a href="../../llms.txt">llms.txt</a></li></ul></nav><nav class="ft-col" aria-label="運営"><h2>運営</h2><ul><li><a href="../../ja/privacy/">プライバシーポリシー</a></li><li><a href="mailto:support@dobbylab.com">support@dobbylab.com</a></li><li><a href="https://x.com/dobbylabhq" target="_blank" rel="noopener" class="x-link"><svg class="x-logo" viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>@<!-- -->dobbylabhq</a></li></ul></nav></div><div class="ft-bottom"><span>© 2026 <a href="https://dobbylab.com/">DobbyLab</a> · <!-- -->All rights reserved</span><div class="lang up ft-lang"><button type="button" class="lang-btn " aria-haspopup="menu" aria-expanded="false" aria-label="言語" title="言語"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg><span>日本語</span><svg viewBox="0 0 24 24" class="chev" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button><div class="lang-menu " role="menu" aria-label="言語"><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../release-notes/" hrefLang="en" lang="en"><span>English</span></a><a role="menuitemradio" aria-checked="true" tabindex="-1" href="../../ja/release-notes/" hrefLang="ja" lang="ja"><span>日本語</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></a><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../zh/release-notes/" hrefLang="zh-CN" lang="zh-CN"><span>中文</span></a></div></div></div></div></footer></div>
+    <script id="page-data" type="application/json">{"kind":"releases","path":"release-notes/","releases":[{"version":"0.3.19","date":"2026-10-28","title":"ターミナルで ⌘ を押すだけで画像を表示、Git リポジトリでないフォルダも開ける、プロジェクトをドラッグで並べ替え","html":"\u003ch3 id=\"改善\">改善\u003ca class=\"h-anchor\" href=\"#改善\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>内蔵ターミナルの画像をその場で見られるようになりました。⌘ を押しながら画像のパス(\u003ccode>/tmp/shot.png\u003c/code>、\u003ccode>~/Desktop/a.jpg\u003c/code>、今のフォルダからの相対パスなど)や、Claude Code で画像を貼り付けたときに出る「[Image #3]」にマウスを合わせると、横にプレビューが出ます。⌘ クリックで大きく開き、「Finder で表示」もできます。Agent が撮ったスクリーンショットや貼り付けた画像を、Finder で探す必要はもうありません。\u003c/li>\n\u003cli>⌘O で Git リポジトリではない普通のフォルダも開けるようになりました。AI セッションやターミナル、ファイルの表示はそのまま使えます。スタートページと「履歴」ページの「Git リポジトリを作成」を押すと、Git プロジェクトになります。\u003c/li>\n\u003cli>サイドバーのプロジェクトをドラッグで並べ替えられるようになりました。次に開いたときもその順番です。\u003c/li>\n\u003cli>サイドバー下部のアップデートのカードが途中で切れなくなりました。次に新しいバージョンが出たときは、カードの「更新内容をすべて見る」から変更点を確認できます。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"修正\">修正\u003ca class=\"h-anchor\" href=\"#修正\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>Claude Code をダークテーマにしていると、質問の本文が gtree の明るいターミナルで白地に白い文字になり、何も表示されていないように見えていた問題を修正しました。背景に近すぎる色の文字は、ターミナルが自動で読める色に調整します。\u003c/li>\n\u003cli>サイドバーの「マージ済み」グループの行をクリックすると、上の一覧に移動してクリックした場所から離れてしまう問題を修正しました。\u003c/li>\n\u003cli>0.3.7 以前のバージョンから更新した後、初回の起動で一度だけ gtree が強制終了する問題を修正しました。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.18","date":"2026-10-28","title":"ファイル画面で定義へ移動、検索は右パネルへ、差分のファイル一覧は折りたたみ可能に","html":"\u003ch3 id=\"改善\">改善\u003ca class=\"h-anchor\" href=\"#改善\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>ファイル画面で定義へ移動できるようになりました。⌘ を押しながら名前にカーソルを合わせると下線が付き、⌘ クリック、F12、右クリックメニューの「Go to Definition」でその場所へ移動して名前を選択します。定義が別のファイルにあれば、ファイル画面でそのファイルを開きます。同じ名前の定義が複数あるときは、パス、行番号、その行のコードを並べた選択画面が出ます。⌃- / ⌃⇧- で元のファイルと行へ戻る・進むことができます。Rust、JavaScript / TypeScript、Python、Go に対応し、言語サーバーのインストールは不要です。worktree ごとに初めてソースファイルを開いたとき、裏で少し準備が入ります。準備が終わるまでは移動しません。\u003c/li>\n\u003cli>ファイルをまたいだ検索(⌘⇧F)を右パネルに移し、「ファイル / 変更 / 検索」の 3 つ目のタブにしました。読んでいるコードを覆わなくなりました。結果をクリックするとメイン画面で開き、結果はパネルに残るので、続けて次の箇所を開けます。\u003c/li>\n\u003cli>差分、未コミットの変更、「AI の各ターン」の左にあるファイル一覧を、細い帯に折りたたんでコードに場所を譲れるようになりました。次に開いたときも折りたたんだままです。\u003c/li>\n\u003cli>⌘T とタブバーの「+」に「ターミナルを開く」を追加しました。「Claude Code を新しく開く」「Codex を新しく開く」の後に並びます。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"修正\">修正\u003ca class=\"h-anchor\" href=\"#修正\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>差分の右側のファイルの順番が左のファイルツリーと合っていなかった問題を修正しました。たとえば Dockerfile が config/ フォルダより前にあるのに、ツリーでは一番下に表示されていました。\u003c/li>\n\u003cli>長い行を横にスクロールすると、コードと背景色が右パネルの境界線まで描かれ、パネルに一部が隠れているように見えていた問題を修正しました。\u003c/li>\n\u003cli>検索結果からファイルを開いたとき、該当する行に移動しないことがあった問題を修正しました。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.17","date":"2026-10-23","title":"差分の横スクロール、⌘⇧P コマンドパレットと Markdown / PDF プレビュー、折りたたんだプロジェクトでも使用中の worktree を表示","html":"\u003ch3 id=\"改善\">改善\u003ca class=\"h-anchor\" href=\"#改善\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>差分の長い行が途中で切れなくなりました。内容は横にスクロールできます(トラックパッドで横にスワイプ、または下のスクロールバーをドラッグ)。行番号、ファイルの見出し、「⋯ 変更のない N 行」は左に固定され、一緒に動きません。「AI の各ターン」や未コミットの変更の詳細も同じです。\u003c/li>\n\u003cli>⌘⇧P のコマンドパレットを追加しました。⌘P と同じ画面で、&gt; から入力するとファイルではなくコマンドを探します。各コマンドにショートカットが表示され、いま実行できるものだけが並びます。\u003c/li>\n\u003cli>ファイル画面で Markdown(見出しで「プレビュー / ソース」を切り替え)と PDF(ページ単位で表示)をプレビューできます。「Markdown プレビュー」と「PDF プレビュー」はどちらも内蔵のプラグインで、最初から有効です。設定に新しく加わった「プラグイン」の節で無効にできます。\u003c/li>\n\u003cli>履歴(⌘Y)の検索欄の右に「この worktree」の切り替え(⌘E)を追加しました。現在の worktree での会話だけを表示し、次回起動後も設定を覚えています。\u003c/li>\n\u003cli>サイドバーで折りたたんだプロジェクトでも、使用中の worktree は表示されます。タブが開いているもの、AI が動いているもの、あなたを待っているものは隠れなくなり、クリックで切り替えられます。\u003c/li>\n\u003cli>配色を見直しました。AI 関連の色を紫からロゴの深い青緑に変え、ブランチ図の各ブランチの色を少し淡くし、ダークテーマでは赤・緑・琥珀色が明るめの色になります。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"修正\">修正\u003ca class=\"h-anchor\" href=\"#修正\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>⌘P / ⌘⇧P の画面を閉じたあとショートカットが効かなくなる問題、⌘P・⌘Y・新しいセッションの選択画面で検索欄をクリックすると画面が閉じてしまう問題を修正しました。\u003c/li>\n\u003cli>新しく作った(まだ git に追加していない)ディレクトリがファイルツリーで名前のない 1 つのファイルとして表示され、中のファイルが 1 つも出てこない問題を修正しました。ファイルを 1 つずつ一覧にし、.gitignore で無視されているファイルもグレーで表示します。node_modules のような無視されているディレクトリは、開いたときに中身を一覧にします。\u003c/li>\n\u003cli>「対応待ち」(「念のため確認」、「作業中」の行の下、関係図の線)に、相手のセッションがすでに終わっていて届くことのないメッセージや、gtree が agent の代わりに送る「[auto]」の通知が並ばなくなりました。「このターンを終えました」という自動通知も、ターンごとに積み重ならなくなりました。\u003c/li>\n\u003cli>現在のプロジェクトを折りたたむと、選択中の worktree がグレーの背景のままプロジェクト名の間に並び、プロジェクトが選択されているように見えていた問題を修正しました。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.16","date":"2026-10-15","title":"差分はすべてのファイルを一続きに、ファイル画面で画像と履歴を表示、プロジェクト名も変更可能に","html":"\u003ch3 id=\"改善\">改善\u003ca class=\"h-anchor\" href=\"#改善\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>差分は GitHub のプルリクエストのように、変更されたすべてのファイルを一続きで表示するようになりました。下へスクロールするだけですべての変更を見られます。左のファイルをクリックするとそこへ移動し、ファイルの見出しをクリックすると折りたたみ・展開できます。「全文を表示 / 変更のみ」はファイルごとに切り替えられるようになりました。「AI の各ターン」や未コミットの変更の詳細も同じ表示になりました。\u003c/li>\n\u003cli>差分で文字を選択すると、右上に「選択をコピー」が現れます。ファイルの見出しや「⋯ 変更のない N 行」の折りたたみ行は含めず、コードだけをコピーします。\u003c/li>\n\u003cli>ファイル画面で画像(PNG、JPG、WebP、GIF、SVG など)を開くと、収まる大きさに縮めて画像として表示します。SVG は「ソースを表示」に切り替えられます。大きすぎる画像はプレビューしません。\u003c/li>\n\u003cli>ファイル画面に「履歴」を追加しました。このファイルを変更したコミットを、ファイル名を変える前のものも含めて一覧にします。クリックすると、そのコミットで何が変わったかを差分で表示します。\u003c/li>\n\u003cli>サイドバーでプロジェクトを右クリックし「名前を変更」を選ぶと、その場で名前を変えられます。↩ で保存、esc で取り消し、空欄にするとフォルダ名に戻ります。新しい名前は「対応待ち」や通知、gtree が agent に伝えるプロジェクト名にも反映されます。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"修正\">修正\u003ca class=\"h-anchor\" href=\"#修正\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>「対応待ち」に戻った直後の数秒間、一覧が前回の状態のままで、サイドバーのバッジと合わない問題を修正しました。\u003c/li>\n\u003cli>worktree のフォルダからリポジトリを開くと「対応待ち」に同じリポジトリが 2 つ表示され、あなたを待っている agent も 2 回並び、agent に伝えるプロジェクト名も間違っていた問題を修正しました。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.15","date":"2026-10-15","title":"agent の作業中も軽く、agent へのメッセージは英語にも対応","html":"\u003ch3 id=\"改善\">改善\u003ca class=\"h-anchor\" href=\"#改善\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>agent が作業している間の gtree 自身の CPU 使用量がほぼ半分になりました。agent の状態を示す回転アイコンとベルは、画面のリフレッシュレートではなく毎秒約 12 回で描き直すようになりました。3 つの agent が作業中、1 つが待っている状態の計測で、gtree は 8.6% から 4.4%(1 コア換算)に下がりました。何も動いていないときは 1% 未満のままです。\u003c/li>\n\u003cli>gtree が agent に送る文章がアプリの言語に合わせて切り替わるようになりました。中国語表示なら中国語、それ以外は英語です。同じ worktree の別セッションがファイルを変更した直後の知らせ、別セッションからの伝言、セッション開始時の「誰が何をしているか」、gtree の MCP ツールの説明が対象です。\u003c/li>\n\u003cli>スタートページの「Claude Code に接続されていません」の案内をカードにしました。説明を 1 行いっぱいに表示し、ボタンはその下に並びます。\u003c/li>\n\u003cli>初回のガイドの文章を今の画面に合わせました。同じ worktree の agent は同じファイルを触る前に互いに確認します。「AI の各ターン」と ⌘Y がタイムラインの代わり、「対応待ち」がコラボビューの代わりです。\u003c/li>\n\u003cli>状態のツールチップの先頭を「Claude ·」から「AI ·」に変えました。Codex のセッションにも使われるためです。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"修正\">修正\u003ca class=\"h-anchor\" href=\"#修正\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>空のリポジトリで、ファイルツリーの読み込み中の表示が消えずに動き続けていました。\u003c/li>\n\u003cli>英語または日本語の表示で、「履歴」で再生した会話に出るツールの手順(「src/theme.ts を編集」など)が中国語になっていました。\u003c/li>\n\u003cli>スタートページの同時変更ファイル一覧で、ファイルのパスが見えなくなるほど詰まることがありました。関係する worktree は 2 行目に移しました。\u003c/li>\n\u003cli>「対応待ち」がもう存在しないワークベンチへ案内していたのをやめ、残りの件数だけを表示するようにしました。\u003c/li>\n\u003cli>設定の Claude Code の各 hook の説明に、ワークベンチやタイムラインが出てこなくなりました。チームプランの説明から、すでに無料版にある「チームメンバー」を外し、中継サーバーは同期情報を転送するだけでデータは保存しないと明記しました。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.14","date":"2026-10-15","title":"閉じる前の状態を覚えて、クリックひとつで差分を表示","html":"\u003ch3 id=\"改善\">改善\u003ca class=\"h-anchor\" href=\"#改善\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>gtree を閉じて開き直しても、開いていたプロジェクト、最後に見ていたプロジェクト、各プロジェクトで選んでいた worktree がそのまま残ります。プロジェクトを追加し直す必要はありません。\u003c/li>\n\u003cli>スタートページの「変更を見る」や、右の「変更」でファイルをクリックすると、中央に差分が開きます。左に変更されたファイル、右に内容が表示され、新しいファイルも見られます。ステージと取り消しは行末の + / − だけで行い、ファイルをクリックしてもステージされなくなりました。\u003c/li>\n\u003cli>スタートページの「エディタで開く」は「ファイルを開く」になりました。右側がファイルツリーに切り替わり、⌘P のファイル検索が開きます。選んだファイルは gtree の中で開き、そのまま編集・保存できます。\u003c/li>\n\u003cli>リベース後にリモートのブランチと食い違ったときは、「プル」と「プッシュ」を両方出す代わりに「リベース後、リモートのこのブランチと食い違っています」の 1 行と「プッシュ(リモートを上書き)」ボタンを表示します。押すと確認が出ます。ほかの人が新しい変更をプッシュしているときは表示しません。\u003c/li>\n\u003cli>ターンの詳細にある長い返信は最初 4 行だけ表示し、展開できます。下の変更が画面の外に押し出されなくなりました。\u003c/li>\n\u003cli>サイドバーのプロジェクト、「マージ済み」「AI の一時ワークスペース」「AI の各ターン」、スタートページの同時変更ファイル一覧は、アニメーション付きで開閉し、行が順番に現れます。「AI の各ターン」を折りたたんでも見出しは動きません。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"修正\">修正\u003ca class=\"h-anchor\" href=\"#修正\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>全体検索でファイル範囲の欄をクリックしても検索が閉じなくなりました。⌘⇧F は常に検索を開くようになり、もう一度押しても閉じません。\u003c/li>\n\u003cli>サイドバーで選んでいるラインが別のラインに切り替わってしまうことがある問題を修正しました。\u003c/li>\n\u003cli>スタートページの同時変更ファイル一覧は、いまのラインに関係するものだけを表示し、別のラインに切り替えても引き継がれなくなりました。\u003c/li>\n\u003cli>「AI の各ターン」でセッションの区切り線が次の行の文字に重なっていた問題を修正しました。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.13","date":"2026-10-14","title":"右のパネルを見やすく:わかりやすいタブと、内容に合わせて広がるコミット欄","html":"\u003ch3 id=\"改善\">改善\u003ca class=\"h-anchor\" href=\"#改善\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>右のパネルの「ファイル」「変更」タブの見た目を変えました。選んでいるタブは文字が濃くなり下線が付くので、切り替えられることがすぐわかります。「変更」には未コミットのファイル数を表示し、「ファイル」にはリポジトリのファイル総数を表示しなくなりました。\u003c/li>\n\u003cli>「変更」タブのレイアウトを変えました。作業ツリーがクリーンなときは上部が「未コミットの変更　変更なし」の 1 行だけになり、下の「AI の各ターン」を広く使えます。「すべて破棄」は「⋯」メニューに移しました。\u003c/li>\n\u003cli>「AI の各ターン」は 1 ターンを 2 行で表示します。1 行目は質問と時刻、2 行目は変更したファイルの数と名前(「3 ファイル · root.rs など」)です。左の色付きの縦線をなくし、セッションの切れ目に区切り線を引くようにしました。「ファイル変更のないターンを表示」と「旧スナップショット」は「⋯」メニューに移しました。\u003c/li>\n\u003cli>「AI の各ターン」を折りたためるようになりました。見出しをクリックするとパネル下部の 1 行だけになり、次に開いたときも折りたたんだままです。\u003c/li>\n\u003cli>コミットメッセージ欄は入力に合わせて最大 4 行まで広がり、それ以上は欄の中でスクロールします。長めのメッセージも全文が見え、上のファイル一覧も隠れません。\u003c/li>\n\u003cli>サイドバーと同じように、「対応待ち」でも作業中の AI の回転アイコンが回り、あなた待ちのベルが点滅するようになりました。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"修正\">修正\u003ca class=\"h-anchor\" href=\"#修正\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>AI ページのタブがアイコンだけに縮み、名前が見えなくなっていた問題を修正しました(0.3.12 で発生)。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.12","date":"2026-10-14","title":"新しいレイアウト:ラインを選べば次にやることがわかる、サイドバーに MR の状態","html":"\u003ch3 id=\"改善\">改善\u003ca class=\"h-anchor\" href=\"#改善\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>画面の構成を変えました。サイドバーは「対応待ち」「コミット履歴」とプロジェクトだけになりました。プロジェクト内のラインをクリックするとそのホームが開き、セッションがあれば会話、なければそのラインのスタートページが表示されます。「ワークベンチ」はなくなりました。ショートカットは ⌘1 対応待ち、⌘2 現在の worktree、⌘3 コミット履歴です。\u003c/li>\n\u003cli>スタートページには、そのラインの今の状況がそれぞれボタン付きで並びます。マージ済み(worktree を削除 / 新しいブランチで始める)、同じファイルを別の場所でも変更中(どれか見る)、未コミットの変更あり(変更を見る)、リモートに新しいコミット(プル)、未プッシュ(プッシュ)、開いている MR(MR を開く)、MR がまだない(MR を作成)、メインブランチより遅れている(リベース)。その下から Claude Code / Codex の新規起動、ターミナルを開く、エディタで開くができます。\u003c/li>\n\u003cli>右のパネルを「ファイル」と「変更」の 2 つのタブにしました(⌥⌘B で開閉、⇧⌘E / ⌃⇧G で切り替え)。「変更」には未コミットのファイル(ステージとコミットはここで)と AI の各ターンが並び、ターンをクリックすると何を変えたかが中央に表示されます。これまでの「変更」ビューは「コミット履歴」に名前を変えました。\u003c/li>\n\u003cli>サイドバーのブランチの後ろに MR の状態を表示します。マージ前はプルリクエストのアイコン、マージ済みなら薄いマージのアイコンです。マウスを乗せると番号・タイトル・リンクが見られ、クリックするとブラウザで開きます。ログイン済みの glab か gh を使い、GitLab(セルフホストを含む)と GitHub に対応しています。どちらも入っていなければ表示しません。\u003c/li>\n\u003cli>サイドバーの各ラインの右端には目印を 1 つだけ表示します。AI セッションの状態(作業中、あなた待ちなど)、同じファイルを別の場所でも変更中(琥珀色の △)、または未コミットの変更の行数(「+24 −3」など)です。マウスを乗せると説明が出ます。\u003c/li>\n\u003cli>ブランチがマージ済みで使っていないラインは、サイドバー下部の「マージ済み · N」にまとめます。プラットフォーム上で squash マージされ、git では判別できないものも含みます。\u003c/li>\n\u003cli>サイドバーでラインを右クリックすると Git メニュー(プッシュ、プル、コミット、ブランチ切り替え、worktree の削除など)が開きます。worktree が多いときはプロジェクト名が上に固定され、いつでもクリックで折りたためます。\u003c/li>\n\u003cli>AI が作業中またはあなた待ちのラインは、どのページからクリックしてもその会話が直接開きます。\u003c/li>\n\u003cli>AI ページを開いても Claude Code が自動で起動しなくなりました。見るだけでセッションが増えることはありません。始めるときはスタートページの「Claude Code を新しく開く」をクリックするか ⌘T を押してください(Codex が入っていれば選べます)。\u003c/li>\n\u003cli>過去の会話は AI ページ上部の小さなウィンドウ(⌘Y)で開くようになりました。入力して検索し、↩ で続きから、⌘↩ で閲覧のみ。一覧の会話をクリックしても続きから始められます。\u003c/li>\n\u003cli>Claude Code が動いているタブを ⌘W で閉じるときは確認が出ます。「今後は確認しない」を選んでも、設定で元に戻せます。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"修正\">修正\u003ca class=\"h-anchor\" href=\"#修正\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>「回答済み、返信待ち」のベルは、そのターミナルのタブに切り替えれば消えるようになりました。メッセージを送る必要はありません。\u003c/li>\n\u003cli>「対応待ち」で行をクリックすると、その件のセッションのタブに切り替わります。一覧が更新されても、キーボードで選んだ行が別の行に移らなくなりました。\u003c/li>\n\u003cli>タイトルバーのボタンを素早くクリックしても、ウィンドウが拡大されなくなりました。\u003c/li>\n\u003cli>ターミナルで 2 行に折り返された長い URL も、⌘ を押しながらクリックで開けるようになりました。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.11","date":"2026-10-13","title":"ワークベンチで先に見るべきものがすぐわかる、「対応待ち」を作り直し","html":"\u003ch3 id=\"改善\">改善\u003ca class=\"h-anchor\" href=\"#改善\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>ワークベンチを worktree ごとに 1 行にし、緊急度でまとめました。対応が必要なもの(あなた待ち、マージの競合)が先頭に並び、変更がなく AI も作業していないものやブランチがマージ済みのものは折りたたまれます。1 行目にブランチ名を省略せずに表示し、2 行目に worktree 名と変更内容を表示します。ボタンはマウスを乗せたときだけ表示されます。\u003c/li>\n\u003cli>2 つの worktree が同じファイルを変更しているときは、常時表示のオレンジのバナーではなくその行に表示され、クリックするとファイル一覧が見られます。\u003c/li>\n\u003cli>ワークベンチ、ステータスバー、ファイルツリー、検索の状態色を 4 つの意味に絞りました。赤は対応が必要、琥珀色はリスクあり、紫はエージェントが作業中、緑はステージ済みです。\u003c/li>\n\u003cli>Claude Code または Codex を接続していれば、エージェントはセッションの開始時(と、あなたが worktree に触れたとき)に再利用できる worktree の一覧を受け取り、新しく作らずに済みます。\u003c/li>\n\u003cli>「対応待ち」を作り直しました。行をクリックするとそのセッションに移動でき、↑↓ と ↩ でも操作でき、⌫ で片付けられます。\u003c/li>\n\u003cli>「対応待ち」右側の「AI のやり取り」欄はなくなり、エージェント同士の質問や伝言は関係する行の下に表示されるようになりました。「念のため確認」には、ほかのエージェントの回答を長く待っているもの、届いていない伝言、あなたの質問への回答(クリックでその場に展開)も表示されます。\u003c/li>\n\u003cli>「対応待ち」のリストと「プロジェクトの関係図」を別々にスクロールできるようになりました。関係図は 2 本指でドラッグ、ピンチで拡大・縮小でき、空いている所をダブルクリックすると全体がウィンドウに収まります。\u003c/li>\n\u003cli>全ファイル検索(⌘⇧F)を新しくしました。入力と同時に結果が出て、ファイルごとにまとまり、一致箇所が強調表示されます。大文字と小文字の区別、単語単位の一致、未コミットの変更があるファイルだけの検索ができ、\u003ccode>*.rs  !tests\u003c/code> のような書き方で対象を絞れます。\u003c/li>\n\u003cli>内蔵ターミナル:⌘ を押しながらリンクをクリックすると開きます。⌘← / ⌘→ で行頭 / 行末に、⌥← / ⌥→ で単語単位に移動でき、Finder からファイルをドラッグするとパスが入力されます。ドラッグした画像は Claude Code が画像として認識します。\u003c/li>\n\u003cli>ファイルを開くと、ファイルツリーがそのファイルまで自動で展開されます。\u003c/li>\n\u003cli>AI ページの「履歴」を「今日」「昨日」「過去 7 日間」「それ以前」に分け、スクロール中も見出しが上部に残るようにしました。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"修正\">修正\u003ca class=\"h-anchor\" href=\"#修正\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>gtree を起動していないとき(⌘Q で終了したあとなど)は、別のターミナルで Claude Code や Codex を使っても gtree の通知が出なくなりました。\u003c/li>\n\u003cli>「このセッションを続ける」は、そのセッションがすでに gtree のターミナルタブで開いていれば、そのタブに切り替わるようになりました。\u003c/li>\n\u003cli>検索:選んだ結果を ↩ で開けるようになりました。パスに日本語などを含む結果も開けるようになり、前の検索結果が新しい結果を置き換えてしまう問題も修正しました。\u003c/li>\n\u003cli>改行を含むセッションタイトルで履歴のリストが崩れる問題を修正しました。\u003c/li>\n\u003cli>「プロジェクトの関係図」が横に広がって右端が切れる問題と、「/」という名前のプロジェクトが表示される問題を修正しました。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.10","date":"2026-10-10","title":"開いたファイルをその場で編集できるように","html":"\u003ch3 id=\"新機能\">新機能\u003ca class=\"h-anchor\" href=\"#新機能\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>開いたファイルをそのまま編集できるようになりました。⌘S で保存でき、別のファイルに切り替えると自動で保存されます。\u003c/li>\n\u003cli>開いたあとにファイルが別の場所で(エージェントなどによって)変更されていた場合、保存しても黙って上書きはしません。読み込み直す(自分の編集を破棄)か、それでも上書きするかを選べます。ファイル切り替え時の自動保存はこの場合上書きせず、保存できなかったファイルを知らせます。\u003c/li>\n\u003cli>UTF-8 以外のファイルは読み取り専用で開きます。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"改善\">改善\u003ca class=\"h-anchor\" href=\"#改善\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>サイドバー、ファイルパネル、AI 履歴の折りたたみ / 展開ボタンを、同じパネルアイコンにそろえました。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.9","date":"2026-10-10","title":"Codex に対応、エージェント同士で相談、「チームメンバー」を追加","html":"\u003ch3 id=\"新機能\">新機能\u003ca class=\"h-anchor\" href=\"#新機能\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>Codex に対応しました。設定で「Codex をつなぐ」をクリックすると、Codex のセッションも Claude Code と同じように扱えます。何をしているか、いつあなたを待っているかがひと目でわかり、待っているものは「対応待ち」に並び、ターンごとの変更も記録されてロールバックできます。Codex 側で一つずつ承認する必要はありません。\u003c/li>\n\u003cli>AI ビューの「+」から Codex を新しく開き、内蔵ターミナルで Claude Code と並べて動かせます。「履歴」でも Codex の会話を検索・再生できます。\u003c/li>\n\u003cli>同じ worktree で動くエージェント(Claude Code でも Codex でも)が互いを把握するようになりました。一方が、もう一方も変更したファイルを変更すると相手に自動で知らせ、同じ箇所を変更する前には伝言を残してどちらが先に進めるかを相談します。先に終えた側は相手に知らせます。\u003c/li>\n\u003cli>「チームメンバー」を追加しました(初期設定はオフ、リポジトリごとにオン)。最近ほかの人がコミットしているリポジトリでは、サイドバーのプロジェクトの下に「チームメンバー」が表示されます。「オンにする」→「共有を始める」で、チーム自身の git リポジトリを通じて、未コミットの変更も含めた作業中のコードをメンバーと見せ合えます。ブランチをクリックすると相手の変更を確認できます。\u003c/li>\n\u003cli>チームメンバーと同じ箇所を変更しそうなとき、あなたの AI は編集する前に手を止めてあなたに確認します。「対応待ち」にも表示され、「相手の変更を見る」ですぐ確認できます。\u003c/li>\n\u003cli>AI からチームメンバーに伝言を残せます。相手本人が読んで「自分の AI に渡す」をクリックしたときだけ相手の AI に届き、返事は尋ねた AI に自動で戻ります。\u003c/li>\n\u003cli>チームメンバー間のやり取りはすべて署名され、伝言は受け取る本人しか読めません。リポジトリにアクセスできるほかの人がメンバーになりすますことはできません。メンバーの身元が変わったときは、本人だと確認するまで何も受け取りません。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"改善\">改善\u003ca class=\"h-anchor\" href=\"#改善\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>ステータスバーの「別のターミナルで AI が開いています」をクリックすると、セッションの一覧が開きます。何を尋ねたか、どれくらい前か、何をしているかが並び、クリックで該当のターミナルへ切り替えます。開いている場所がわからないものは、その会話を再生します。\u003c/li>\n\u003cli>ファイルツリーの右クリックから「ブラウザで開く」「既定のアプリで開く」「Finder で表示」「ターミナルで開く」(gtree の内蔵ターミナル)「パスをコピー」が使えます。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"修正\">修正\u003ca class=\"h-anchor\" href=\"#修正\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>ガイドのページをめくるときに別の画面が一瞬映る問題を修正しました。最後のページの動画は「Claude Code に接続」する手順に差し替えました。\u003c/li>\n\u003cli>同じ worktree で長いコマンドを並行して実行したとき、ファイルが別のセッションのものとして扱われる問題を修正しました。テスト出力の「0 failed」もエラーと見なさなくなりました。\u003c/li>\n\u003cli>Claude Code の接続説明から、アプリが実際には表示しない「エラー」「停止」の状態についての記述を削除しました。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.8","date":"2026-10-09","title":"「対応待ち」と通知を追加、ナビを 4 項目に整理","html":"\u003cp>\u003cfigure>\u003cimg src=\"/media/app/inbox-ja-light.webp\" alt=\"gtree の「対応待ち」画面。上にあなたを待っているセッションが「開く →」付きで並び、「気にかけておくと良いもの」に同じファイルを変更している worktree が、いちばん下に「作業中」の AI が表示されている\" loading=\"lazy\" decoding=\"async\" />\u003cfigcaption>新しい最初の画面「対応待ち」。誰があなたを待っているか、どこで作業が重なっているかが 1 ページでわかります\u003c/figcaption>\u003c/figure>\u003c/p>\n\u003ch3 id=\"新機能\">新機能\u003ca class=\"h-anchor\" href=\"#新機能\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>最初の画面が「対応待ち」になりました。今あなたが対応すべきことがあるかだけを伝えます。あなたを待っている AI を待ち時間の長い順に先頭に並べ、続いて 2 つのブランチが同じファイルを変更しているなど、気にかけておくと良いことを表示します。\u003c/li>\n\u003cli>AI が止まってあなたを待っているとき(許可が必要なとき、またはターンを終えて返事を待っているとき)、macOS の通知でお知らせし、クリックでそのセッションへ移動できます。Dock アイコンには待っている件数が表示されます。\u003c/li>\n\u003cli>同じ worktree で 2 つの Claude Code セッションが作業しているとき、もう一方が変更したばかりのファイルを編集する前に AI へ知らせ、互いに上書きしないようにします。\u003c/li>\n\u003cli>設定から gtree をこの Mac から削除できます。Claude Code との接続を解除し、gtree のデータを削除して(再インストール予定なら残すこともできます)、アプリをゴミ箱へ移します。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"改善\">改善\u003ca class=\"h-anchor\" href=\"#改善\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>ナビゲーションを 7 項目から 4 項目(対応待ち・ワークベンチ・変更・AI)に整理し、⌘1–⌘4 で順に開けます。「変更」には AI の変更・コミット履歴・比較をまとめました。\u003c/li>\n\u003cli>Claude Code への接続は、ガイド・ワークベンチのお知らせバー・空の「AI の変更」画面からワンクリックで行えます。通知の許可も同時に確認するので、ターミナルでのコマンド入力は不要です。\u003c/li>\n\u003cli>「比較」を開くと、メインブランチと現在の worktree の差分が最初から表示されます。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"修正\">修正\u003ca class=\"h-anchor\" href=\"#修正\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>数百のブランチがあるリポジトリで、Mac 全体が重くなる問題を修正しました。\u003c/li>\n\u003cli>ターミナルタブを閉じると、中で動いている Claude も終了するようになりました。同じ worktree で複数の Claude タブを開いても、状態が互いに上書きされなくなりました。\u003c/li>\n\u003cli>ダウンロードフォルダから直接開いた gtree で、アップデートや Claude Code への接続が失敗する問題を修正しました。アプリケーションフォルダへの移動もワンクリックで行えます。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.7","date":"2026-10-09","title":"gtree をどこに移動しても Claude Code 連携はそのまま","html":"\u003ch3 id=\"改善\">改善\u003ca class=\"h-anchor\" href=\"#改善\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>gtree.app を別のフォルダへ移動しても、Claude Code との接続が知らないうちに切れることはなくなりました。接続済みの場合は、初回起動時に自動で切り替わります。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"修正\">修正\u003ca class=\"h-anchor\" href=\"#修正\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>一部のターミナルでインストールコマンドが「unbound variable」で失敗する問題を修正しました。0.3.3 以降、多くの方がこのエラーでインストールできていませんでした。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.6","date":"2026-10-09","title":"新規インストールが利用統計に正しく反映されるように","html":"\u003ch3 id=\"修正\">修正\u003ca class=\"h-anchor\" href=\"#修正\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>新しくインストールした方が、匿名の利用統計にインストール当日から正しく反映されるようになりました。これまでどおりお知らせを表示した後にのみ集計し、設定からオフにできます。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.5","date":"2026-10-09","title":"ブラウザでダウンロードしても確実に起動","html":"\u003ch3 id=\"修正\">修正\u003ca class=\"h-anchor\" href=\"#修正\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>ブラウザでダウンロードした .zip から開くと「gtree は壊れているため開けません」と表示される問題を修正しました。アプリ全体に署名したため、初回だけ「システム設定 → プライバシーとセキュリティ → このまま開く」で許可すれば使えます。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.3","date":"2026-10-09","title":"Claude Code 連携を設定画面から導入","html":"\u003cp>\u003cfigure>\u003cimg src=\"/media/app/settings-claude-not-connected-ja-light.webp\" alt=\"gtree の設定の「Claude Code との接続」欄。「未接続」の表示と「Claude Code に接続」ボタン、接続すると何ができるかの説明がある\" loading=\"lazy\" decoding=\"async\" />\u003cfigcaption>設定からワンクリックで Claude Code に接続できます。何ができて何が変わるかも、その場で説明しています\u003c/figcaption>\u003c/figure>\u003c/p>\n\u003ch3 id=\"新機能\">新機能\u003ca class=\"h-anchor\" href=\"#新機能\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>設定に「Claude Code 連携」を追加しました。ワンクリックで導入でき、何のために入れるのか、何が変わるのかを平易に説明します。インストール先の変更、hook ごとの確認とオン・オフ、アンインストールもここで行えます。\u003c/li>\n\u003cli>Claude Code 連携が未導入または更新が必要なとき、ワークベンチにお知らせバーを表示し、設定へ直接移動できます。\u003c/li>\n\u003cli>AI タブをドラッグで並べ替えられるようになりました。タブが多いときはタブバーをスクロールできます。\u003c/li>\n\u003cli>設定で、近日公開予定のチームプランの概要と予定価格をご案内し、アーリーバード登録もできるようにしました。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"改善\">改善\u003ca class=\"h-anchor\" href=\"#改善\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>タイムラインの冒頭に用途の説明を加え、既定ではファイルを変更したターンだけを表示するようにしました。システムメッセージや Markdown も読みやすく表示します。\u003c/li>\n\u003cli>サイドバー、ファイルパネル、AI の履歴パネルの開閉をなめらかなアニメーションにしました。\u003c/li>\n\u003cli>コマンドラインの出力と \u003ccode>gtree --help\u003c/code> が表示言語に合わせて表示されます。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"修正\">修正\u003ca class=\"h-anchor\" href=\"#修正\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>サイドバーの開閉中に、内容がウィンドウのボタンに重なる問題を修正しました。\u003c/li>\n\u003cli>Claude Code のサブエージェントが終了した後も、過去の会話が「別のターミナルで開いています」のままになり再開できない問題を修正しました。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.2","date":"2026-10-09","title":"英語・日本語表示に対応、初回ガイドを追加","html":"\u003cp>\u003cfigure>\u003cimg src=\"/media/app/settings-general-notifications-ja-light.webp\" alt=\"gtree の設定の「一般」。言語を English・日本語・中文 から選ぶ切り替えと、「ガイド」の「もう一度見る」ボタンがある\" loading=\"lazy\" decoding=\"async\" />\u003cfigcaption>設定でいつでも表示言語を切り替えられ、ガイドもここから見直せます\u003c/figcaption>\u003c/figure>\u003c/p>\n\u003ch3 id=\"新機能\">新機能\u003ca class=\"h-anchor\" href=\"#新機能\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>画面の表示言語に英語・日本語・簡体字中国語を追加しました。macOS の言語設定に合わせて表示され、設定からすぐに切り替えられます。\u003c/li>\n\u003cli>サイドバー左下の歯車ボタンから設定を開けます。ボタンには現在の言語が表示されます。\u003c/li>\n\u003cli>新しく使い始める方には、初回起動時に 6 ページのガイドを表示します。設定 → 一般からいつでも見直せます。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"改善\">改善\u003ca class=\"h-anchor\" href=\"#改善\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>ガイドは macOS の「視差効果を減らす」設定に従い、動きを抑えたフェード表示になります。\u003c/li>\n\u003cli>インストールコマンドの進捗表示を英語にしました。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"修正\">修正\u003ca class=\"h-anchor\" href=\"#修正\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>英語・日本語表示でワークベンチのパネル見出しが途中で切れる問題を修正しました。\u003c/li>\n\u003cli>コラボ画面のカードに、質問の代わりにシステムのタグがそのまま表示される問題を修正しました。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.1","date":"2026-10-08","title":"設定パネルを追加、利用統計をいつでもオン・オフ","html":"\u003ch3 id=\"新機能\">新機能\u003ca class=\"h-anchor\" href=\"#新機能\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>「設定」を追加しました(⌘, またはメニューバーの gtree → 設定…)。最初の項目で、匿名の利用統計をいつでもオン・オフできます。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"改善\">改善\u003ca class=\"h-anchor\" href=\"#改善\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>初回起動時の利用統計のお知らせを、よりわかりやすい言葉に改め、設定から変更できることを案内するようにしました。\u003c/li>\n\u003c/ul>\n"},{"version":"0.3.0","date":"2026-10-08","title":"タイムライン:AI のターンごとに見返して復元","html":"\u003cp>\u003cfigure>\u003cimg src=\"/media/app/ai-changes-timeline-ja-light.webp\" alt=\"「AI の変更」画面。中央にファイルを変更したターンが並び、右側に選択したターンの質問、Claude の返答、変更されたファイルと diff、右上に「このターンに復元」がある\" loading=\"lazy\" decoding=\"async\" />\u003cfigcaption>ターンごとの質問・返答・変更が残り、「このターンに復元」でそのターンのファイルを戻せます\u003c/figcaption>\u003c/figure>\u003c/p>\n\u003ch3 id=\"新機能\">新機能\u003ca class=\"h-anchor\" href=\"#新機能\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>「スナップショット」は「タイムライン」になりました。Claude Code のターンが終わるたびに質問・返答・変更されたファイルを記録し、ターンごとの差分を確認したり、そのターンで変更されたファイルを元に戻したりできます。ブランチやステージングエリアには触れません。\u003c/li>\n\u003cli>新しい Claude Code セッションは、同じ worktree で前のセッションがどこまで進んだか(質問、最後の返答、変更したファイル)を把握した状態で始まります。\u003c/li>\n\u003cli>AI が自分で過去のターンの記録を調べられるようになりました。ほかのプロジェクトの記録も対象です。\u003c/li>\n\u003cli>コミットグラフに、AI の各ターン終了時の状態を、現在のコミットから伸びるブランチのように表示できます。ツールバーで表示を切り替えられます。\u003c/li>\n\u003cli>コラボ画面の先頭に、動いている AI ごとのカードが並びます。何をしているか、前のターンで何をしたかがわかり、あなたを待っている AI が先頭に来ます。\u003c/li>\n\u003cli>「見に行く」で、worktree で作業中の Claude へ直接移動できます。gtree 内なら AI タブへ、ご自身のターミナルで動いている場合は読み取り専用の再生を開きます。\u003c/li>\n\u003c/ul>\n\u003ch3 id=\"改善\">改善\u003ca class=\"h-anchor\" href=\"#改善\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cul>\n\u003cli>ダウンロードとアップデートは gtree 専用のダウンロードサーバーを経由し、つながらない場合は自動で GitHub に切り替えます。\u003c/li>\n\u003cli>匿名の利用統計を導入しました。送信を始める前に初回起動時にお知らせし、お知らせから、または GTREE_NO_TELEMETRY=1 でオフにできます。\u003c/li>\n\u003c/ul>\n"}]}</script>
+  </body>
+</html>

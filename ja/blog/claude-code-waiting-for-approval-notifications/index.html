@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ja" data-lang="ja" data-root="../../../" data-path="blog/claude-code-waiting-for-approval-notifications/" data-prerendered>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="../../../favicon.png" />
+    <link rel="apple-touch-icon" href="../../../logo.png" />
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0A0A0A" media="(prefers-color-scheme: dark)" />
+    <title>Claude Code の承認待ちにすぐ気づく方法 — 通知と状態の見える化 · gtree</title>
+    <meta name="description" content="Claude Code は許可が必要になると止まって待ち続けます。Notification hook で通知を出す方法と、複数並列でもどのセッションが待っているかをひと目で把握する方法を解説します。" />
+    <link rel="canonical" href="https://gtree.dobbylab.com/ja/blog/claude-code-waiting-for-approval-notifications/" />
+    <link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/claude-code-waiting-for-approval-notifications/" />
+    <link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/claude-code-waiting-for-approval-notifications/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/claude-code-waiting-for-approval-notifications/" />
+    <link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/claude-code-waiting-for-approval-notifications/" />
+    <link rel="alternate" type="application/rss+xml" title="ブログ · gtree" href="https://gtree.dobbylab.com/ja/blog/feed.xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="gtree" />
+    <meta property="og:title" content="Claude Code の承認待ちにすぐ気づく方法 — 通知と状態の見える化" />
+    <meta property="og:description" content="Claude Code は許可が必要になると止まって待ち続けます。Notification hook で通知を出す方法と、複数並列でもどのセッションが待っているかをひと目で把握する方法を解説します。" />
+    <meta property="og:url" content="https://gtree.dobbylab.com/ja/blog/claude-code-waiting-for-approval-notifications/" />
+    <meta property="og:image" content="https://gtree.dobbylab.com/og-ja.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="zh_CN" />
+    <meta property="article:published_time" content="2026-10-13" />
+    <link rel="alternate" type="text/markdown" href="https://gtree.dobbylab.com/ja/blog/claude-code-waiting-for-approval-notifications/index.md" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@dobbylabhq" />
+    <meta name="twitter:title" content="Claude Code の承認待ちにすぐ気づく方法 — 通知と状態の見える化" />
+    <meta name="twitter:description" content="Claude Code は許可が必要になると止まって待ち続けます。Notification hook で通知を出す方法と、複数並列でもどのセッションが待っているかをひと目で把握する方法を解説します。" />
+    <meta name="twitter:image" content="https://gtree.dobbylab.com/og-ja.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://dobbylab.com/#org","name":"DobbyLab","url":"https://dobbylab.com/","logo":"https://gtree.dobbylab.com/logo.png","email":"mailto:support@dobbylab.com","sameAs":["https://x.com/dobbylabhq","https://discord.gg/EnPJxrUEK5","https://github.com/dobbylabhq"]},{"@type":"BlogPosting","@id":"https://gtree.dobbylab.com/ja/blog/claude-code-waiting-for-approval-notifications/#post","headline":"Claude Code の承認待ちにすぐ気づく方法 — 通知と状態の見える化","description":"Claude Code は許可が必要になると止まって待ち続けます。Notification hook で通知を出す方法と、複数並列でもどのセッションが待っているかをひと目で把握する方法を解説します。","datePublished":"2026-10-13","dateModified":"2026-10-15","inLanguage":"ja","image":"https://gtree.dobbylab.com/og-ja.png","url":"https://gtree.dobbylab.com/ja/blog/claude-code-waiting-for-approval-notifications/","mainEntityOfPage":"https://gtree.dobbylab.com/ja/blog/claude-code-waiting-for-approval-notifications/","keywords":"claude-code, notifications, parallel-agents","author":{"@id":"https://dobbylab.com/#org"},"publisher":{"@id":"https://dobbylab.com/#org"},"about":{"@id":"https://gtree.dobbylab.com/#app"},"isPartOf":{"@id":"https://gtree.dobbylab.com/ja/blog/#blog"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://gtree.dobbylab.com/ja/"},{"@type":"ListItem","position":2,"name":"ブログ","item":"https://gtree.dobbylab.com/ja/blog/"},{"@type":"ListItem","position":3,"name":"Claude Code の承認待ちにすぐ気づく方法 — 通知と状態の見える化","item":"https://gtree.dobbylab.com/ja/blog/claude-code-waiting-for-approval-notifications/"}]}]}</script>
+    <script>
+      // 首次绘制前:① 套上用户选过的深浅色(没选过 = 跟随系统),避免闪屏;
+      // ② 语言:每种语言是独立的预渲染页面(/、/ja/、/zh/)。?lang=xx 视为显式选择 —— 记下并跳到对应页面;
+      //    子页面(/zh/blog/… 等)同理,跳到同一页面的另一种语言。
+      //    没有 ?lang 时,只有用户在页面上选过语言(localStorage 有值)且和当前页不同才跳。
+      //    没选过就不跳(不按浏览器语言猜);爬虫没有 localStorage,不会被重定向。
+      //    开发模式没有 data-prerendered,这段不跳(dev 用 ?lang= 由 main.jsx 读)。
+      try { var t = localStorage.getItem('gtree:theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t } catch (e) {}
+      try {
+        var d = document.documentElement, L = ['en', 'ja', 'zh'], cur = d.getAttribute('data-lang') || 'en'
+        if (d.hasAttribute('data-prerendered')) {
+          var q = new URLSearchParams(location.search).get('lang'), want = null
+          if (L.indexOf(q) >= 0) { want = q; try { localStorage.setItem('gtree:lang', q) } catch (e) {} }
+          else { var s = null; try { s = localStorage.getItem('gtree:lang') } catch (e) {} if (L.indexOf(s) >= 0) want = s }
+          // data-root:当前页到站点根的相对前缀;data-path:页面在语言根下的路径(博客文章等子页面换语言时留在同一页)
+          var root = d.getAttribute('data-root') || (cur === 'en' ? './' : '../'), sub = d.getAttribute('data-path') || ''
+          if (want && want !== cur) location.replace(new URL(root + (want === 'en' ? '' : want + '/') + sub + location.hash, location.href).href)
+          else if (L.indexOf(q) >= 0) history.replaceState(null, '', location.pathname + location.hash)
+        }
+      } catch (e) {}
+    </script>
+    <script>
+      // Cloudflare Web Analytics:按访客去重的访问量,不用 cookie。只在正式域名上加载 —— 本地开发、预览不上报。
+      // 官网在 GitHub Pages、DNS 不走代理,Cloudflare 没法自动注入,所以手动嵌(站点在控制台 Web Analytics 里)
+      if (location.hostname === 'gtree.dobbylab.com') {
+        var b = document.createElement('script')
+        b.defer = true
+        b.src = 'https://static.cloudflareinsights.com/beacon.min.js'
+        b.setAttribute('data-cf-beacon', '{"token": "db95a1c82680427f93b860b29b317f24"}')
+        document.head.appendChild(b)
+      }
+    </script>
+    <script type="module" crossorigin src="../../../assets/index-DpQD1bb3.js"></script>
+    <link rel="stylesheet" crossorigin href="../../../assets/index-B057dae2.css">
+  </head>
+  <body>
+    <div id="root"><header class="nav"><div class="wrap"><a class="brand" href="../../../ja/" aria-label="gtree"><img src="../../../logo.png" alt="" width="26" height="26"/>gtree</a><nav class="nav-links" aria-label="ページ内ナビゲーション"><a href="../../../ja/#features" class="">機能</a><a href="../../../ja/#compare" class="">比較</a><a href="../../../ja/#pricing" class="">料金</a><a href="../../../ja/#faq" class="">FAQ</a></nav><div class="nav-right"><span class="social"><a class="theme-btn" href="https://discord.gg/EnPJxrUEK5" target="_blank" rel="noopener noreferrer" aria-label="Discord — バグ報告・質問はこちら" title="Discord — バグ報告・質問はこちら"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.007.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg></a><a class="theme-btn" href="https://x.com/dobbylabhq" target="_blank" rel="noopener noreferrer" aria-label="X で @dobbylabhq をフォロー" title="X で @dobbylabhq をフォロー"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg></a></span><div class="lang  "><button type="button" class="lang-btn " aria-haspopup="menu" aria-expanded="false" aria-label="言語" title="言語"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg><span>日本語</span><svg viewBox="0 0 24 24" class="chev" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button><div class="lang-menu " role="menu" aria-label="言語"><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../blog/claude-code-waiting-for-approval-notifications/" hrefLang="en" lang="en"><span>English</span></a><a role="menuitemradio" aria-checked="true" tabindex="-1" href="../../../ja/blog/claude-code-waiting-for-approval-notifications/" hrefLang="ja" lang="ja"><span>日本語</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></a><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../zh/blog/claude-code-waiting-for-approval-notifications/" hrefLang="zh-CN" lang="zh-CN"><span>中文</span></a></div></div><button type="button" class="theme-btn" title="テーマ:システムに合わせる(クリックでライトに切り替え)" aria-label="テーマ:システムに合わせる(クリックでライトに切り替え)"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"></rect><path d="M8 21h8"></path><path d="M12 17v4"></path></svg></button><a class="btn" href="../../../ja/#download">Mac 版を無料ダウンロード<svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M12 4v12"></path><path d="m7 11 5 5 5-5"></path><path d="M5 20h14"></path></svg></a><button class="nav-burger" type="button" aria-expanded="false" aria-label="メニュー"><svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path></svg></button></div></div><div class="nav-sheet "><a href="../../../ja/#features">機能</a><a href="../../../ja/#compare">比較</a><a href="../../../ja/#pricing">料金</a><a href="../../../ja/#faq">FAQ</a><a href="../../../ja/#download">Mac 版を無料ダウンロード</a><a class="nav-sheet-social" href="https://discord.gg/EnPJxrUEK5" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.007.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg>Discord — バグ報告・質問はこちら</a><a class="nav-sheet-social" href="https://x.com/dobbylabhq" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg>X で @dobbylabhq をフォロー</a></div></header><main id="top"><article class="doc wrap-doc"><nav class="doc-crumbs" aria-label="現在の位置"><ol><li><a href="../../../ja/">ホーム</a></li><li><a href="../../../ja/blog/">ブログ</a></li><li><span aria-current="page">Claude Code の承認待ちにすぐ気づく方法 — 通知と状態の見える化</span></li></ol></nav><header class="doc-head"><h1>Claude Code の承認待ちにすぐ気づく方法 — 通知と状態の見える化</h1><p class="doc-meta"><time dateTime="2026-10-13">2026年10月13日</time> · DobbyLab<!-- --> · <span class="doc-tag">claude-code</span><span class="doc-tag">notifications</span><span class="doc-tag">parallel-agents</span></p></header><div class="prose"><p>Claude Code はツールの実行に許可が必要になると作業を止め、あなたが答えるまで先に進みません。すぐに気づくには、Claude Code の <strong><code>Notification</code> hook</strong> を使います。この hook は、承認プロンプトが出たまま数秒操作がないときと、返答を終えてから 1 分ほど入力がないときに呼ばれます。Claude が 1 つだけなら、この hook からデスクトップ通知を出せば十分です。複数を並列で動かしている場合は、<strong>どのセッションが</strong>待っているかも知る必要があります。gtree のサイドバー、「対応待ち」、Dock のバッジはそのためにあります。</p>
+<!-- TODO 截图:0.3.14「対応待ち」(⌘1,日文界面)—— 顶部「1 件があなたを待っています」一行红底,下面「念のため確認」「作業中」;侧栏对应行是红铃铛。图注:「対応待ち」は、すべてのプロジェクトであなたを待っているものを 1 ページにまとめます。行をクリックすればそのセッションに移動します -->
+
+<h2 id="claude-code-はなぜ止まって待つのですか">Claude Code はなぜ止まって待つのですか?<a class="h-anchor" href="#claude-code-はなぜ止まって待つのですか" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>Claude Code は、事前に許可していない操作の前に必ず確認します。シェルコマンドの実行、許可範囲外のファイルの編集、Web ページの取得などです。確認はそのセッションのターミナルに表示され、選択するまでセッションは止まったままです。</p>
+<p>これは妥当なデフォルトです。困るのは、その間に別の作業をしているときです。10 分で終わるはずのタスクが、ターミナルが別のウィンドウの後ろに隠れていたせいで、40 分後もまだ承認プロンプト(「Do you want to proceed?」)で止まっている、ということが起こります。</p>
+<p><a href="/ja/blog/run-multiple-claude-code-git-worktree/">git worktree で Claude Code を複数並列に動かしている</a>と、この問題は何倍にもなります。タブが 5 つあれば、どれが待っていてもおかしくありません。</p>
+<h2 id="claude-code-が承認を求めたら通知するには">Claude Code が承認を求めたら通知するには?<a class="h-anchor" href="#claude-code-が承認を求めたら通知するには" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>まずは標準機能を確認しましょう。Ghostty、Kitty、iTerm2 では、タスクを終えたときや承認プロンプトで止まったときに、あなたがターミナルから離れているようであれば Claude Code が自分でデスクトップ通知を出します(iTerm2 は環境設定で Notification Center Alerts をオンにする必要があります)。ほかのターミナルでは、<code>~/.claude/settings.json</code> に <code>&quot;preferredNotifChannel&quot;: &quot;terminal_bell&quot;</code> を設定するとベルを鳴らせます。ターミナルによっては、Dock アイコンが跳ねたりバッジが付いたりします。</p>
+<p>通知の内容を自分で決めたいなら <strong>hook</strong>(特定のイベントで実行されるシェルコマンド)を使います。使うのは <code>Notification</code> イベントです。<code>~/.claude/settings.json</code> に次を追加します(既存の <code>hooks</code> があればマージしてください)。</p>
+<pre><code class="language-json">{
+  &quot;hooks&quot;: {
+    &quot;Notification&quot;: [
+      {
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;osascript -e &#39;display notification \&quot;Claude Code が待っています\&quot; with title \&quot;Claude Code\&quot;&#39;&quot;
+          }
+        ]
+      }
+    ]
+  }
+}
+</code></pre>
+<p>各 Claude Code セッションを再起動すると、どれかが待ち状態になるたびに macOS の通知が表示されます。発生するのは次の 2 つの場合です。</p>
+<ul>
+<li><strong>承認が必要なとき:</strong> 承認プロンプトが表示されてから約 6 秒、操作がない場合。</li>
+<li><strong>返答を終えて待っているとき:</strong> Claude が返答を終えてから約 60 秒、入力がない場合。</li>
+</ul>
+<p>hook には標準入力で JSON が渡され、理由を説明するメッセージとセッションの作業ディレクトリが含まれているので、小さなスクリプトを書けば通知にプロジェクト名を入れることもできます。1 分待たずに、終わった瞬間に知りたい場合は <code>Stop</code> hook も追加します。返答が終わるたびに発生します。ただし、スクリプトを終了コード 2 で終えないでください。「止まるな」という意味になり、Claude が作業を続けてしまいます。</p>
+<h3 id="自前の-hook-の限界">自前の hook の限界<a class="h-anchor" href="#自前の-hook-の限界" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>hook は動きますが、頼り切ると次のような点が気になってきます。</p>
+<ul>
+<li><strong><code>osascript</code> の通知は「スクリプトエディタ」の名義になります。</strong> システム設定でスクリプトエディタの通知がオフになっていると(よくあることです)、コマンドは成功しても何も表示されません。</li>
+<li><strong>通知をクリックしても該当セッションには移動しません。</strong> 結局、正しいターミナルタブを自分で探すことになります。</li>
+<li><strong>一瞬の通知であって、状態ではありません。</strong> バナーを見逃すと、まだ待っているものを確認する場所がありません。</li>
+<li><strong>全体を見渡せません。</strong> どのセッションが実行中で、どれがアイドルで、どれが 30 分動いていないのかがわかりません。</li>
+</ul>
+<h2 id="gtree-なら-どのエージェントが待っているかひと目でわかる">gtree なら、どのエージェントが待っているかひと目でわかる<a class="h-anchor" href="#gtree-なら-どのエージェントが待っているかひと目でわかる" aria-hidden="true" tabindex="-1">#</a></h2>
+<p><a href="https://gtree.dobbylab.com/ja/">gtree</a> は同じイベントを、ひと目でわかる画面に変えます。まず Claude Code に一度接続します。ようこそガイドの最後のページか、設定(⌘,)から行えます。接続するまでは、スタートページの上部に「Claude Code に接続されていません」という案内と「Claude Code に接続」ボタンが出ます。gtree は <code>~/.claude/settings.json</code> に自分の hook エントリを追加し、それ以外の内容には一切触れません。以後は、あなたが自分のターミナルで起動したものも含め、すべてのセッションの状態を把握します。設定で Codex もつなげば、Codex のセッションも同じように「作業中」「承認待ち・質問待ち」を報告します。</p>
+<h3 id="サイドバー-worktree-ごとに-1-つのマーク">サイドバー:worktree ごとに 1 つのマーク<a class="h-anchor" href="#サイドバー-worktree-ごとに-1-つのマーク" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>サイドバーの各 worktree の行末には状態マークが 1 つだけ付きます。文字ではなく形で読み取れます。</p>
+<ul>
+<li><strong>紫の回転アイコン</strong>:エージェントが考え中、またはツールを実行中。</li>
+<li><strong>点滅する赤いベル</strong>:あなたを待っています。</li>
+<li><strong>薄い紫のロボット</strong>:セッションは開いているが待機中。</li>
+<li><strong>薄いターミナルアイコン</strong>:ターミナルだけが開いていて、エージェントは動いていない。</li>
+</ul>
+<p>アイコンにホバーすると、何をしているか、何を待っているか(「あなたの応答待ち」など)が表示されます。折りたたんだプロジェクトの中に待っているセッションがあると、プロジェクト名に赤い点が付きます。</p>
+<h3 id="対応待ち-あなたが対応すべきものを-1-つのリストに">「対応待ち」:あなたが対応すべきものを 1 つのリストに<a class="h-anchor" href="#対応待ち-あなたが対応すべきものを-1-つのリストに" aria-hidden="true" tabindex="-1">#</a></h3>
+<p><strong>「対応待ち」</strong>(⌘1)が答えるのは「いま自分を待っているものはあるか」という 1 つの問いだけです。いちばん上に「N 件があなたを待っています」として 1 件ずつ並びます。行をクリックすればそのセッションに直接移動でき、↑↓ と ↩ でも操作できます。gtree 内で動いているセッションならそのターミナルタブに切り替わり、別のターミナルアプリで動いているものは、gtree がウィンドウを切り替えられないため、会話の読み取り専用リプレイを開きます。</p>
+<p>その下の**「念のため確認」**には、まだ止まってはいないものの、見ておいたほうがいいものが集まります。</p>
+<ul>
+<li>「作業中」のままなのに 10 分以上何も動きがないセッション</li>
+<li>2 つの worktree が同じファイルを変更していて、どちらもまだコミットしていない</li>
+<li>あるエージェントが別のエージェントの回答を長く待っている</li>
+<li>エージェント間の伝言が 10 分以上届いていない</li>
+<li>別のエージェントにした質問に回答が届いた(その場で展開して読めます)</li>
+</ul>
+<p>どれも「了解」(または ⌫)で閉じられ、状況が変わればまた表示されます。さらにその下が**「作業中」<strong>で、動いているセッションが並びます。何も待っていないときは</strong>「すべて順調」**とだけ表示されます。</p>
+<p>「対応待ち」の件数は、開いているプロジェクトだけでなく<strong>すべての</strong>プロジェクトが対象です。同じ数字が gtree の <strong>Dock アイコン</strong>にも表示され、ウィンドウを閉じていても更新され続けます。</p>
+<h3 id="クリックでそのセッションに移動できる通知">クリックでそのセッションに移動できる通知<a class="h-anchor" href="#クリックでそのセッションに移動できる通知" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>セッションが待ち状態になると、gtree は自分の名前で macOS の通知を出すので、スクリプトエディタの通知設定には左右されません。クリックするとその worktree のセッション(別のターミナルのセッションなら読み取り専用リプレイ)に移動します。邪魔をする必要がないときは静かにしています。</p>
+<ul>
+<li>gtree でそのセッションをすでに見ているときは通知しません。</li>
+<li>同じ worktree からは 10 秒以内に再通知しないので、承認プロンプトが続いても通知は 1 回です。</li>
+</ul>
+<p>通知の許可は、作業の途中ではなく、ようこそガイドの最後のページで求めます。設定画面で通知がオンになっているかを確認し、「テスト通知を送る」で試せます。</p>
+<!-- TODO 截图:0.3.14 设置 › 通知(オン + テスト通知を送る,日文界面)。旧图 settings-general-notifications-ja-light.webp 拍于 0.3.8,核对 0.3.14 布局一致后可直接复用 -->
+
+<h3 id="終わった-はどうわかる">「終わった」はどうわかる?<a class="h-anchor" href="#終わった-はどうわかる" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>エージェントがターンを終えると、回転アイコンが止まります。返信しないままでいると、Claude Code は約 60 秒後にアイドル通知を出し、gtree はそれをほかの待ち状態と同じように扱います。ベル、「対応待ち」への追加、通知です。つまり、タスクが終わってから 1 分ほどでわかります。この「答え終わって返信待ち」のベルは、そのセッションのターミナルタブに切り替えた時点で消えます。何か入力する必要はありません。(Codex はアイドルのイベントを送らないため、Codex のセッションでベルが鳴るのは承認が必要なときと質問があるときだけです。)</p>
+<h3 id="gtree-の外で動いているセッション">gtree の外で動いているセッション<a class="h-anchor" href="#gtree-の外で動いているセッション" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>iTerm などのターミナルで起動したセッションも同じ hook で報告するので、サイドバーと「対応待ち」に表示されます。ステータスバーには、どこで開いているか(例:「iTerm で AI が 1 件開いています」)が表示されます。</p>
+<h2 id="自前の-hook-と-gtree-の比較">自前の hook と gtree の比較<a class="h-anchor" href="#自前の-hook-と-gtree-の比較" aria-hidden="true" tabindex="-1">#</a></h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>Notification</code> hook + <code>osascript</code></th>
+<th>gtree</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>エージェントが承認を求めたら通知</td>
+<td>できる</td>
+<td>できる</td>
+</tr>
+<tr>
+<td>どのプロジェクト・worktree かを表示</td>
+<td>スクリプト次第</td>
+<td>できる</td>
+</tr>
+<tr>
+<td>通知のクリックでセッションへ移動</td>
+<td>できない</td>
+<td>できる</td>
+</tr>
+<tr>
+<td>まだ待っているものの一覧</td>
+<td>ない</td>
+<td>「対応待ち」</td>
+</tr>
+<tr>
+<td>Dock アイコンの件数表示</td>
+<td>ない</td>
+<td>あり(全プロジェクト対象)</td>
+</tr>
+<tr>
+<td>見ているときは通知しない</td>
+<td>できない</td>
+<td>できる</td>
+</tr>
+<tr>
+<td>各セッションの作業中 / 待機の状態</td>
+<td>わからない</td>
+<td>サイドバーのアイコンと「対応待ち」</td>
+</tr>
+</tbody></table>
+<h2 id="よくある質問">よくある質問<a class="h-anchor" href="#よくある質問" aria-hidden="true" tabindex="-1">#</a></h2>
+<h3 id="承認が必要なときに発生する-claude-code-のイベントは">承認が必要なときに発生する Claude Code のイベントは?<a class="h-anchor" href="#承認が必要なときに発生する-claude-code-のイベントは" aria-hidden="true" tabindex="-1">#</a></h3>
+<p><code>Notification</code> hook です。承認プロンプトが出てから約 6 秒操作がないとき、そして返答を終えてから約 60 秒入力がないときに発生し、理由を説明するメッセージが含まれます。承認ダイアログが出た瞬間に反応したい場合は <code>PermissionRequest</code> hook を使います。</p>
+<h3 id="codex-でも使えますか">Codex でも使えますか?<a class="h-anchor" href="#codex-でも使えますか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>使えます。設定で Codex をつなぐと、Codex のセッションにも同じ回転アイコンが付き、承認が必要なときや質問があるときは同じようにベルが鳴ります。Codex はアイドルのイベントを送らないため、「答え終わって返信待ち」のベルはありません。</p>
+<h3 id="gtree-を入れると-claude-code-は遅くなりますか">gtree を入れると Claude Code は遅くなりますか?<a class="h-anchor" href="#gtree-を入れると-claude-code-は遅くなりますか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>なりません。gtree の hook は 1 回あたり数ミリ秒で終わるので、Claude が待たされることはありません。gtree 側で何か問題が起きても hook は静かに処理を飛ばし、会話はそのまま続きます。</p>
+<h3 id="gtree-に-claude-code-の設定を変更させたくない場合は">gtree に Claude Code の設定を変更させたくない場合は?<a class="h-anchor" href="#gtree-に-claude-code-の設定を変更させたくない場合は" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>設定画面で、gtree が追加した hook とそれぞれの役割を確認でき、個別にオフにすることも、Claude Code との接続を丸ごと解除することもできます(Codex の接続解除もそこからできます)。gtree が追加・削除するのは自分のエントリだけです。</p>
+<h3 id="gtree-の中でエージェントを動かす必要がありますか">gtree の中でエージェントを動かす必要がありますか?<a class="h-anchor" href="#gtree-の中でエージェントを動かす必要がありますか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>ありません。Claude Code に接続すれば、どのターミナルのセッションも状態を報告します。gtree の内蔵ターミナルで動かすと、hook がまだ一度も発生していない段階でも、ターミナルのタイトルから Claude が動いているかを判別できるという利点があります。</p>
+<p>gtree のローカル機能は無料で、登録も不要です。gtree があなたのコードをアップロードすることはありません。<a href="https://gtree.dobbylab.com/ja/">gtree をダウンロード</a>して Claude Code に接続すれば、どのエージェントがあなたを待っているかはベルが教えてくれます。</p>
+<p><em>この記事は gtree 0.3.14 に合わせて更新しました(2026 年 10 月)。</em></p>
+</div><aside class="doc-cta"><div><h2>gtree を試す</h2><p>AI コーディングエージェントのための無料デスクトップアプリです。ローカル機能はずっと無料、ログイン不要、gtree はコードをアップロードしません。</p></div><a class="btn primary" href="../../../ja/#download"><svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M12 4v12"></path><path d="m7 11 5 5 5-5"></path><path d="M5 20h14"></path></svg>Mac 版を無料ダウンロード</a></aside><nav class="doc-more" aria-label="ほかの記事"><h2>ほかの記事</h2><ul><li><a href="../../../ja/blog/gtree-native-app-not-electron/">gtree が Electron を使わない理由 — 24 MB、0.2 秒でウィンドウ表示</a> <span class="doc-meta"><time dateTime="2026-10-25">2026年10月25日</time></span></li><li><a href="../../../ja/blog/undo-claude-code-changes/">Claude Code の変更を元に戻す方法 — 閉じたセッションのターンも復元</a> <span class="doc-meta"><time dateTime="2026-10-22">2026年10月22日</time></span></li><li><a href="../../../ja/blog/ai-agents-editing-same-file/">2 つの AI エージェントが同じファイルを編集するとき — 互いに上書きさせない方法</a> <span class="doc-meta"><time dateTime="2026-10-19">2026年10月19日</time></span></li></ul></nav></article></main><footer class="site-footer"><div class="wrap"><div class="ft-top"><div class="ft-brand"><a class="brand" href="../../../ja/" aria-label="gtree"><img src="../../../logo.png" alt="" width="22" height="22"/>gtree</a><p>gtree は DobbyLab が開発する、複数の AI コーディングエージェントを同時に動かす人のためのデスクトップアプリです。ローカルで動き、gtree があなたのコードをアップロードすることはありません。</p></div><nav class="ft-col" aria-label="製品"><h2>製品</h2><ul><li><a href="../../../ja/#download">ダウンロード</a></li><li><a href="../../../ja/#pricing">料金</a></li><li><a href="../../../ja/release-notes/">リリースノート</a></li></ul></nav><nav class="ft-col" aria-label="リソース"><h2>リソース</h2><ul><li><a href="../../../ja/blog/">ブログ</a></li><li><a href="../../../ja/#faq">よくある質問</a></li><li><a href="../../../llms.txt">llms.txt</a></li></ul></nav><nav class="ft-col" aria-label="運営"><h2>運営</h2><ul><li><a href="../../../ja/privacy/">プライバシーポリシー</a></li><li><a href="mailto:support@dobbylab.com">support@dobbylab.com</a></li><li><a href="https://x.com/dobbylabhq" target="_blank" rel="noopener" class="x-link"><svg class="x-logo" viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>@<!-- -->dobbylabhq</a></li></ul></nav></div><div class="ft-bottom"><span>© 2026 <a href="https://dobbylab.com/">DobbyLab</a> · <!-- -->All rights reserved</span><div class="lang up ft-lang"><button type="button" class="lang-btn " aria-haspopup="menu" aria-expanded="false" aria-label="言語" title="言語"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg><span>日本語</span><svg viewBox="0 0 24 24" class="chev" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button><div class="lang-menu " role="menu" aria-label="言語"><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../blog/claude-code-waiting-for-approval-notifications/" hrefLang="en" lang="en"><span>English</span></a><a role="menuitemradio" aria-checked="true" tabindex="-1" href="../../../ja/blog/claude-code-waiting-for-approval-notifications/" hrefLang="ja" lang="ja"><span>日本語</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></a><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../zh/blog/claude-code-waiting-for-approval-notifications/" hrefLang="zh-CN" lang="zh-CN"><span>中文</span></a></div></div></div></div></footer></div>
+    <script id="page-data" type="application/json">{"kind":"post","path":"blog/claude-code-waiting-for-approval-notifications/","slug":"claude-code-waiting-for-approval-notifications","title":"Claude Code の承認待ちにすぐ気づく方法 — 通知と状態の見える化","date":"2026-10-13","tags":["claude-code","notifications","parallel-agents"],"html":"\u003cp>Claude Code はツールの実行に許可が必要になると作業を止め、あなたが答えるまで先に進みません。すぐに気づくには、Claude Code の \u003cstrong>\u003ccode>Notification\u003c/code> hook\u003c/strong> を使います。この hook は、承認プロンプトが出たまま数秒操作がないときと、返答を終えてから 1 分ほど入力がないときに呼ばれます。Claude が 1 つだけなら、この hook からデスクトップ通知を出せば十分です。複数を並列で動かしている場合は、\u003cstrong>どのセッションが\u003c/strong>待っているかも知る必要があります。gtree のサイドバー、「対応待ち」、Dock のバッジはそのためにあります。\u003c/p>\n\u003c!-- TODO 截图:0.3.14「対応待ち」(⌘1,日文界面)—— 顶部「1 件があなたを待っています」一行红底,下面「念のため確認」「作業中」;侧栏对应行是红铃铛。图注:「対応待ち」は、すべてのプロジェクトであなたを待っているものを 1 ページにまとめます。行をクリックすればそのセッションに移動します -->\n\n\u003ch2 id=\"claude-code-はなぜ止まって待つのですか\">Claude Code はなぜ止まって待つのですか?\u003ca class=\"h-anchor\" href=\"#claude-code-はなぜ止まって待つのですか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>Claude Code は、事前に許可していない操作の前に必ず確認します。シェルコマンドの実行、許可範囲外のファイルの編集、Web ページの取得などです。確認はそのセッションのターミナルに表示され、選択するまでセッションは止まったままです。\u003c/p>\n\u003cp>これは妥当なデフォルトです。困るのは、その間に別の作業をしているときです。10 分で終わるはずのタスクが、ターミナルが別のウィンドウの後ろに隠れていたせいで、40 分後もまだ承認プロンプト(「Do you want to proceed?」)で止まっている、ということが起こります。\u003c/p>\n\u003cp>\u003ca href=\"/ja/blog/run-multiple-claude-code-git-worktree/\">git worktree で Claude Code を複数並列に動かしている\u003c/a>と、この問題は何倍にもなります。タブが 5 つあれば、どれが待っていてもおかしくありません。\u003c/p>\n\u003ch2 id=\"claude-code-が承認を求めたら通知するには\">Claude Code が承認を求めたら通知するには?\u003ca class=\"h-anchor\" href=\"#claude-code-が承認を求めたら通知するには\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>まずは標準機能を確認しましょう。Ghostty、Kitty、iTerm2 では、タスクを終えたときや承認プロンプトで止まったときに、あなたがターミナルから離れているようであれば Claude Code が自分でデスクトップ通知を出します(iTerm2 は環境設定で Notification Center Alerts をオンにする必要があります)。ほかのターミナルでは、\u003ccode>~/.claude/settings.json\u003c/code> に \u003ccode>&quot;preferredNotifChannel&quot;: &quot;terminal_bell&quot;\u003c/code> を設定するとベルを鳴らせます。ターミナルによっては、Dock アイコンが跳ねたりバッジが付いたりします。\u003c/p>\n\u003cp>通知の内容を自分で決めたいなら \u003cstrong>hook\u003c/strong>(特定のイベントで実行されるシェルコマンド)を使います。使うのは \u003ccode>Notification\u003c/code> イベントです。\u003ccode>~/.claude/settings.json\u003c/code> に次を追加します(既存の \u003ccode>hooks\u003c/code> があればマージしてください)。\u003c/p>\n\u003cpre>\u003ccode class=\"language-json\">{\n  &quot;hooks&quot;: {\n    &quot;Notification&quot;: [\n      {\n        &quot;hooks&quot;: [\n          {\n            &quot;type&quot;: &quot;command&quot;,\n            &quot;command&quot;: &quot;osascript -e &#39;display notification \\&quot;Claude Code が待っています\\&quot; with title \\&quot;Claude Code\\&quot;&#39;&quot;\n          }\n        ]\n      }\n    ]\n  }\n}\n\u003c/code>\u003c/pre>\n\u003cp>各 Claude Code セッションを再起動すると、どれかが待ち状態になるたびに macOS の通知が表示されます。発生するのは次の 2 つの場合です。\u003c/p>\n\u003cul>\n\u003cli>\u003cstrong>承認が必要なとき:\u003c/strong> 承認プロンプトが表示されてから約 6 秒、操作がない場合。\u003c/li>\n\u003cli>\u003cstrong>返答を終えて待っているとき:\u003c/strong> Claude が返答を終えてから約 60 秒、入力がない場合。\u003c/li>\n\u003c/ul>\n\u003cp>hook には標準入力で JSON が渡され、理由を説明するメッセージとセッションの作業ディレクトリが含まれているので、小さなスクリプトを書けば通知にプロジェクト名を入れることもできます。1 分待たずに、終わった瞬間に知りたい場合は \u003ccode>Stop\u003c/code> hook も追加します。返答が終わるたびに発生します。ただし、スクリプトを終了コード 2 で終えないでください。「止まるな」という意味になり、Claude が作業を続けてしまいます。\u003c/p>\n\u003ch3 id=\"自前の-hook-の限界\">自前の hook の限界\u003ca class=\"h-anchor\" href=\"#自前の-hook-の限界\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>hook は動きますが、頼り切ると次のような点が気になってきます。\u003c/p>\n\u003cul>\n\u003cli>\u003cstrong>\u003ccode>osascript\u003c/code> の通知は「スクリプトエディタ」の名義になります。\u003c/strong> システム設定でスクリプトエディタの通知がオフになっていると(よくあることです)、コマンドは成功しても何も表示されません。\u003c/li>\n\u003cli>\u003cstrong>通知をクリックしても該当セッションには移動しません。\u003c/strong> 結局、正しいターミナルタブを自分で探すことになります。\u003c/li>\n\u003cli>\u003cstrong>一瞬の通知であって、状態ではありません。\u003c/strong> バナーを見逃すと、まだ待っているものを確認する場所がありません。\u003c/li>\n\u003cli>\u003cstrong>全体を見渡せません。\u003c/strong> どのセッションが実行中で、どれがアイドルで、どれが 30 分動いていないのかがわかりません。\u003c/li>\n\u003c/ul>\n\u003ch2 id=\"gtree-なら-どのエージェントが待っているかひと目でわかる\">gtree なら、どのエージェントが待っているかひと目でわかる\u003ca class=\"h-anchor\" href=\"#gtree-なら-どのエージェントが待っているかひと目でわかる\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>\u003ca href=\"https://gtree.dobbylab.com/ja/\">gtree\u003c/a> は同じイベントを、ひと目でわかる画面に変えます。まず Claude Code に一度接続します。ようこそガイドの最後のページか、設定(⌘,)から行えます。接続するまでは、スタートページの上部に「Claude Code に接続されていません」という案内と「Claude Code に接続」ボタンが出ます。gtree は \u003ccode>~/.claude/settings.json\u003c/code> に自分の hook エントリを追加し、それ以外の内容には一切触れません。以後は、あなたが自分のターミナルで起動したものも含め、すべてのセッションの状態を把握します。設定で Codex もつなげば、Codex のセッションも同じように「作業中」「承認待ち・質問待ち」を報告します。\u003c/p>\n\u003ch3 id=\"サイドバー-worktree-ごとに-1-つのマーク\">サイドバー:worktree ごとに 1 つのマーク\u003ca class=\"h-anchor\" href=\"#サイドバー-worktree-ごとに-1-つのマーク\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>サイドバーの各 worktree の行末には状態マークが 1 つだけ付きます。文字ではなく形で読み取れます。\u003c/p>\n\u003cul>\n\u003cli>\u003cstrong>紫の回転アイコン\u003c/strong>:エージェントが考え中、またはツールを実行中。\u003c/li>\n\u003cli>\u003cstrong>点滅する赤いベル\u003c/strong>:あなたを待っています。\u003c/li>\n\u003cli>\u003cstrong>薄い紫のロボット\u003c/strong>:セッションは開いているが待機中。\u003c/li>\n\u003cli>\u003cstrong>薄いターミナルアイコン\u003c/strong>:ターミナルだけが開いていて、エージェントは動いていない。\u003c/li>\n\u003c/ul>\n\u003cp>アイコンにホバーすると、何をしているか、何を待っているか(「あなたの応答待ち」など)が表示されます。折りたたんだプロジェクトの中に待っているセッションがあると、プロジェクト名に赤い点が付きます。\u003c/p>\n\u003ch3 id=\"対応待ち-あなたが対応すべきものを-1-つのリストに\">「対応待ち」:あなたが対応すべきものを 1 つのリストに\u003ca class=\"h-anchor\" href=\"#対応待ち-あなたが対応すべきものを-1-つのリストに\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>\u003cstrong>「対応待ち」\u003c/strong>(⌘1)が答えるのは「いま自分を待っているものはあるか」という 1 つの問いだけです。いちばん上に「N 件があなたを待っています」として 1 件ずつ並びます。行をクリックすればそのセッションに直接移動でき、↑↓ と ↩ でも操作できます。gtree 内で動いているセッションならそのターミナルタブに切り替わり、別のターミナルアプリで動いているものは、gtree がウィンドウを切り替えられないため、会話の読み取り専用リプレイを開きます。\u003c/p>\n\u003cp>その下の**「念のため確認」**には、まだ止まってはいないものの、見ておいたほうがいいものが集まります。\u003c/p>\n\u003cul>\n\u003cli>「作業中」のままなのに 10 分以上何も動きがないセッション\u003c/li>\n\u003cli>2 つの worktree が同じファイルを変更していて、どちらもまだコミットしていない\u003c/li>\n\u003cli>あるエージェントが別のエージェントの回答を長く待っている\u003c/li>\n\u003cli>エージェント間の伝言が 10 分以上届いていない\u003c/li>\n\u003cli>別のエージェントにした質問に回答が届いた(その場で展開して読めます)\u003c/li>\n\u003c/ul>\n\u003cp>どれも「了解」(または ⌫)で閉じられ、状況が変わればまた表示されます。さらにその下が**「作業中」\u003cstrong>で、動いているセッションが並びます。何も待っていないときは\u003c/strong>「すべて順調」**とだけ表示されます。\u003c/p>\n\u003cp>「対応待ち」の件数は、開いているプロジェクトだけでなく\u003cstrong>すべての\u003c/strong>プロジェクトが対象です。同じ数字が gtree の \u003cstrong>Dock アイコン\u003c/strong>にも表示され、ウィンドウを閉じていても更新され続けます。\u003c/p>\n\u003ch3 id=\"クリックでそのセッションに移動できる通知\">クリックでそのセッションに移動できる通知\u003ca class=\"h-anchor\" href=\"#クリックでそのセッションに移動できる通知\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>セッションが待ち状態になると、gtree は自分の名前で macOS の通知を出すので、スクリプトエディタの通知設定には左右されません。クリックするとその worktree のセッション(別のターミナルのセッションなら読み取り専用リプレイ)に移動します。邪魔をする必要がないときは静かにしています。\u003c/p>\n\u003cul>\n\u003cli>gtree でそのセッションをすでに見ているときは通知しません。\u003c/li>\n\u003cli>同じ worktree からは 10 秒以内に再通知しないので、承認プロンプトが続いても通知は 1 回です。\u003c/li>\n\u003c/ul>\n\u003cp>通知の許可は、作業の途中ではなく、ようこそガイドの最後のページで求めます。設定画面で通知がオンになっているかを確認し、「テスト通知を送る」で試せます。\u003c/p>\n\u003c!-- TODO 截图:0.3.14 设置 › 通知(オン + テスト通知を送る,日文界面)。旧图 settings-general-notifications-ja-light.webp 拍于 0.3.8,核对 0.3.14 布局一致后可直接复用 -->\n\n\u003ch3 id=\"終わった-はどうわかる\">「終わった」はどうわかる?\u003ca class=\"h-anchor\" href=\"#終わった-はどうわかる\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>エージェントがターンを終えると、回転アイコンが止まります。返信しないままでいると、Claude Code は約 60 秒後にアイドル通知を出し、gtree はそれをほかの待ち状態と同じように扱います。ベル、「対応待ち」への追加、通知です。つまり、タスクが終わってから 1 分ほどでわかります。この「答え終わって返信待ち」のベルは、そのセッションのターミナルタブに切り替えた時点で消えます。何か入力する必要はありません。(Codex はアイドルのイベントを送らないため、Codex のセッションでベルが鳴るのは承認が必要なときと質問があるときだけです。)\u003c/p>\n\u003ch3 id=\"gtree-の外で動いているセッション\">gtree の外で動いているセッション\u003ca class=\"h-anchor\" href=\"#gtree-の外で動いているセッション\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>iTerm などのターミナルで起動したセッションも同じ hook で報告するので、サイドバーと「対応待ち」に表示されます。ステータスバーには、どこで開いているか(例:「iTerm で AI が 1 件開いています」)が表示されます。\u003c/p>\n\u003ch2 id=\"自前の-hook-と-gtree-の比較\">自前の hook と gtree の比較\u003ca class=\"h-anchor\" href=\"#自前の-hook-と-gtree-の比較\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003ctable>\n\u003cthead>\n\u003ctr>\n\u003cth>\u003c/th>\n\u003cth>\u003ccode>Notification\u003c/code> hook + \u003ccode>osascript\u003c/code>\u003c/th>\n\u003cth>gtree\u003c/th>\n\u003c/tr>\n\u003c/thead>\n\u003ctbody>\u003ctr>\n\u003ctd>エージェントが承認を求めたら通知\u003c/td>\n\u003ctd>できる\u003c/td>\n\u003ctd>できる\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>どのプロジェクト・worktree かを表示\u003c/td>\n\u003ctd>スクリプト次第\u003c/td>\n\u003ctd>できる\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>通知のクリックでセッションへ移動\u003c/td>\n\u003ctd>できない\u003c/td>\n\u003ctd>できる\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>まだ待っているものの一覧\u003c/td>\n\u003ctd>ない\u003c/td>\n\u003ctd>「対応待ち」\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>Dock アイコンの件数表示\u003c/td>\n\u003ctd>ない\u003c/td>\n\u003ctd>あり(全プロジェクト対象)\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>見ているときは通知しない\u003c/td>\n\u003ctd>できない\u003c/td>\n\u003ctd>できる\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>各セッションの作業中 / 待機の状態\u003c/td>\n\u003ctd>わからない\u003c/td>\n\u003ctd>サイドバーのアイコンと「対応待ち」\u003c/td>\n\u003c/tr>\n\u003c/tbody>\u003c/table>\n\u003ch2 id=\"よくある質問\">よくある質問\u003ca class=\"h-anchor\" href=\"#よくある質問\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003ch3 id=\"承認が必要なときに発生する-claude-code-のイベントは\">承認が必要なときに発生する Claude Code のイベントは?\u003ca class=\"h-anchor\" href=\"#承認が必要なときに発生する-claude-code-のイベントは\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>\u003ccode>Notification\u003c/code> hook です。承認プロンプトが出てから約 6 秒操作がないとき、そして返答を終えてから約 60 秒入力がないときに発生し、理由を説明するメッセージが含まれます。承認ダイアログが出た瞬間に反応したい場合は \u003ccode>PermissionRequest\u003c/code> hook を使います。\u003c/p>\n\u003ch3 id=\"codex-でも使えますか\">Codex でも使えますか?\u003ca class=\"h-anchor\" href=\"#codex-でも使えますか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>使えます。設定で Codex をつなぐと、Codex のセッションにも同じ回転アイコンが付き、承認が必要なときや質問があるときは同じようにベルが鳴ります。Codex はアイドルのイベントを送らないため、「答え終わって返信待ち」のベルはありません。\u003c/p>\n\u003ch3 id=\"gtree-を入れると-claude-code-は遅くなりますか\">gtree を入れると Claude Code は遅くなりますか?\u003ca class=\"h-anchor\" href=\"#gtree-を入れると-claude-code-は遅くなりますか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>なりません。gtree の hook は 1 回あたり数ミリ秒で終わるので、Claude が待たされることはありません。gtree 側で何か問題が起きても hook は静かに処理を飛ばし、会話はそのまま続きます。\u003c/p>\n\u003ch3 id=\"gtree-に-claude-code-の設定を変更させたくない場合は\">gtree に Claude Code の設定を変更させたくない場合は?\u003ca class=\"h-anchor\" href=\"#gtree-に-claude-code-の設定を変更させたくない場合は\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>設定画面で、gtree が追加した hook とそれぞれの役割を確認でき、個別にオフにすることも、Claude Code との接続を丸ごと解除することもできます(Codex の接続解除もそこからできます)。gtree が追加・削除するのは自分のエントリだけです。\u003c/p>\n\u003ch3 id=\"gtree-の中でエージェントを動かす必要がありますか\">gtree の中でエージェントを動かす必要がありますか?\u003ca class=\"h-anchor\" href=\"#gtree-の中でエージェントを動かす必要がありますか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>ありません。Claude Code に接続すれば、どのターミナルのセッションも状態を報告します。gtree の内蔵ターミナルで動かすと、hook がまだ一度も発生していない段階でも、ターミナルのタイトルから Claude が動いているかを判別できるという利点があります。\u003c/p>\n\u003cp>gtree のローカル機能は無料で、登録も不要です。gtree があなたのコードをアップロードすることはありません。\u003ca href=\"https://gtree.dobbylab.com/ja/\">gtree をダウンロード\u003c/a>して Claude Code に接続すれば、どのエージェントがあなたを待っているかはベルが教えてくれます。\u003c/p>\n\u003cp>\u003cem>この記事は gtree 0.3.14 に合わせて更新しました(2026 年 10 月)。\u003c/em>\u003c/p>\n","more":[{"slug":"gtree-native-app-not-electron","title":"gtree が Electron を使わない理由 — 24 MB、0.2 秒でウィンドウ表示","date":"2026-10-25"},{"slug":"undo-claude-code-changes","title":"Claude Code の変更を元に戻す方法 — 閉じたセッションのターンも復元","date":"2026-10-22"},{"slug":"ai-agents-editing-same-file","title":"2 つの AI エージェントが同じファイルを編集するとき — 互いに上書きさせない方法","date":"2026-10-19"}]}</script>
+  </body>
+</html>

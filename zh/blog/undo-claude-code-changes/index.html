@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-CN" data-lang="zh" data-root="../../../" data-path="blog/undo-claude-code-changes/" data-prerendered>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="../../../favicon.png" />
+    <link rel="apple-touch-icon" href="../../../logo.png" />
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0A0A0A" media="(prefers-color-scheme: dark)" />
+    <title>撤销 Claude Code 的改动:回到任意一轮,关掉的会话也行 · gtree</title>
+    <meta name="description" content="AI agent 三轮之前把东西改坏了?对比三种撤销办法:git、Claude Code 的 /rewind,以及 gtree 的「AI 每一轮」—— 任意一轮的文件都能恢复,新会话还记得上次做到哪。" />
+    <link rel="canonical" href="https://gtree.dobbylab.com/zh/blog/undo-claude-code-changes/" />
+    <link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/undo-claude-code-changes/" />
+    <link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/undo-claude-code-changes/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/undo-claude-code-changes/" />
+    <link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/undo-claude-code-changes/" />
+    <link rel="alternate" type="application/rss+xml" title="博客 · gtree" href="https://gtree.dobbylab.com/zh/blog/feed.xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="gtree" />
+    <meta property="og:title" content="撤销 Claude Code 的改动:回到任意一轮,关掉的会话也行" />
+    <meta property="og:description" content="AI agent 三轮之前把东西改坏了?对比三种撤销办法:git、Claude Code 的 /rewind,以及 gtree 的「AI 每一轮」—— 任意一轮的文件都能恢复,新会话还记得上次做到哪。" />
+    <meta property="og:url" content="https://gtree.dobbylab.com/zh/blog/undo-claude-code-changes/" />
+    <meta property="og:image" content="https://gtree.dobbylab.com/media/app/ai-turn-detail-zh-light.webp" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="ja_JP" />
+    <meta property="article:published_time" content="2026-10-22" />
+    <link rel="alternate" type="text/markdown" href="https://gtree.dobbylab.com/zh/blog/undo-claude-code-changes/index.md" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@dobbylabhq" />
+    <meta name="twitter:title" content="撤销 Claude Code 的改动:回到任意一轮,关掉的会话也行" />
+    <meta name="twitter:description" content="AI agent 三轮之前把东西改坏了?对比三种撤销办法:git、Claude Code 的 /rewind,以及 gtree 的「AI 每一轮」—— 任意一轮的文件都能恢复,新会话还记得上次做到哪。" />
+    <meta name="twitter:image" content="https://gtree.dobbylab.com/media/app/ai-turn-detail-zh-light.webp" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://dobbylab.com/#org","name":"DobbyLab","url":"https://dobbylab.com/","logo":"https://gtree.dobbylab.com/logo.png","email":"mailto:support@dobbylab.com","sameAs":["https://x.com/dobbylabhq","https://discord.gg/EnPJxrUEK5","https://github.com/dobbylabhq"]},{"@type":"BlogPosting","@id":"https://gtree.dobbylab.com/zh/blog/undo-claude-code-changes/#post","headline":"撤销 Claude Code 的改动:回到任意一轮,关掉的会话也行","description":"AI agent 三轮之前把东西改坏了?对比三种撤销办法:git、Claude Code 的 /rewind,以及 gtree 的「AI 每一轮」—— 任意一轮的文件都能恢复,新会话还记得上次做到哪。","datePublished":"2026-10-22","dateModified":"2026-10-22","inLanguage":"zh-CN","image":"https://gtree.dobbylab.com/media/app/ai-turn-detail-zh-light.webp","url":"https://gtree.dobbylab.com/zh/blog/undo-claude-code-changes/","mainEntityOfPage":"https://gtree.dobbylab.com/zh/blog/undo-claude-code-changes/","keywords":"claude-code, codex, undo, git","author":{"@id":"https://dobbylab.com/#org"},"publisher":{"@id":"https://dobbylab.com/#org"},"about":{"@id":"https://gtree.dobbylab.com/#app"},"isPartOf":{"@id":"https://gtree.dobbylab.com/zh/blog/#blog"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://gtree.dobbylab.com/zh/"},{"@type":"ListItem","position":2,"name":"博客","item":"https://gtree.dobbylab.com/zh/blog/"},{"@type":"ListItem","position":3,"name":"撤销 Claude Code 的改动:回到任意一轮,关掉的会话也行","item":"https://gtree.dobbylab.com/zh/blog/undo-claude-code-changes/"}]}]}</script>
+    <script>
+      // 首次绘制前:① 套上用户选过的深浅色(没选过 = 跟随系统),避免闪屏;
+      // ② 语言:每种语言是独立的预渲染页面(/、/ja/、/zh/)。?lang=xx 视为显式选择 —— 记下并跳到对应页面;
+      //    子页面(/zh/blog/… 等)同理,跳到同一页面的另一种语言。
+      //    没有 ?lang 时,只有用户在页面上选过语言(localStorage 有值)且和当前页不同才跳。
+      //    没选过就不跳(不按浏览器语言猜);爬虫没有 localStorage,不会被重定向。
+      //    开发模式没有 data-prerendered,这段不跳(dev 用 ?lang= 由 main.jsx 读)。
+      try { var t = localStorage.getItem('gtree:theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t } catch (e) {}
+      try {
+        var d = document.documentElement, L = ['en', 'ja', 'zh'], cur = d.getAttribute('data-lang') || 'en'
+        if (d.hasAttribute('data-prerendered')) {
+          var q = new URLSearchParams(location.search).get('lang'), want = null
+          if (L.indexOf(q) >= 0) { want = q; try { localStorage.setItem('gtree:lang', q) } catch (e) {} }
+          else { var s = null; try { s = localStorage.getItem('gtree:lang') } catch (e) {} if (L.indexOf(s) >= 0) want = s }
+          // data-root:当前页到站点根的相对前缀;data-path:页面在语言根下的路径(博客文章等子页面换语言时留在同一页)
+          var root = d.getAttribute('data-root') || (cur === 'en' ? './' : '../'), sub = d.getAttribute('data-path') || ''
+          if (want && want !== cur) location.replace(new URL(root + (want === 'en' ? '' : want + '/') + sub + location.hash, location.href).href)
+          else if (L.indexOf(q) >= 0) history.replaceState(null, '', location.pathname + location.hash)
+        }
+      } catch (e) {}
+    </script>
+    <script>
+      // Cloudflare Web Analytics:按访客去重的访问量,不用 cookie。只在正式域名上加载 —— 本地开发、预览不上报。
+      // 官网在 GitHub Pages、DNS 不走代理,Cloudflare 没法自动注入,所以手动嵌(站点在控制台 Web Analytics 里)
+      if (location.hostname === 'gtree.dobbylab.com') {
+        var b = document.createElement('script')
+        b.defer = true
+        b.src = 'https://static.cloudflareinsights.com/beacon.min.js'
+        b.setAttribute('data-cf-beacon', '{"token": "db95a1c82680427f93b860b29b317f24"}')
+        document.head.appendChild(b)
+      }
+    </script>
+    <script type="module" crossorigin src="../../../assets/index-DpQD1bb3.js"></script>
+    <link rel="stylesheet" crossorigin href="../../../assets/index-B057dae2.css">
+  </head>
+  <body>
+    <div id="root"><header class="nav"><div class="wrap"><a class="brand" href="../../../zh/" aria-label="gtree"><img src="../../../logo.png" alt="" width="26" height="26"/>gtree</a><nav class="nav-links" aria-label="页面导航"><a href="../../../zh/#features" class="">能力</a><a href="../../../zh/#compare" class="">对比</a><a href="../../../zh/#pricing" class="">定价</a><a href="../../../zh/#faq" class="">FAQ</a></nav><div class="nav-right"><span class="social"><a class="theme-btn" href="https://discord.gg/EnPJxrUEK5" target="_blank" rel="noopener noreferrer" aria-label="Discord 群 —— 报 bug、提问题" title="Discord 群 —— 报 bug、提问题"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.007.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg></a><a class="theme-btn" href="https://x.com/dobbylabhq" target="_blank" rel="noopener noreferrer" aria-label="在 X 上关注 @dobbylabhq" title="在 X 上关注 @dobbylabhq"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg></a></span><div class="lang  "><button type="button" class="lang-btn " aria-haspopup="menu" aria-expanded="false" aria-label="语言" title="语言"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg><span>中文</span><svg viewBox="0 0 24 24" class="chev" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button><div class="lang-menu " role="menu" aria-label="语言"><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../blog/undo-claude-code-changes/" hrefLang="en" lang="en"><span>English</span></a><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../ja/blog/undo-claude-code-changes/" hrefLang="ja" lang="ja"><span>日本語</span></a><a role="menuitemradio" aria-checked="true" tabindex="-1" href="../../../zh/blog/undo-claude-code-changes/" hrefLang="zh-CN" lang="zh-CN"><span>中文</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></a></div></div><button type="button" class="theme-btn" title="主题:跟随系统(点一下切到浅色)" aria-label="主题:跟随系统(点一下切到浅色)"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"></rect><path d="M8 21h8"></path><path d="M12 17v4"></path></svg></button><a class="btn" href="../../../zh/#download">免费下载 Mac 版<svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M12 4v12"></path><path d="m7 11 5 5 5-5"></path><path d="M5 20h14"></path></svg></a><button class="nav-burger" type="button" aria-expanded="false" aria-label="菜单"><svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path></svg></button></div></div><div class="nav-sheet "><a href="../../../zh/#features">能力</a><a href="../../../zh/#compare">对比</a><a href="../../../zh/#pricing">定价</a><a href="../../../zh/#faq">FAQ</a><a href="../../../zh/#download">免费下载 Mac 版</a><a class="nav-sheet-social" href="https://discord.gg/EnPJxrUEK5" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.007.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg>Discord 群 —— 报 bug、提问题</a><a class="nav-sheet-social" href="https://x.com/dobbylabhq" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg>在 X 上关注 @dobbylabhq</a></div></header><main id="top"><article class="doc wrap-doc"><nav class="doc-crumbs" aria-label="当前位置"><ol><li><a href="../../../zh/">首页</a></li><li><a href="../../../zh/blog/">博客</a></li><li><span aria-current="page">撤销 Claude Code 的改动:回到任意一轮,关掉的会话也行</span></li></ol></nav><header class="doc-head"><h1>撤销 Claude Code 的改动:回到任意一轮,关掉的会话也行</h1><p class="doc-meta"><time dateTime="2026-10-22">2026年10月22日</time> · DobbyLab<!-- --> · <span class="doc-tag">claude-code</span><span class="doc-tag">codex</span><span class="doc-tag">undo</span><span class="doc-tag">git</span></p></header><div class="prose"><p>想撤销 Claude Code 做的改动,有三种办法。<strong>git</strong> 能丢掉未提交的改动(<code>git restore &lt;文件&gt;</code>),但最远只能退到上一次提交。<strong>Claude Code 自带的回退</strong>(<code>/rewind</code>)能把代码退回对话里的某个时间点,但只管它用文件编辑工具做的改动。<strong>gtree</strong> 在 agent 每答完一轮时给 worktree 存一个检查点:任意一轮改了什么都看得到,点两下就能把那些文件放回去,不管这一轮来自哪个会话,上周关掉的也行。新会话一开头还知道上次做到了哪。</p>
+<p><figure><img src="/media/app/ai-turn-detail-zh-light.webp" alt="右面板「改动」:上半是 3 个未提交的文件,下半「AI 每一轮」有三轮;中间是选中那一轮「Follow the system appearance by default」的详情:agent 的回复(可「展开全部」)、改了的 2 个文件和 diff,右上角「恢复到这一轮」" loading="lazy" decoding="async" /><figcaption>AI 每一轮:每答完一轮存一个检查点。点一轮看它改了什么,「恢复到这一轮」把那些文件放回去</figcaption></figure></p>
+<h2 id="为什么撤销-ai-的改动比撤销自己的难">为什么撤销 AI 的改动比撤销自己的难?<a class="h-anchor" href="#为什么撤销-ai-的改动比撤销自己的难" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>自己写代码时,提交大致跟着思路走。AI 不是这样:二十分钟里 agent 可能答了八轮、动了十五个文件、跑了十几条命令,全都夹在你的两次提交之间。然后第六轮把测试改挂了:你想把第六轮的改动撤掉,前五轮的留着。</p>
+<p>单靠 git 表达不了这件事:在它看来,上次提交到现在什么都没发生过。</p>
+<h2 id="怎么用-git-撤销-claude-code-的改动">怎么用 git 撤销 Claude Code 的改动?<a class="h-anchor" href="#怎么用-git-撤销-claude-code-的改动" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>如果 AI 开工以后你还没提交过,git 是最快的「全部不要了」:</p>
+<pre><code class="language-bash">git status                     # 改了哪些
+git diff                       # 怎么改的
+
+git restore src/auth.ts        # 丢掉一个已跟踪文件的改动
+git restore .                  # 丢掉所有已跟踪文件的改动
+
+git clean -n                   # 先预览会删掉哪些未跟踪文件
+git clean -fd                  # 真删(小心,删了就回不来)
+</code></pre>
+<p>想在把任务交给 AI 之前留条后路,先存一份:</p>
+<pre><code class="language-bash">git stash push -u -m &quot;交给 AI 之前&quot;   # 把手上的改动(含新文件)先收起来
+git stash apply                        # 之后取回来,stash 还留着
+</code></pre>
+<p>或者每次发提示词之前都提交一次。能用,但提交历史会塞满「wip」,之后还得 squash;而且总有一次会忘,偏偏就是出事那次。</p>
+<h2 id="claude-code-的-rewind-怎么用">Claude Code 的 /rewind 怎么用?<a class="h-anchor" href="#claude-code-的-rewind-怎么用" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>Claude Code 在对话过程中会自己存检查点。输入 <code>/rewind</code>(或者在输入框为空时连按两次 Esc),选一条更早的消息,就能把对话、代码或两者一起恢复到那个时间点。「刚才两轮方向错了」这种情况,它是最快的。</p>
+<p>检查点随对话一起保存,用 <code>claude --resume</code> 回到以前的对话后照样能 <code>/rewind</code>。每个会话保留最近 100 个检查点,默认大约 30 天后清理。</p>
+<p>按 Claude Code 文档的说法,它有几类改动是不记录的:</p>
+<ul>
+<li><strong>shell 命令改的文件</strong>:<code>rm</code>、<code>mv</code>、<code>cp</code>、一行 <code>sed</code>、格式化工具、代码生成器;</li>
+<li><strong>子 agent 做的编辑</strong>(通常不记录);</li>
+<li><strong>会话之外的改动</strong>:你手动改的、同时开着的其他会话改的。</li>
+</ul>
+<p>它的定位是快速的本地撤销,不是用来代替版本管理的。</p>
+<h2 id="gtree-怎么按轮回滚">gtree 怎么按轮回滚<a class="h-anchor" href="#gtree-怎么按轮回滚" aria-hidden="true" tabindex="-1">#</a></h2>
+<p><a href="https://gtree.dobbylab.com/zh/">gtree</a> 换了个思路:不追踪一次次编辑,而是给结果拍快照。Claude Code 和 Codex 都支持。</p>
+<h3 id="每答完一轮-存一个检查点">每答完一轮,存一个检查点<a class="h-anchor" href="#每答完一轮-存一个检查点" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>连上 Claude Code(或 Codex)之后,agent 每答完一轮,gtree 都把 worktree 当时的状态存成一个<strong>检查点</strong>。存的是文件本身而不是编辑操作,所以 shell 命令改的文件、新建的文件也都在里面。被 git 忽略的、或者超过 1 MB 的新文件不存。</p>
+<p>检查点是仓库里普通的 git 对象,挂在单独的引用下面,不在任何分支上;存检查点不会碰你的分支、暂存区和文件。保留 30 天。</p>
+<h3 id="每一轮改了什么-改动-ai-每一轮">每一轮改了什么:「改动 › AI 每一轮」<a class="h-anchor" href="#每一轮改了什么-改动-ai-每一轮" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>打开右面板的**「改动」<strong>(⌃⇧G)。上半部分是未提交的文件,下半部分是</strong>「AI 每一轮」**:当前 worktree 里的每一轮。每轮占两行:你的提问和时间,然后是改了几个文件、改了哪些,比如「3 个文件 · session.ts 等」。默认只列改过文件的轮次,因为大部分轮次只是一问一答;「⋯」菜单里可以把其他的也显示出来。</p>
+<p>点一轮,它的详情在中间打开:</p>
+<ul>
+<li>你的提问和 agent 最后的回复(先显示 4 行,点「展开全部」看完);</li>
+<li>下面紧接着是这一轮具体改了什么的 diff。</li>
+</ul>
+<p>跨会话也有效。昨天关掉的对话,它的每一轮还在列表里,「昨晚 AI 到底改了什么」有答案。</p>
+<h3 id="恢复到这一轮-做了什么">「恢复到这一轮」做了什么<a class="h-anchor" href="#恢复到这一轮-做了什么" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>选中一轮,点**「恢复到这一轮」<strong>。按钮会变红、变成</strong>「再点一次确认恢复」**,手滑点一下不会覆盖任何东西。</p>
+<p><figure><img src="/media/app/ai-turn-restore-confirm-zh-light.webp" alt="点过一次之后,按钮变红,写着「再点一次确认恢复」,下面一行说明:会把这一轮动过的 2 个文件改回它结束时的样子;别的文件、暂存区和分支不动" loading="lazy" decoding="async" /><figcaption>第一次点只是确认,第二次才真的恢复</figcaption></figure></p>
+<p>第二次点下去,<strong>这一轮改过的文件</strong>会被写回它结束时的样子;其中当时还不存在的文件会被删掉。完成后会提示,比如「已把这一轮的 2 个文件恢复到它结束时的样子」。</p>
+<p>它只动这一轮改过的文件,不会把整个工作目录退回那个时刻,也不碰你的分支和暂存区。</p>
+<h3 id="怎么撤掉出问题的那一轮">怎么撤掉出问题的那一轮<a class="h-anchor" href="#怎么撤掉出问题的那一轮" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>还是上面的例子,第六轮把测试改挂了:</p>
+<ol>
+<li><strong>先选中第六轮</strong>,看它改了哪些文件。这就是要退回去的清单。</li>
+<li><strong>往前找最近一个也改过这些文件的轮次</strong>(比如第四轮),选中它,点两次「恢复到这一轮」。这些文件就回到第四轮结束时的样子,也就是第六轮动手之前。</li>
+<li><strong>看一眼第四轮还改了哪些别的文件。</strong> 恢复会把第四轮动过的文件全都写回去;如果其中某个文件第五轮又改过,第五轮的改动也会跟着退掉。先看清楚再点。</li>
+<li><strong>第六轮之前没有哪一轮改过的文件</strong>,先用 <code>git diff &lt;文件&gt;</code> 看一眼;如果里面只有第六轮的改动,再用 <code>git restore &lt;文件&gt;</code> 退回。第六轮新建的文件直接删掉。</li>
+</ol>
+<p>其他东西一概不动:别的文件、暂存区、分支、提交。恢复本身就是工作区里一次普通的改动,可以在上面的未提交改动里检查,也可以直接提交。</p>
+<h3 id="在提交图上看-ai-的每一轮">在提交图上看 AI 的每一轮<a class="h-anchor" href="#在提交图上看-ai-的每一轮" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>在**「提交历史」<strong>(⌘3)里,工具条上的</strong>「AI 每一轮」**开关会把最近三天的检查点画成从当前提交长出来的额外提交,标题是那一轮的提问。点一个就能看它改了什么,和普通提交一样。</p>
+<p><figure><img src="/media/app/history-graph-ai-turns-zh-light.webp" alt="「提交历史」打开「AI 每一轮」开关后:最上面三行是 AI 检查点,下面是其他分支的泳道" loading="lazy" decoding="async" /><figcaption>打开「AI 每一轮」,agent 的检查点和你的提交画在同一张图上</figcaption></figure></p>
+<h3 id="找到改动背后的那段对话">找到改动背后的那段对话<a class="h-anchor" href="#找到改动背后的那段对话" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>有时候撤销之前得先知道<em>为什么</em>这么改。在 AI 页按 <strong>⌘Y</strong>,顶上落下一个「历史对话」小窗,列着这个仓库所有 worktree 里以前的每段对话,按今天、昨天、近 7 天、更早分组。打字就能全部搜一遍。Claude Code 的对话按 <strong>↩</strong> 在它的 worktree 里接着聊;<strong>⌘↩</strong> 打开只读回放,命中的地方高亮,想接着聊时「继续这个会话」就在旁边。(Codex 的每一轮同样会出现在「AI 每一轮」里、能恢复;从这里接着聊目前只支持 Claude Code 的会话。)</p>
+<p><figure><img src="/media/app/history-modal-zh-light.webp" alt="AI 页上的 ⌘Y 历史对话小窗:「搜索历史对话…」,以前的会话按今天、昨天、近 7 天分组,底部提示「↩ 继续 · ⌘↩ 只看」" loading="lazy" decoding="async" /><figcaption>⌘Y:这个仓库里以前的每段对话,一个快捷键就到</figcaption></figure></p>
+<h3 id="新会话怎么知道上次做到哪">新会话怎么知道上次做到哪?<a class="h-anchor" href="#新会话怎么知道上次做到哪" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>撤销回答的是「放回去」,另一半问题是「上次做到哪了」。在一个 worktree 里开新会话时,agent 会自动收到这里上一个会话的简短总结:什么时候结束的、最近问了什么、最后说了什么、动过哪些文件。所以它能接着上次停下的地方做,而不是从头摸索,也知道哪些已经试过了。</p>
+<p>agent 还能自己往更早翻。gtree 的 <code>recall</code> 工具能在你所有项目里搜最近 30 天每一轮的提问和结论,「上周 token 刷新是怎么修的?」这种问题,agent 自己就能找到答案。</p>
+<h2 id="git-rewind-gtree-该用哪个">git、/rewind、gtree 该用哪个?<a class="h-anchor" href="#git-rewind-gtree-该用哪个" aria-hidden="true" tabindex="-1">#</a></h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>git</th>
+<th>Claude Code <code>/rewind</code></th>
+<th>gtree</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>撤销的单位</td>
+<td>提交 / 整个文件</td>
+<td>对话里的一条消息</td>
+<td>答完的一轮</td>
+</tr>
+<tr>
+<td>shell 命令改的文件</td>
+<td>能(未提交的)</td>
+<td>不记录</td>
+<td>能</td>
+</tr>
+<tr>
+<td>以前的会话</td>
+<td>提交过才行</td>
+<td>resume 回那段对话后可以(约 30 天)</td>
+<td>所有会话,30 天内,不用找回对话</td>
+</tr>
+<tr>
+<td>新会话知道上次做了什么</td>
+<td>不知道</td>
+<td>不知道</td>
+<td>知道</td>
+</tr>
+<tr>
+<td>看每一步改了什么</td>
+<td>只能看提交之间</td>
+<td>在对话里看</td>
+<td>每一轮都有 diff</td>
+</tr>
+<tr>
+<td>会动分支 / 暂存区吗</td>
+<td><code>reset</code>、<code>stash</code> 会</td>
+<td>不会</td>
+<td>不会</td>
+</tr>
+</tbody></table>
+<p>三者可以配合着用:对话进行中「不对,别这么改」用 <code>/rewind</code>;改动来自 shell 命令、或者过了一阵才发现、记不清是哪个会话干的,用 gtree;已经提交的,交给 git。</p>
+<h2 id="让撤销更容易的几个习惯">让撤销更容易的几个习惯<a class="h-anchor" href="#让撤销更容易的几个习惯" aria-hidden="true" tabindex="-1">#</a></h2>
+<ol>
+<li><strong>任务做通了再提交</strong>,不必每轮都提交。有了每轮的检查点,不需要拿「wip」提交当安全网。</li>
+<li><strong>一个任务一个 worktree。</strong> 回滚这个任务的轮次,碰不到别的任务的文件。参见<a href="/zh/blog/run-multiple-claude-code-git-worktree/">用 git worktree 同时跑多个 Claude Code</a>。</li>
+<li><strong>恢复前先看 diff。</strong> 这一轮的 diff 就是恢复时会被改写的文件清单。</li>
+<li><strong>别让两个会话稀里糊涂地共用一个目录。</strong> 回滚一个会话的轮次,可能会动到另一个的活。参见<a href="/zh/blog/ai-agents-editing-same-file/">两个 AI agent 改同一个文件</a>。</li>
+</ol>
+<h2 id="常见问题">常见问题<a class="h-anchor" href="#常见问题" aria-hidden="true" tabindex="-1">#</a></h2>
+<h3 id="会话关掉以后-还能撤销-claude-code-的改动吗">会话关掉以后,还能撤销 Claude Code 的改动吗?<a class="h-anchor" href="#会话关掉以后-还能撤销-claude-code-的改动吗" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>可以。Claude Code 本身:用 <code>claude --resume</code> 回到那段对话再 <code>/rewind</code>,但只能退回文件编辑工具做的改动。gtree:30 天内的每一轮都留在「AI 每一轮」里,不管来自哪个会话,shell 命令改的文件也在。git:只有改动还没提交、或者改之前你提交过,才退得回去。</p>
+<h3 id="恢复以后-出问题那一轮改的某个文件没变回来-为什么">恢复以后,出问题那一轮改的某个文件没变回来,为什么?<a class="h-anchor" href="#恢复以后-出问题那一轮改的某个文件没变回来-为什么" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>恢复只写回<strong>那一轮</strong>改过的文件。为了撤销第 5 轮而恢复到第 4 轮,写回的是第 4 轮动过的文件;第 5 轮改了、第 4 轮没碰过的文件保持原样。打开第 5 轮看它改了哪些文件,再用 git 恢复,或者从更早一个改过它们的轮次恢复。</p>
+<h3 id="恢复会改我的提交或分支吗">恢复会改我的提交或分支吗?<a class="h-anchor" href="#恢复会改我的提交或分支吗" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>不会。它只改写工作区里的文件,提交、分支、暂存区都不动;要不要提交由你决定。</p>
+<h3 id="codex-也能这样吗">Codex 也能这样吗?<a class="h-anchor" href="#codex-也能这样吗" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>能。Codex 会话每答完一轮同样会存检查点,它的每一轮也会出现在「AI 每一轮」里,能同样恢复。从 ⌘Y 接着聊以前的对话,目前只支持 Claude Code 的会话。</p>
+<h3 id="新会话会知道上一个会话做了什么吗">新会话会知道上一个会话做了什么吗?<a class="h-anchor" href="#新会话会知道上一个会话做了什么吗" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>用 gtree 的话会。在一个 worktree 里开新会话,它会自动收到这里上一个会话的总结(最近的提问、最后的回复、动过的文件);更早的,agent 可以用 <code>recall</code> 工具去搜。</p>
+<h3 id="检查点里会包含我自己改的东西吗">检查点里会包含我自己改的东西吗?<a class="h-anchor" href="#检查点里会包含我自己改的东西吗" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>会。检查点存的是一轮结束时整个工作目录的样子,所以上一轮之后你手动改的内容也在里面。</p>
+<p>gtree 本地功能免费、不用注册;gtree 不上传你的代码。<a href="https://gtree.dobbylab.com/zh/">下载 gtree</a>,连上 Claude Code 或 Codex,下次哪一轮改坏了,你能看清它改了什么,把那些文件退回去。</p>
+</div><aside class="doc-cta"><div><h2>试试 gtree</h2><p>给 AI 编程 Agent 用的免费桌面应用。本地功能永久免费,无需登录,gtree 不上传你的代码。</p></div><a class="btn primary" href="../../../zh/#download"><svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M12 4v12"></path><path d="m7 11 5 5 5-5"></path><path d="M5 20h14"></path></svg>免费下载 Mac 版</a></aside><nav class="doc-more" aria-label="更多文章"><h2>更多文章</h2><ul><li><a href="../../../zh/blog/gtree-native-app-not-electron/">为什么 gtree 不用 Electron:24 MB 安装包,0.2 秒开窗</a> <span class="doc-meta"><time dateTime="2026-10-25">2026年10月25日</time></span></li><li><a href="../../../zh/blog/ai-agents-editing-same-file/">两个 AI agent 改同一个文件:怎么让它们先商量、不互相覆盖</a> <span class="doc-meta"><time dateTime="2026-10-19">2026年10月19日</time></span></li><li><a href="../../../zh/blog/claude-code-waiting-for-approval-notifications/">Claude Code 在等你授权?怎么第一时间知道</a> <span class="doc-meta"><time dateTime="2026-10-13">2026年10月13日</time></span></li></ul></nav></article></main><footer class="site-footer"><div class="wrap"><div class="ft-top"><div class="ft-brand"><a class="brand" href="../../../zh/" aria-label="gtree"><img src="../../../logo.png" alt="" width="22" height="22"/>gtree</a><p>gtree 是 DobbyLab 出品的桌面应用,给同时开好几个 AI 编程助手的人用。本地运行,gtree 不上传你的代码。</p></div><nav class="ft-col" aria-label="产品"><h2>产品</h2><ul><li><a href="../../../zh/#download">下载</a></li><li><a href="../../../zh/#pricing">定价</a></li><li><a href="../../../zh/release-notes/">版本说明</a></li></ul></nav><nav class="ft-col" aria-label="资源"><h2>资源</h2><ul><li><a href="../../../zh/blog/">博客</a></li><li><a href="../../../zh/#faq">常见问题</a></li><li><a href="../../../llms.txt">llms.txt</a></li></ul></nav><nav class="ft-col" aria-label="关于"><h2>关于</h2><ul><li><a href="../../../zh/privacy/">隐私政策</a></li><li><a href="mailto:support@dobbylab.com">support@dobbylab.com</a></li><li><a href="https://x.com/dobbylabhq" target="_blank" rel="noopener" class="x-link"><svg class="x-logo" viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>@<!-- -->dobbylabhq</a></li></ul></nav></div><div class="ft-bottom"><span>© 2026 <a href="https://dobbylab.com/">DobbyLab</a> · <!-- -->保留所有权利</span><div class="lang up ft-lang"><button type="button" class="lang-btn " aria-haspopup="menu" aria-expanded="false" aria-label="语言" title="语言"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg><span>中文</span><svg viewBox="0 0 24 24" class="chev" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button><div class="lang-menu " role="menu" aria-label="语言"><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../blog/undo-claude-code-changes/" hrefLang="en" lang="en"><span>English</span></a><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../ja/blog/undo-claude-code-changes/" hrefLang="ja" lang="ja"><span>日本語</span></a><a role="menuitemradio" aria-checked="true" tabindex="-1" href="../../../zh/blog/undo-claude-code-changes/" hrefLang="zh-CN" lang="zh-CN"><span>中文</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></a></div></div></div></div></footer></div>
+    <script id="page-data" type="application/json">{"kind":"post","path":"blog/undo-claude-code-changes/","slug":"undo-claude-code-changes","title":"撤销 Claude Code 的改动:回到任意一轮,关掉的会话也行","date":"2026-10-22","tags":["claude-code","codex","undo","git"],"html":"\u003cp>想撤销 Claude Code 做的改动,有三种办法。\u003cstrong>git\u003c/strong> 能丢掉未提交的改动(\u003ccode>git restore &lt;文件&gt;\u003c/code>),但最远只能退到上一次提交。\u003cstrong>Claude Code 自带的回退\u003c/strong>(\u003ccode>/rewind\u003c/code>)能把代码退回对话里的某个时间点,但只管它用文件编辑工具做的改动。\u003cstrong>gtree\u003c/strong> 在 agent 每答完一轮时给 worktree 存一个检查点:任意一轮改了什么都看得到,点两下就能把那些文件放回去,不管这一轮来自哪个会话,上周关掉的也行。新会话一开头还知道上次做到了哪。\u003c/p>\n\u003cp>\u003cfigure>\u003cimg src=\"/media/app/ai-turn-detail-zh-light.webp\" alt=\"右面板「改动」:上半是 3 个未提交的文件,下半「AI 每一轮」有三轮;中间是选中那一轮「Follow the system appearance by default」的详情:agent 的回复(可「展开全部」)、改了的 2 个文件和 diff,右上角「恢复到这一轮」\" loading=\"lazy\" decoding=\"async\" />\u003cfigcaption>AI 每一轮:每答完一轮存一个检查点。点一轮看它改了什么,「恢复到这一轮」把那些文件放回去\u003c/figcaption>\u003c/figure>\u003c/p>\n\u003ch2 id=\"为什么撤销-ai-的改动比撤销自己的难\">为什么撤销 AI 的改动比撤销自己的难?\u003ca class=\"h-anchor\" href=\"#为什么撤销-ai-的改动比撤销自己的难\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>自己写代码时,提交大致跟着思路走。AI 不是这样:二十分钟里 agent 可能答了八轮、动了十五个文件、跑了十几条命令,全都夹在你的两次提交之间。然后第六轮把测试改挂了:你想把第六轮的改动撤掉,前五轮的留着。\u003c/p>\n\u003cp>单靠 git 表达不了这件事:在它看来,上次提交到现在什么都没发生过。\u003c/p>\n\u003ch2 id=\"怎么用-git-撤销-claude-code-的改动\">怎么用 git 撤销 Claude Code 的改动?\u003ca class=\"h-anchor\" href=\"#怎么用-git-撤销-claude-code-的改动\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>如果 AI 开工以后你还没提交过,git 是最快的「全部不要了」:\u003c/p>\n\u003cpre>\u003ccode class=\"language-bash\">git status                     # 改了哪些\ngit diff                       # 怎么改的\n\ngit restore src/auth.ts        # 丢掉一个已跟踪文件的改动\ngit restore .                  # 丢掉所有已跟踪文件的改动\n\ngit clean -n                   # 先预览会删掉哪些未跟踪文件\ngit clean -fd                  # 真删(小心,删了就回不来)\n\u003c/code>\u003c/pre>\n\u003cp>想在把任务交给 AI 之前留条后路,先存一份:\u003c/p>\n\u003cpre>\u003ccode class=\"language-bash\">git stash push -u -m &quot;交给 AI 之前&quot;   # 把手上的改动(含新文件)先收起来\ngit stash apply                        # 之后取回来,stash 还留着\n\u003c/code>\u003c/pre>\n\u003cp>或者每次发提示词之前都提交一次。能用,但提交历史会塞满「wip」,之后还得 squash;而且总有一次会忘,偏偏就是出事那次。\u003c/p>\n\u003ch2 id=\"claude-code-的-rewind-怎么用\">Claude Code 的 /rewind 怎么用?\u003ca class=\"h-anchor\" href=\"#claude-code-的-rewind-怎么用\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>Claude Code 在对话过程中会自己存检查点。输入 \u003ccode>/rewind\u003c/code>(或者在输入框为空时连按两次 Esc),选一条更早的消息,就能把对话、代码或两者一起恢复到那个时间点。「刚才两轮方向错了」这种情况,它是最快的。\u003c/p>\n\u003cp>检查点随对话一起保存,用 \u003ccode>claude --resume\u003c/code> 回到以前的对话后照样能 \u003ccode>/rewind\u003c/code>。每个会话保留最近 100 个检查点,默认大约 30 天后清理。\u003c/p>\n\u003cp>按 Claude Code 文档的说法,它有几类改动是不记录的:\u003c/p>\n\u003cul>\n\u003cli>\u003cstrong>shell 命令改的文件\u003c/strong>:\u003ccode>rm\u003c/code>、\u003ccode>mv\u003c/code>、\u003ccode>cp\u003c/code>、一行 \u003ccode>sed\u003c/code>、格式化工具、代码生成器;\u003c/li>\n\u003cli>\u003cstrong>子 agent 做的编辑\u003c/strong>(通常不记录);\u003c/li>\n\u003cli>\u003cstrong>会话之外的改动\u003c/strong>:你手动改的、同时开着的其他会话改的。\u003c/li>\n\u003c/ul>\n\u003cp>它的定位是快速的本地撤销,不是用来代替版本管理的。\u003c/p>\n\u003ch2 id=\"gtree-怎么按轮回滚\">gtree 怎么按轮回滚\u003ca class=\"h-anchor\" href=\"#gtree-怎么按轮回滚\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>\u003ca href=\"https://gtree.dobbylab.com/zh/\">gtree\u003c/a> 换了个思路:不追踪一次次编辑,而是给结果拍快照。Claude Code 和 Codex 都支持。\u003c/p>\n\u003ch3 id=\"每答完一轮-存一个检查点\">每答完一轮,存一个检查点\u003ca class=\"h-anchor\" href=\"#每答完一轮-存一个检查点\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>连上 Claude Code(或 Codex)之后,agent 每答完一轮,gtree 都把 worktree 当时的状态存成一个\u003cstrong>检查点\u003c/strong>。存的是文件本身而不是编辑操作,所以 shell 命令改的文件、新建的文件也都在里面。被 git 忽略的、或者超过 1 MB 的新文件不存。\u003c/p>\n\u003cp>检查点是仓库里普通的 git 对象,挂在单独的引用下面,不在任何分支上;存检查点不会碰你的分支、暂存区和文件。保留 30 天。\u003c/p>\n\u003ch3 id=\"每一轮改了什么-改动-ai-每一轮\">每一轮改了什么:「改动 › AI 每一轮」\u003ca class=\"h-anchor\" href=\"#每一轮改了什么-改动-ai-每一轮\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>打开右面板的**「改动」\u003cstrong>(⌃⇧G)。上半部分是未提交的文件,下半部分是\u003c/strong>「AI 每一轮」**:当前 worktree 里的每一轮。每轮占两行:你的提问和时间,然后是改了几个文件、改了哪些,比如「3 个文件 · session.ts 等」。默认只列改过文件的轮次,因为大部分轮次只是一问一答;「⋯」菜单里可以把其他的也显示出来。\u003c/p>\n\u003cp>点一轮,它的详情在中间打开:\u003c/p>\n\u003cul>\n\u003cli>你的提问和 agent 最后的回复(先显示 4 行,点「展开全部」看完);\u003c/li>\n\u003cli>下面紧接着是这一轮具体改了什么的 diff。\u003c/li>\n\u003c/ul>\n\u003cp>跨会话也有效。昨天关掉的对话,它的每一轮还在列表里,「昨晚 AI 到底改了什么」有答案。\u003c/p>\n\u003ch3 id=\"恢复到这一轮-做了什么\">「恢复到这一轮」做了什么\u003ca class=\"h-anchor\" href=\"#恢复到这一轮-做了什么\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>选中一轮,点**「恢复到这一轮」\u003cstrong>。按钮会变红、变成\u003c/strong>「再点一次确认恢复」**,手滑点一下不会覆盖任何东西。\u003c/p>\n\u003cp>\u003cfigure>\u003cimg src=\"/media/app/ai-turn-restore-confirm-zh-light.webp\" alt=\"点过一次之后,按钮变红,写着「再点一次确认恢复」,下面一行说明:会把这一轮动过的 2 个文件改回它结束时的样子;别的文件、暂存区和分支不动\" loading=\"lazy\" decoding=\"async\" />\u003cfigcaption>第一次点只是确认,第二次才真的恢复\u003c/figcaption>\u003c/figure>\u003c/p>\n\u003cp>第二次点下去,\u003cstrong>这一轮改过的文件\u003c/strong>会被写回它结束时的样子;其中当时还不存在的文件会被删掉。完成后会提示,比如「已把这一轮的 2 个文件恢复到它结束时的样子」。\u003c/p>\n\u003cp>它只动这一轮改过的文件,不会把整个工作目录退回那个时刻,也不碰你的分支和暂存区。\u003c/p>\n\u003ch3 id=\"怎么撤掉出问题的那一轮\">怎么撤掉出问题的那一轮\u003ca class=\"h-anchor\" href=\"#怎么撤掉出问题的那一轮\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>还是上面的例子,第六轮把测试改挂了:\u003c/p>\n\u003col>\n\u003cli>\u003cstrong>先选中第六轮\u003c/strong>,看它改了哪些文件。这就是要退回去的清单。\u003c/li>\n\u003cli>\u003cstrong>往前找最近一个也改过这些文件的轮次\u003c/strong>(比如第四轮),选中它,点两次「恢复到这一轮」。这些文件就回到第四轮结束时的样子,也就是第六轮动手之前。\u003c/li>\n\u003cli>\u003cstrong>看一眼第四轮还改了哪些别的文件。\u003c/strong> 恢复会把第四轮动过的文件全都写回去;如果其中某个文件第五轮又改过,第五轮的改动也会跟着退掉。先看清楚再点。\u003c/li>\n\u003cli>\u003cstrong>第六轮之前没有哪一轮改过的文件\u003c/strong>,先用 \u003ccode>git diff &lt;文件&gt;\u003c/code> 看一眼;如果里面只有第六轮的改动,再用 \u003ccode>git restore &lt;文件&gt;\u003c/code> 退回。第六轮新建的文件直接删掉。\u003c/li>\n\u003c/ol>\n\u003cp>其他东西一概不动:别的文件、暂存区、分支、提交。恢复本身就是工作区里一次普通的改动,可以在上面的未提交改动里检查,也可以直接提交。\u003c/p>\n\u003ch3 id=\"在提交图上看-ai-的每一轮\">在提交图上看 AI 的每一轮\u003ca class=\"h-anchor\" href=\"#在提交图上看-ai-的每一轮\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>在**「提交历史」\u003cstrong>(⌘3)里,工具条上的\u003c/strong>「AI 每一轮」**开关会把最近三天的检查点画成从当前提交长出来的额外提交,标题是那一轮的提问。点一个就能看它改了什么,和普通提交一样。\u003c/p>\n\u003cp>\u003cfigure>\u003cimg src=\"/media/app/history-graph-ai-turns-zh-light.webp\" alt=\"「提交历史」打开「AI 每一轮」开关后:最上面三行是 AI 检查点,下面是其他分支的泳道\" loading=\"lazy\" decoding=\"async\" />\u003cfigcaption>打开「AI 每一轮」,agent 的检查点和你的提交画在同一张图上\u003c/figcaption>\u003c/figure>\u003c/p>\n\u003ch3 id=\"找到改动背后的那段对话\">找到改动背后的那段对话\u003ca class=\"h-anchor\" href=\"#找到改动背后的那段对话\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>有时候撤销之前得先知道\u003cem>为什么\u003c/em>这么改。在 AI 页按 \u003cstrong>⌘Y\u003c/strong>,顶上落下一个「历史对话」小窗,列着这个仓库所有 worktree 里以前的每段对话,按今天、昨天、近 7 天、更早分组。打字就能全部搜一遍。Claude Code 的对话按 \u003cstrong>↩\u003c/strong> 在它的 worktree 里接着聊;\u003cstrong>⌘↩\u003c/strong> 打开只读回放,命中的地方高亮,想接着聊时「继续这个会话」就在旁边。(Codex 的每一轮同样会出现在「AI 每一轮」里、能恢复;从这里接着聊目前只支持 Claude Code 的会话。)\u003c/p>\n\u003cp>\u003cfigure>\u003cimg src=\"/media/app/history-modal-zh-light.webp\" alt=\"AI 页上的 ⌘Y 历史对话小窗:「搜索历史对话…」,以前的会话按今天、昨天、近 7 天分组,底部提示「↩ 继续 · ⌘↩ 只看」\" loading=\"lazy\" decoding=\"async\" />\u003cfigcaption>⌘Y:这个仓库里以前的每段对话,一个快捷键就到\u003c/figcaption>\u003c/figure>\u003c/p>\n\u003ch3 id=\"新会话怎么知道上次做到哪\">新会话怎么知道上次做到哪?\u003ca class=\"h-anchor\" href=\"#新会话怎么知道上次做到哪\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>撤销回答的是「放回去」,另一半问题是「上次做到哪了」。在一个 worktree 里开新会话时,agent 会自动收到这里上一个会话的简短总结:什么时候结束的、最近问了什么、最后说了什么、动过哪些文件。所以它能接着上次停下的地方做,而不是从头摸索,也知道哪些已经试过了。\u003c/p>\n\u003cp>agent 还能自己往更早翻。gtree 的 \u003ccode>recall\u003c/code> 工具能在你所有项目里搜最近 30 天每一轮的提问和结论,「上周 token 刷新是怎么修的?」这种问题,agent 自己就能找到答案。\u003c/p>\n\u003ch2 id=\"git-rewind-gtree-该用哪个\">git、/rewind、gtree 该用哪个?\u003ca class=\"h-anchor\" href=\"#git-rewind-gtree-该用哪个\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003ctable>\n\u003cthead>\n\u003ctr>\n\u003cth>\u003c/th>\n\u003cth>git\u003c/th>\n\u003cth>Claude Code \u003ccode>/rewind\u003c/code>\u003c/th>\n\u003cth>gtree\u003c/th>\n\u003c/tr>\n\u003c/thead>\n\u003ctbody>\u003ctr>\n\u003ctd>撤销的单位\u003c/td>\n\u003ctd>提交 / 整个文件\u003c/td>\n\u003ctd>对话里的一条消息\u003c/td>\n\u003ctd>答完的一轮\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>shell 命令改的文件\u003c/td>\n\u003ctd>能(未提交的)\u003c/td>\n\u003ctd>不记录\u003c/td>\n\u003ctd>能\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>以前的会话\u003c/td>\n\u003ctd>提交过才行\u003c/td>\n\u003ctd>resume 回那段对话后可以(约 30 天)\u003c/td>\n\u003ctd>所有会话,30 天内,不用找回对话\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>新会话知道上次做了什么\u003c/td>\n\u003ctd>不知道\u003c/td>\n\u003ctd>不知道\u003c/td>\n\u003ctd>知道\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>看每一步改了什么\u003c/td>\n\u003ctd>只能看提交之间\u003c/td>\n\u003ctd>在对话里看\u003c/td>\n\u003ctd>每一轮都有 diff\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>会动分支 / 暂存区吗\u003c/td>\n\u003ctd>\u003ccode>reset\u003c/code>、\u003ccode>stash\u003c/code> 会\u003c/td>\n\u003ctd>不会\u003c/td>\n\u003ctd>不会\u003c/td>\n\u003c/tr>\n\u003c/tbody>\u003c/table>\n\u003cp>三者可以配合着用:对话进行中「不对,别这么改」用 \u003ccode>/rewind\u003c/code>;改动来自 shell 命令、或者过了一阵才发现、记不清是哪个会话干的,用 gtree;已经提交的,交给 git。\u003c/p>\n\u003ch2 id=\"让撤销更容易的几个习惯\">让撤销更容易的几个习惯\u003ca class=\"h-anchor\" href=\"#让撤销更容易的几个习惯\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003col>\n\u003cli>\u003cstrong>任务做通了再提交\u003c/strong>,不必每轮都提交。有了每轮的检查点,不需要拿「wip」提交当安全网。\u003c/li>\n\u003cli>\u003cstrong>一个任务一个 worktree。\u003c/strong> 回滚这个任务的轮次,碰不到别的任务的文件。参见\u003ca href=\"/zh/blog/run-multiple-claude-code-git-worktree/\">用 git worktree 同时跑多个 Claude Code\u003c/a>。\u003c/li>\n\u003cli>\u003cstrong>恢复前先看 diff。\u003c/strong> 这一轮的 diff 就是恢复时会被改写的文件清单。\u003c/li>\n\u003cli>\u003cstrong>别让两个会话稀里糊涂地共用一个目录。\u003c/strong> 回滚一个会话的轮次,可能会动到另一个的活。参见\u003ca href=\"/zh/blog/ai-agents-editing-same-file/\">两个 AI agent 改同一个文件\u003c/a>。\u003c/li>\n\u003c/ol>\n\u003ch2 id=\"常见问题\">常见问题\u003ca class=\"h-anchor\" href=\"#常见问题\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003ch3 id=\"会话关掉以后-还能撤销-claude-code-的改动吗\">会话关掉以后,还能撤销 Claude Code 的改动吗?\u003ca class=\"h-anchor\" href=\"#会话关掉以后-还能撤销-claude-code-的改动吗\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>可以。Claude Code 本身:用 \u003ccode>claude --resume\u003c/code> 回到那段对话再 \u003ccode>/rewind\u003c/code>,但只能退回文件编辑工具做的改动。gtree:30 天内的每一轮都留在「AI 每一轮」里,不管来自哪个会话,shell 命令改的文件也在。git:只有改动还没提交、或者改之前你提交过,才退得回去。\u003c/p>\n\u003ch3 id=\"恢复以后-出问题那一轮改的某个文件没变回来-为什么\">恢复以后,出问题那一轮改的某个文件没变回来,为什么?\u003ca class=\"h-anchor\" href=\"#恢复以后-出问题那一轮改的某个文件没变回来-为什么\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>恢复只写回\u003cstrong>那一轮\u003c/strong>改过的文件。为了撤销第 5 轮而恢复到第 4 轮,写回的是第 4 轮动过的文件;第 5 轮改了、第 4 轮没碰过的文件保持原样。打开第 5 轮看它改了哪些文件,再用 git 恢复,或者从更早一个改过它们的轮次恢复。\u003c/p>\n\u003ch3 id=\"恢复会改我的提交或分支吗\">恢复会改我的提交或分支吗?\u003ca class=\"h-anchor\" href=\"#恢复会改我的提交或分支吗\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>不会。它只改写工作区里的文件,提交、分支、暂存区都不动;要不要提交由你决定。\u003c/p>\n\u003ch3 id=\"codex-也能这样吗\">Codex 也能这样吗?\u003ca class=\"h-anchor\" href=\"#codex-也能这样吗\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>能。Codex 会话每答完一轮同样会存检查点,它的每一轮也会出现在「AI 每一轮」里,能同样恢复。从 ⌘Y 接着聊以前的对话,目前只支持 Claude Code 的会话。\u003c/p>\n\u003ch3 id=\"新会话会知道上一个会话做了什么吗\">新会话会知道上一个会话做了什么吗?\u003ca class=\"h-anchor\" href=\"#新会话会知道上一个会话做了什么吗\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>用 gtree 的话会。在一个 worktree 里开新会话,它会自动收到这里上一个会话的总结(最近的提问、最后的回复、动过的文件);更早的,agent 可以用 \u003ccode>recall\u003c/code> 工具去搜。\u003c/p>\n\u003ch3 id=\"检查点里会包含我自己改的东西吗\">检查点里会包含我自己改的东西吗?\u003ca class=\"h-anchor\" href=\"#检查点里会包含我自己改的东西吗\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>会。检查点存的是一轮结束时整个工作目录的样子,所以上一轮之后你手动改的内容也在里面。\u003c/p>\n\u003cp>gtree 本地功能免费、不用注册;gtree 不上传你的代码。\u003ca href=\"https://gtree.dobbylab.com/zh/\">下载 gtree\u003c/a>,连上 Claude Code 或 Codex,下次哪一轮改坏了,你能看清它改了什么,把那些文件退回去。\u003c/p>\n","more":[{"slug":"gtree-native-app-not-electron","title":"为什么 gtree 不用 Electron:24 MB 安装包,0.2 秒开窗","date":"2026-10-25"},{"slug":"ai-agents-editing-same-file","title":"两个 AI agent 改同一个文件:怎么让它们先商量、不互相覆盖","date":"2026-10-19"},{"slug":"claude-code-waiting-for-approval-notifications","title":"Claude Code 在等你授权?怎么第一时间知道","date":"2026-10-13"}]}</script>
+  </body>
+</html>

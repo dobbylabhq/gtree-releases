@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://gtree.dobbylab.com/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/privacy/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/privacy/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/privacy/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/privacy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/privacy/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/blog/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/blog/gtree-native-app-not-electron/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/gtree-native-app-not-electron/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/gtree-native-app-not-electron/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/gtree-native-app-not-electron/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/gtree-native-app-not-electron/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/blog/undo-claude-code-changes/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/undo-claude-code-changes/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/undo-claude-code-changes/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/undo-claude-code-changes/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/undo-claude-code-changes/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/blog/ai-agents-editing-same-file/</loc>
+    <lastmod>2026-10-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/ai-agents-editing-same-file/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/ai-agents-editing-same-file/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/ai-agents-editing-same-file/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/ai-agents-editing-same-file/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/blog/claude-code-waiting-for-approval-notifications/</loc>
+    <lastmod>2026-10-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/claude-code-waiting-for-approval-notifications/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/claude-code-waiting-for-approval-notifications/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/claude-code-waiting-for-approval-notifications/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/claude-code-waiting-for-approval-notifications/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/blog/run-multiple-claude-code-git-worktree/</loc>
+    <lastmod>2026-10-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/run-multiple-claude-code-git-worktree/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/run-multiple-claude-code-git-worktree/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/run-multiple-claude-code-git-worktree/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/run-multiple-claude-code-git-worktree/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/release-notes/</loc>
+    <lastmod>2026-10-28</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/release-notes/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/release-notes/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/release-notes/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/release-notes/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/ja/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/ja/privacy/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/privacy/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/privacy/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/privacy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/privacy/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/ja/blog/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/ja/blog/gtree-native-app-not-electron/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/gtree-native-app-not-electron/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/gtree-native-app-not-electron/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/gtree-native-app-not-electron/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/gtree-native-app-not-electron/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/ja/blog/undo-claude-code-changes/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/undo-claude-code-changes/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/undo-claude-code-changes/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/undo-claude-code-changes/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/undo-claude-code-changes/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/ja/blog/ai-agents-editing-same-file/</loc>
+    <lastmod>2026-10-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/ai-agents-editing-same-file/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/ai-agents-editing-same-file/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/ai-agents-editing-same-file/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/ai-agents-editing-same-file/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/ja/blog/claude-code-waiting-for-approval-notifications/</loc>
+    <lastmod>2026-10-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/claude-code-waiting-for-approval-notifications/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/claude-code-waiting-for-approval-notifications/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/claude-code-waiting-for-approval-notifications/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/claude-code-waiting-for-approval-notifications/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/ja/blog/run-multiple-claude-code-git-worktree/</loc>
+    <lastmod>2026-10-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/run-multiple-claude-code-git-worktree/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/run-multiple-claude-code-git-worktree/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/run-multiple-claude-code-git-worktree/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/run-multiple-claude-code-git-worktree/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/ja/release-notes/</loc>
+    <lastmod>2026-10-28</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/release-notes/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/release-notes/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/release-notes/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/release-notes/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/zh/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/zh/privacy/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/privacy/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/privacy/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/privacy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/privacy/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/zh/blog/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/zh/blog/gtree-native-app-not-electron/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/gtree-native-app-not-electron/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/gtree-native-app-not-electron/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/gtree-native-app-not-electron/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/gtree-native-app-not-electron/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/zh/blog/undo-claude-code-changes/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/undo-claude-code-changes/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/undo-claude-code-changes/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/undo-claude-code-changes/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/undo-claude-code-changes/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/zh/blog/ai-agents-editing-same-file/</loc>
+    <lastmod>2026-10-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/ai-agents-editing-same-file/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/ai-agents-editing-same-file/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/ai-agents-editing-same-file/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/ai-agents-editing-same-file/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/zh/blog/claude-code-waiting-for-approval-notifications/</loc>
+    <lastmod>2026-10-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/claude-code-waiting-for-approval-notifications/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/claude-code-waiting-for-approval-notifications/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/claude-code-waiting-for-approval-notifications/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/claude-code-waiting-for-approval-notifications/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/zh/blog/run-multiple-claude-code-git-worktree/</loc>
+    <lastmod>2026-10-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/run-multiple-claude-code-git-worktree/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/run-multiple-claude-code-git-worktree/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/run-multiple-claude-code-git-worktree/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/run-multiple-claude-code-git-worktree/" />
+  </url>
+  <url>
+    <loc>https://gtree.dobbylab.com/zh/release-notes/</loc>
+    <lastmod>2026-10-28</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/release-notes/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/release-notes/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/release-notes/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/release-notes/" />
+  </url>
+</urlset>

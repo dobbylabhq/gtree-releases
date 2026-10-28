@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="ja" data-lang="ja" data-root="../../../" data-path="blog/run-multiple-claude-code-git-worktree/" data-prerendered>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="../../../favicon.png" />
+    <link rel="apple-touch-icon" href="../../../logo.png" />
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0A0A0A" media="(prefers-color-scheme: dark)" />
+    <title>Claude Code を複数並列で動かす方法 — git worktree 入門 · gtree</title>
+    <meta name="description" content="複数の Claude Code を同じリポジトリで並列に動かすなら、セッションごとに git worktree を用意するのが確実です。実際のコマンド、つまずきやすい点、手間を省く方法をまとめました。" />
+    <link rel="canonical" href="https://gtree.dobbylab.com/ja/blog/run-multiple-claude-code-git-worktree/" />
+    <link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/run-multiple-claude-code-git-worktree/" />
+    <link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/run-multiple-claude-code-git-worktree/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/run-multiple-claude-code-git-worktree/" />
+    <link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/run-multiple-claude-code-git-worktree/" />
+    <link rel="alternate" type="application/rss+xml" title="ブログ · gtree" href="https://gtree.dobbylab.com/ja/blog/feed.xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="gtree" />
+    <meta property="og:title" content="Claude Code を複数並列で動かす方法 — git worktree 入門" />
+    <meta property="og:description" content="複数の Claude Code を同じリポジトリで並列に動かすなら、セッションごとに git worktree を用意するのが確実です。実際のコマンド、つまずきやすい点、手間を省く方法をまとめました。" />
+    <meta property="og:url" content="https://gtree.dobbylab.com/ja/blog/run-multiple-claude-code-git-worktree/" />
+    <meta property="og:image" content="https://gtree.dobbylab.com/og-ja.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="zh_CN" />
+    <meta property="article:published_time" content="2026-10-10" />
+    <link rel="alternate" type="text/markdown" href="https://gtree.dobbylab.com/ja/blog/run-multiple-claude-code-git-worktree/index.md" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@dobbylabhq" />
+    <meta name="twitter:title" content="Claude Code を複数並列で動かす方法 — git worktree 入門" />
+    <meta name="twitter:description" content="複数の Claude Code を同じリポジトリで並列に動かすなら、セッションごとに git worktree を用意するのが確実です。実際のコマンド、つまずきやすい点、手間を省く方法をまとめました。" />
+    <meta name="twitter:image" content="https://gtree.dobbylab.com/og-ja.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://dobbylab.com/#org","name":"DobbyLab","url":"https://dobbylab.com/","logo":"https://gtree.dobbylab.com/logo.png","email":"mailto:support@dobbylab.com","sameAs":["https://x.com/dobbylabhq","https://discord.gg/EnPJxrUEK5","https://github.com/dobbylabhq"]},{"@type":"BlogPosting","@id":"https://gtree.dobbylab.com/ja/blog/run-multiple-claude-code-git-worktree/#post","headline":"Claude Code を複数並列で動かす方法 — git worktree 入門","description":"複数の Claude Code を同じリポジトリで並列に動かすなら、セッションごとに git worktree を用意するのが確実です。実際のコマンド、つまずきやすい点、手間を省く方法をまとめました。","datePublished":"2026-10-10","dateModified":"2026-10-15","inLanguage":"ja","image":"https://gtree.dobbylab.com/og-ja.png","url":"https://gtree.dobbylab.com/ja/blog/run-multiple-claude-code-git-worktree/","mainEntityOfPage":"https://gtree.dobbylab.com/ja/blog/run-multiple-claude-code-git-worktree/","keywords":"claude-code, git-worktree, parallel-agents","author":{"@id":"https://dobbylab.com/#org"},"publisher":{"@id":"https://dobbylab.com/#org"},"about":{"@id":"https://gtree.dobbylab.com/#app"},"isPartOf":{"@id":"https://gtree.dobbylab.com/ja/blog/#blog"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://gtree.dobbylab.com/ja/"},{"@type":"ListItem","position":2,"name":"ブログ","item":"https://gtree.dobbylab.com/ja/blog/"},{"@type":"ListItem","position":3,"name":"Claude Code を複数並列で動かす方法 — git worktree 入門","item":"https://gtree.dobbylab.com/ja/blog/run-multiple-claude-code-git-worktree/"}]}]}</script>
+    <script>
+      // 首次绘制前:① 套上用户选过的深浅色(没选过 = 跟随系统),避免闪屏;
+      // ② 语言:每种语言是独立的预渲染页面(/、/ja/、/zh/)。?lang=xx 视为显式选择 —— 记下并跳到对应页面;
+      //    子页面(/zh/blog/… 等)同理,跳到同一页面的另一种语言。
+      //    没有 ?lang 时,只有用户在页面上选过语言(localStorage 有值)且和当前页不同才跳。
+      //    没选过就不跳(不按浏览器语言猜);爬虫没有 localStorage,不会被重定向。
+      //    开发模式没有 data-prerendered,这段不跳(dev 用 ?lang= 由 main.jsx 读)。
+      try { var t = localStorage.getItem('gtree:theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t } catch (e) {}
+      try {
+        var d = document.documentElement, L = ['en', 'ja', 'zh'], cur = d.getAttribute('data-lang') || 'en'
+        if (d.hasAttribute('data-prerendered')) {
+          var q = new URLSearchParams(location.search).get('lang'), want = null
+          if (L.indexOf(q) >= 0) { want = q; try { localStorage.setItem('gtree:lang', q) } catch (e) {} }
+          else { var s = null; try { s = localStorage.getItem('gtree:lang') } catch (e) {} if (L.indexOf(s) >= 0) want = s }
+          // data-root:当前页到站点根的相对前缀;data-path:页面在语言根下的路径(博客文章等子页面换语言时留在同一页)
+          var root = d.getAttribute('data-root') || (cur === 'en' ? './' : '../'), sub = d.getAttribute('data-path') || ''
+          if (want && want !== cur) location.replace(new URL(root + (want === 'en' ? '' : want + '/') + sub + location.hash, location.href).href)
+          else if (L.indexOf(q) >= 0) history.replaceState(null, '', location.pathname + location.hash)
+        }
+      } catch (e) {}
+    </script>
+    <script>
+      // Cloudflare Web Analytics:按访客去重的访问量,不用 cookie。只在正式域名上加载 —— 本地开发、预览不上报。
+      // 官网在 GitHub Pages、DNS 不走代理,Cloudflare 没法自动注入,所以手动嵌(站点在控制台 Web Analytics 里)
+      if (location.hostname === 'gtree.dobbylab.com') {
+        var b = document.createElement('script')
+        b.defer = true
+        b.src = 'https://static.cloudflareinsights.com/beacon.min.js'
+        b.setAttribute('data-cf-beacon', '{"token": "db95a1c82680427f93b860b29b317f24"}')
+        document.head.appendChild(b)
+      }
+    </script>
+    <script type="module" crossorigin src="../../../assets/index-DpQD1bb3.js"></script>
+    <link rel="stylesheet" crossorigin href="../../../assets/index-B057dae2.css">
+  </head>
+  <body>
+    <div id="root"><header class="nav"><div class="wrap"><a class="brand" href="../../../ja/" aria-label="gtree"><img src="../../../logo.png" alt="" width="26" height="26"/>gtree</a><nav class="nav-links" aria-label="ページ内ナビゲーション"><a href="../../../ja/#features" class="">機能</a><a href="../../../ja/#compare" class="">比較</a><a href="../../../ja/#pricing" class="">料金</a><a href="../../../ja/#faq" class="">FAQ</a></nav><div class="nav-right"><span class="social"><a class="theme-btn" href="https://discord.gg/EnPJxrUEK5" target="_blank" rel="noopener noreferrer" aria-label="Discord — バグ報告・質問はこちら" title="Discord — バグ報告・質問はこちら"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.007.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg></a><a class="theme-btn" href="https://x.com/dobbylabhq" target="_blank" rel="noopener noreferrer" aria-label="X で @dobbylabhq をフォロー" title="X で @dobbylabhq をフォロー"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg></a></span><div class="lang  "><button type="button" class="lang-btn " aria-haspopup="menu" aria-expanded="false" aria-label="言語" title="言語"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg><span>日本語</span><svg viewBox="0 0 24 24" class="chev" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button><div class="lang-menu " role="menu" aria-label="言語"><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../blog/run-multiple-claude-code-git-worktree/" hrefLang="en" lang="en"><span>English</span></a><a role="menuitemradio" aria-checked="true" tabindex="-1" href="../../../ja/blog/run-multiple-claude-code-git-worktree/" hrefLang="ja" lang="ja"><span>日本語</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></a><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../zh/blog/run-multiple-claude-code-git-worktree/" hrefLang="zh-CN" lang="zh-CN"><span>中文</span></a></div></div><button type="button" class="theme-btn" title="テーマ:システムに合わせる(クリックでライトに切り替え)" aria-label="テーマ:システムに合わせる(クリックでライトに切り替え)"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"></rect><path d="M8 21h8"></path><path d="M12 17v4"></path></svg></button><a class="btn" href="../../../ja/#download">Mac 版を無料ダウンロード<svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M12 4v12"></path><path d="m7 11 5 5 5-5"></path><path d="M5 20h14"></path></svg></a><button class="nav-burger" type="button" aria-expanded="false" aria-label="メニュー"><svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path></svg></button></div></div><div class="nav-sheet "><a href="../../../ja/#features">機能</a><a href="../../../ja/#compare">比較</a><a href="../../../ja/#pricing">料金</a><a href="../../../ja/#faq">FAQ</a><a href="../../../ja/#download">Mac 版を無料ダウンロード</a><a class="nav-sheet-social" href="https://discord.gg/EnPJxrUEK5" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.007.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg>Discord — バグ報告・質問はこちら</a><a class="nav-sheet-social" href="https://x.com/dobbylabhq" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg>X で @dobbylabhq をフォロー</a></div></header><main id="top"><article class="doc wrap-doc"><nav class="doc-crumbs" aria-label="現在の位置"><ol><li><a href="../../../ja/">ホーム</a></li><li><a href="../../../ja/blog/">ブログ</a></li><li><span aria-current="page">Claude Code を複数並列で動かす方法 — git worktree 入門</span></li></ol></nav><header class="doc-head"><h1>Claude Code を複数並列で動かす方法 — git worktree 入門</h1><p class="doc-meta"><time dateTime="2026-10-10">2026年10月10日</time> · DobbyLab<!-- --> · <span class="doc-tag">claude-code</span><span class="doc-tag">git-worktree</span><span class="doc-tag">parallel-agents</span></p></header><div class="prose"><p>同じリポジトリで Claude Code を複数並列に動かすなら、<strong>セッションごとに git worktree を 1 つずつ用意する</strong>のが確実です。worktree は同じ <code>.git</code> の履歴を共有しながら、別のブランチをチェックアウトした独立した作業ディレクトリです。<code>git worktree add ../myapp-fix-login -b fix-login</code> で作成し、その中で <code>claude</code> を起動する。これをタスクの数だけ繰り返せば、各 AI は互いのファイルを上書きすることなく、並行して編集・ビルド・テストを進められます。</p>
+<p>考え方はこれだけです。本記事では、実際に入力するコマンド、最初の 1 週間でつまずきやすい点、そして gtree がその繰り返し作業をどう肩代わりするかを説明します。</p>
+<!-- TODO 截图:0.3.14 主图 —— 侧栏 + 某条线的开始页(日文界面);确认后可加回 frontmatter 的 image: -->
+
+<h2 id="同じフォルダで-claude-code-を-2-つ開くだけではだめなのですか">同じフォルダで Claude Code を 2 つ開くだけではだめなのですか?<a class="h-anchor" href="#同じフォルダで-claude-code-を-2-つ開くだけではだめなのですか" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>開くこと自体はできますし、質問するだけなら問題ありません。しかし両方のセッションがファイルを編集し始めると、隔離のない 1 つの作業ディレクトリを共有することになります。</p>
+<ul>
+<li>セッション A が <code>auth.ts</code> を書き換えた直後に、古い内容を読んだままのセッション B がもう一度書き換える。</li>
+<li>A の作業途中の変更でビルドが壊れ、B が実行するテストは原因不明のまま失敗し続ける。</li>
+<li>コミットするときには、2 つのタスクの変更が 1 つの diff に混ざってしまう。</li>
+</ul>
+<p>ブランチだけでは解決できません。1 つのフォルダでチェックアウトできるブランチは同時に 1 つだけだからです。worktree なら、それぞれが専用のブランチ・未コミットの変更・ビルド成果物を持つ実ディレクトリになり、コミットやブランチ、リモートはすべて共有されます。</p>
+<h2 id="claude-code-用に-git-worktree-をセットアップするには">Claude Code 用に git worktree をセットアップするには?<a class="h-anchor" href="#claude-code-用に-git-worktree-をセットアップするには" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>メインのチェックアウトの中で次を実行します。</p>
+<pre><code class="language-bash"># 1. リポジトリの隣に worktree を作成し、新しいブランチを切る
+git worktree add ../myapp-fix-login -b fix-login
+
+# 2. その中で Claude Code を起動
+cd ../myapp-fix-login
+claude
+</code></pre>
+<p>別のターミナルを開き、次のタスクでも同じことをします。</p>
+<pre><code class="language-bash">git worktree add ../myapp-search -b search-box
+cd ../myapp-search
+claude
+</code></pre>
+<p>よく使うコマンドは次のとおりです。</p>
+<table>
+<thead>
+<tr>
+<th>コマンド</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>git worktree list</code></td>
+<td>すべての worktree のパス・コミット・ブランチを表示</td>
+</tr>
+<tr>
+<td><code>git worktree add &lt;パス&gt; -b &lt;新ブランチ&gt;</code></td>
+<td>新しいフォルダと新しいブランチを作成</td>
+</tr>
+<tr>
+<td><code>git worktree add &lt;パス&gt; &lt;既存ブランチ&gt;</code></td>
+<td>既存ブランチを新しいフォルダにチェックアウト</td>
+</tr>
+<tr>
+<td><code>git worktree remove &lt;パス&gt;</code></td>
+<td>worktree を削除(未コミットの変更があると拒否。<code>--force</code> で強制)</td>
+</tr>
+<tr>
+<td><code>git worktree prune</code></td>
+<td>手動で消したフォルダの worktree 記録を掃除</td>
+</tr>
+</tbody></table>
+<p>タスクが終わったら、いつもどおりマージするか MR / PR を作成し、worktree を削除します。</p>
+<h2 id="git-worktree-の注意点は">git worktree の注意点は?<a class="h-anchor" href="#git-worktree-の注意点は" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>ほとんどの手間は「新しい worktree には <strong>git が追跡しているファイルしかない</strong>」ことから来ます。</p>
+<ol>
+<li><strong>依存関係は入っていません。</strong> <code>node_modules</code>、<code>target/</code>、<code>.venv</code> などは <code>.gitignore</code> 対象なので、worktree ごとにインストールやビルドが必要です。ディスク容量と初回ビルドの時間を見込んでおきましょう。</li>
+<li><strong>ローカル設定もありません。</strong> <code>.env</code> など無視されている設定ファイルは、各 worktree にコピーするかシンボリックリンクを張ります。</li>
+<li><strong>1 つのブランチは 1 つの worktree でしかチェックアウトできません。</strong> 「すでにチェックアウトされている」と言われたら、新しいブランチを作ります。</li>
+<li><strong>ポートが衝突します。</strong> 2 つの worktree から dev サーバーを起動すると同じポートを取り合うので、片方を変えます。</li>
+<li><strong>フォルダが溜まります。</strong> <code>rm -rf</code> でフォルダを消しても git は覚えているので、<code>git worktree prune</code> を実行します。</li>
+</ol>
+<p>どれも致命的ではありませんが、毎回意識しておく必要があります。</p>
+<h2 id="本当の課題は-5-つのターミナルを把握し続けること">本当の課題は 5 つのターミナルを把握し続けること<a class="h-anchor" href="#本当の課題は-5-つのターミナルを把握し続けること" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>環境が整うと、今度は別の問題が出てきます。5 つのエージェントを 5 つのターミナルタブで動かすと、</p>
+<ul>
+<li>どれが<strong>承認待ち</strong>なのか、タブを全部めくるまでわかりません。</li>
+<li>どれが<strong>作業を終えて</strong>レビュー待ちなのかもわかりません。</li>
+<li>どの worktree がどのブランチで、<code>main</code> からどれだけ離れているのか、だんだん追えなくなります。</li>
+<li>2 つのエージェントが別々の worktree で<strong>同じファイルを編集</strong>していても、マージするまで気づけません。</li>
+</ul>
+<p>tmux のようなツールでウィンドウは整理できますが、中のエージェントが何をしているかまではわかりません。その層を補うのが gtree です。</p>
+<h2 id="gtree-で複数の-claude-code-を管理する">gtree で複数の Claude Code を管理する<a class="h-anchor" href="#gtree-で複数の-claude-code-を管理する" aria-hidden="true" tabindex="-1">#</a></h2>
+<p><a href="https://gtree.dobbylab.com/ja/">gtree</a> は worktree を中心に設計されたネイティブのデスクトップアプリで、Claude Code と Codex に対応しています(最初に対応し、連携がもっとも深いのは Claude Code)。リポジトリを開くと、コマンドラインで作ったものも含め、すべての worktree がサイドバーのプロジェクトの下に並びます。どれかをクリックすると、その worktree のホームが開きます。セッションがあれば会話、なければその worktree の<strong>スタートページ</strong>で、次に何をすればいいかが書かれています。</p>
+<p><strong>worktree の作成:</strong> サイドバーの worktree を右クリックして「新規 worktree…」を選び、ブランチ名を入力します。gtree が <code>git worktree add</code> を実行し、リポジトリの隣に「&lt;リポジトリ名&gt;-&lt;ブランチ名&gt;」のフォルダを作ります。「worktree を削除…」も同じメニューにあり、確認つきで実行されます。ブランチがマージ済みなら、スタートページに「worktree を削除」ボタンが直接出ます。</p>
+<p><strong>エージェントの起動:</strong> スタートページで「Claude Code を新しく開く」をクリックするか、<strong>⌘T</strong> を押します(Codex をインストールしていれば、どちらを使うか選べます)。gtree の内蔵ターミナルで動くのは本物のエージェント CLI で、iTerm で使う Claude Code や Codex とまったく同じです。スラッシュコマンド、plan mode、承認プロンプト、MCP もそのまま使えます。同じ worktree でセッションを複数開くこともできます。見るためにクリックしただけでは、セッションが勝手に起動することはありません。</p>
+<p><strong>全セッションをひと目で:</strong> 設定で Claude Code(または Codex)に接続すると、サイドバーの各 worktree の行末に状態マークが 1 つだけ付きます。紫のアイコンが回転していればエージェントが作業中、赤いベルが点滅していればあなたの応答待ちです。ホバーすると詳細が出ます。文字を読まなくても、赤いベルを探すだけで済みます。詳しくは<a href="/ja/blog/claude-code-waiting-for-approval-notifications/">次の記事</a>で紹介します。</p>
+<p><strong>ブランチの状態:</strong> スタートページには、対応が必要なことだけが 1 行ずつ、それぞれのボタンと一緒に並びます。</p>
+<table>
+<thead>
+<tr>
+<th>スタートページの表示</th>
+<th>ボタン</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>このブランチはマージ済みです</td>
+<td>worktree を削除 / 新しいブランチで始める</td>
+</tr>
+<tr>
+<td>N 件のファイルが別の場所でも変更されています</td>
+<td>どれか見る</td>
+</tr>
+<tr>
+<td>未コミットのファイルが N 件あります</td>
+<td>変更を見る</td>
+</tr>
+<tr>
+<td>リモートに新しいコミットが N 件あります</td>
+<td>プル</td>
+</tr>
+<tr>
+<td>未プッシュのコミットが N 件あります</td>
+<td>プッシュ</td>
+</tr>
+<tr>
+<td>リベース後、リモートのこのブランチと食い違っています</td>
+<td>プッシュ(リモートを上書き)</td>
+</tr>
+<tr>
+<td>MR #N · 未マージ / MR はまだありません</td>
+<td>MR を開く / MR を作成</td>
+</tr>
+<tr>
+<td>main より N コミット遅れています</td>
+<td>main にリベース</td>
+</tr>
+</tbody></table>
+<p>やることがなければ「最新です」と表示されます。サイドバーでは各ブランチの後ろに MR の状態も出ます。MR が開いている間は MR アイコン、マージ後は薄いマージアイコンです。情報はすでにログイン済みの <code>glab</code> または <code>gh</code> から取るので、GitHub でも GitLab(セルフホスト含む)でも使えます。Git の操作一式(コミット、プル、プッシュ、リベース、ブランチ切り替えなど)は右クリックメニューにあり、書き込みはすべて Mac 上の git を通すので SSH キーや hook もそのまま効きます。全ブランチの全体像は「コミット履歴」(⌘3)で確認でき、ブランチごとのレーンにチェックアウト先の worktree 名が付きます。</p>
+<!-- TODO 截图:0.3.14「コミット履歴」(⌘3)泳道图(日文界面),分支标签上带 worktree 名 -->
+
+<p><strong>変更の確認:</strong> スタートページの「変更を見る」で、中央に差分が開きます。左に変更ファイル、右に内容です。マージ前にブランチ全体をレビューしたいときは、「コミット履歴 › 比較」が最初から「メインブランチ → 現在の worktree」で開くので、<code>git diff</code> を打つ必要はありません。</p>
+<p><strong>衝突の事前通知:</strong> 2 つの worktree が同じファイルを変更すると、(その行にセッションの状態アイコンが出ていなければ)サイドバーの行末に琥珀色の △ が付き、スタートページには必ず他の場所でも変更されているファイル数が出ます。「どれか見る」で一覧できます。どちらもまだコミットしていない場合は、「対応待ち」の「念のため確認」にも表示されます。同じ worktree の中ではさらに一歩進みます。2 つのエージェントが同じファイルを編集しようとすると、お互いの存在を知らされ、伝言を残し合って先にどちらが変更するかを決められます。詳しくは<a href="/ja/blog/ai-agents-editing-same-file/">2 つの AI エージェントが同じファイルを編集するとき</a>で説明します。</p>
+<h3 id="手作業と-gtree-の比較">手作業と gtree の比較<a class="h-anchor" href="#手作業と-gtree-の比較" aria-hidden="true" tabindex="-1">#</a></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>ターミナル + git</th>
+<th>gtree</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>worktree の作成</td>
+<td><code>git worktree add ../x -b x</code></td>
+<td>右クリック →「新規 worktree…」</td>
+</tr>
+<tr>
+<td>エージェントの起動</td>
+<td>新しいタブで <code>cd</code> + <code>claude</code></td>
+<td>スタートページ → 新しいセッション(⌘T)</td>
+</tr>
+<tr>
+<td>あなた待ちはどれ?</td>
+<td>タブを全部確認</td>
+<td>サイドバーのベル + 通知</td>
+</tr>
+<tr>
+<td>ブランチの状態</td>
+<td>フォルダごとに <code>git status</code> / <code>git log</code></td>
+<td>スタートページ + サイドバーの行末マーク</td>
+</tr>
+<tr>
+<td>同じファイルの二重編集</td>
+<td>マージ時に発覚</td>
+<td>両方が変更した時点でマーク</td>
+</tr>
+</tbody></table>
+<h2 id="5-セッションまで無理なく回せるワークフロー">5 セッションまで無理なく回せるワークフロー<a class="h-anchor" href="#5-セッションまで無理なく回せるワークフロー" aria-hidden="true" tabindex="-1">#</a></h2>
+<ol>
+<li>メインフォルダは <code>main</code>(またはデフォルトブランチ)のままにし、AI には作業させない。</li>
+<li>1 タスク = 1 worktree = 1 ブランチ。ブランチ名はタスクに合わせる。</li>
+<li>各エージェントへのプロンプトで、担当するファイルや範囲を明確にする。</li>
+<li>マージ前に <code>main</code> と比較してレビューし、終わったら worktree を削除する。</li>
+<li>こまめにマージする。ブランチが長生きするほど差分は広がります。</li>
+</ol>
+<h2 id="よくある質問">よくある質問<a class="h-anchor" href="#よくある質問" aria-hidden="true" tabindex="-1">#</a></h2>
+<h3 id="claude-code-はいくつまで同時に動かせますか">Claude Code はいくつまで同時に動かせますか?<a class="h-anchor" href="#claude-code-はいくつまで同時に動かせますか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>git 側に上限はありません。実際にはあなたの注意力、マシン性能(worktree ごとに依存関係やビルドが必要な場合があります)、ご利用のプランの利用上限で決まります。</p>
+<h3 id="git-worktree-とブランチの違いは">git worktree とブランチの違いは?<a class="h-anchor" href="#git-worktree-とブランチの違いは" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>ブランチはコミットの流れで、worktree はブランチをチェックアウトしたフォルダです。1 つのフォルダには一度に 1 つのブランチしかチェックアウトできません。worktree を使えば、それぞれ別のブランチをチェックアウトした複数のフォルダを持てて、履歴はすべて共有されます。</p>
+<h3 id="worktree-はディスクを大量に使いますか">worktree はディスクを大量に使いますか?<a class="h-anchor" href="#worktree-はディスクを大量に使いますか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>git の履歴は共有されるため、増えるのはチェックアウトされたファイルと、その中でインストール・ビルドしたものだけです。多くの場合 <code>node_modules</code> のような依存フォルダがいちばん大きくなります。</p>
+<h3 id="gtree-がないと-worktree-で-claude-code-を使えませんか">gtree がないと worktree で Claude Code を使えませんか?<a class="h-anchor" href="#gtree-がないと-worktree-で-claude-code-を使えませんか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>いいえ。上記はすべて git とターミナルだけで動きます。gtree が省くのは、worktree の作成、待っているセッション探し、編集の重なりの発見といった細かな作業です。</p>
+<h3 id="gtree-は-claude-code-の代わりになりますか">gtree は Claude Code の代わりになりますか?<a class="h-anchor" href="#gtree-は-claude-code-の代わりになりますか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>なりません。gtree は内蔵ターミナルで本物のエージェント CLI(Claude Code または Codex)を動かし、その状態を読み取るだけです。Claude Code の設定やサブスクリプションはそのままです。</p>
+<p>gtree のローカル機能は無料で、登録も不要です。gtree があなたのコードをアップロードすることはありません。<a href="https://gtree.dobbylab.com/ja/">こちらからダウンロード</a>して、作業中のリポジトリを開いてみてください。既存の worktree がサイドバーに並んでいるはずです。</p>
+<p><em>この記事は gtree 0.3.14 に合わせて更新しました(2026 年 10 月)。</em></p>
+</div><aside class="doc-cta"><div><h2>gtree を試す</h2><p>AI コーディングエージェントのための無料デスクトップアプリです。ローカル機能はずっと無料、ログイン不要、gtree はコードをアップロードしません。</p></div><a class="btn primary" href="../../../ja/#download"><svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M12 4v12"></path><path d="m7 11 5 5 5-5"></path><path d="M5 20h14"></path></svg>Mac 版を無料ダウンロード</a></aside><nav class="doc-more" aria-label="ほかの記事"><h2>ほかの記事</h2><ul><li><a href="../../../ja/blog/gtree-native-app-not-electron/">gtree が Electron を使わない理由 — 24 MB、0.2 秒でウィンドウ表示</a> <span class="doc-meta"><time dateTime="2026-10-25">2026年10月25日</time></span></li><li><a href="../../../ja/blog/undo-claude-code-changes/">Claude Code の変更を元に戻す方法 — 閉じたセッションのターンも復元</a> <span class="doc-meta"><time dateTime="2026-10-22">2026年10月22日</time></span></li><li><a href="../../../ja/blog/ai-agents-editing-same-file/">2 つの AI エージェントが同じファイルを編集するとき — 互いに上書きさせない方法</a> <span class="doc-meta"><time dateTime="2026-10-19">2026年10月19日</time></span></li></ul></nav></article></main><footer class="site-footer"><div class="wrap"><div class="ft-top"><div class="ft-brand"><a class="brand" href="../../../ja/" aria-label="gtree"><img src="../../../logo.png" alt="" width="22" height="22"/>gtree</a><p>gtree は DobbyLab が開発する、複数の AI コーディングエージェントを同時に動かす人のためのデスクトップアプリです。ローカルで動き、gtree があなたのコードをアップロードすることはありません。</p></div><nav class="ft-col" aria-label="製品"><h2>製品</h2><ul><li><a href="../../../ja/#download">ダウンロード</a></li><li><a href="../../../ja/#pricing">料金</a></li><li><a href="../../../ja/release-notes/">リリースノート</a></li></ul></nav><nav class="ft-col" aria-label="リソース"><h2>リソース</h2><ul><li><a href="../../../ja/blog/">ブログ</a></li><li><a href="../../../ja/#faq">よくある質問</a></li><li><a href="../../../llms.txt">llms.txt</a></li></ul></nav><nav class="ft-col" aria-label="運営"><h2>運営</h2><ul><li><a href="../../../ja/privacy/">プライバシーポリシー</a></li><li><a href="mailto:support@dobbylab.com">support@dobbylab.com</a></li><li><a href="https://x.com/dobbylabhq" target="_blank" rel="noopener" class="x-link"><svg class="x-logo" viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>@<!-- -->dobbylabhq</a></li></ul></nav></div><div class="ft-bottom"><span>© 2026 <a href="https://dobbylab.com/">DobbyLab</a> · <!-- -->All rights reserved</span><div class="lang up ft-lang"><button type="button" class="lang-btn " aria-haspopup="menu" aria-expanded="false" aria-label="言語" title="言語"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg><span>日本語</span><svg viewBox="0 0 24 24" class="chev" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button><div class="lang-menu " role="menu" aria-label="言語"><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../blog/run-multiple-claude-code-git-worktree/" hrefLang="en" lang="en"><span>English</span></a><a role="menuitemradio" aria-checked="true" tabindex="-1" href="../../../ja/blog/run-multiple-claude-code-git-worktree/" hrefLang="ja" lang="ja"><span>日本語</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></a><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../zh/blog/run-multiple-claude-code-git-worktree/" hrefLang="zh-CN" lang="zh-CN"><span>中文</span></a></div></div></div></div></footer></div>
+    <script id="page-data" type="application/json">{"kind":"post","path":"blog/run-multiple-claude-code-git-worktree/","slug":"run-multiple-claude-code-git-worktree","title":"Claude Code を複数並列で動かす方法 — git worktree 入門","date":"2026-10-10","tags":["claude-code","git-worktree","parallel-agents"],"html":"\u003cp>同じリポジトリで Claude Code を複数並列に動かすなら、\u003cstrong>セッションごとに git worktree を 1 つずつ用意する\u003c/strong>のが確実です。worktree は同じ \u003ccode>.git\u003c/code> の履歴を共有しながら、別のブランチをチェックアウトした独立した作業ディレクトリです。\u003ccode>git worktree add ../myapp-fix-login -b fix-login\u003c/code> で作成し、その中で \u003ccode>claude\u003c/code> を起動する。これをタスクの数だけ繰り返せば、各 AI は互いのファイルを上書きすることなく、並行して編集・ビルド・テストを進められます。\u003c/p>\n\u003cp>考え方はこれだけです。本記事では、実際に入力するコマンド、最初の 1 週間でつまずきやすい点、そして gtree がその繰り返し作業をどう肩代わりするかを説明します。\u003c/p>\n\u003c!-- TODO 截图:0.3.14 主图 —— 侧栏 + 某条线的开始页(日文界面);确认后可加回 frontmatter 的 image: -->\n\n\u003ch2 id=\"同じフォルダで-claude-code-を-2-つ開くだけではだめなのですか\">同じフォルダで Claude Code を 2 つ開くだけではだめなのですか?\u003ca class=\"h-anchor\" href=\"#同じフォルダで-claude-code-を-2-つ開くだけではだめなのですか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>開くこと自体はできますし、質問するだけなら問題ありません。しかし両方のセッションがファイルを編集し始めると、隔離のない 1 つの作業ディレクトリを共有することになります。\u003c/p>\n\u003cul>\n\u003cli>セッション A が \u003ccode>auth.ts\u003c/code> を書き換えた直後に、古い内容を読んだままのセッション B がもう一度書き換える。\u003c/li>\n\u003cli>A の作業途中の変更でビルドが壊れ、B が実行するテストは原因不明のまま失敗し続ける。\u003c/li>\n\u003cli>コミットするときには、2 つのタスクの変更が 1 つの diff に混ざってしまう。\u003c/li>\n\u003c/ul>\n\u003cp>ブランチだけでは解決できません。1 つのフォルダでチェックアウトできるブランチは同時に 1 つだけだからです。worktree なら、それぞれが専用のブランチ・未コミットの変更・ビルド成果物を持つ実ディレクトリになり、コミットやブランチ、リモートはすべて共有されます。\u003c/p>\n\u003ch2 id=\"claude-code-用に-git-worktree-をセットアップするには\">Claude Code 用に git worktree をセットアップするには?\u003ca class=\"h-anchor\" href=\"#claude-code-用に-git-worktree-をセットアップするには\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>メインのチェックアウトの中で次を実行します。\u003c/p>\n\u003cpre>\u003ccode class=\"language-bash\"># 1. リポジトリの隣に worktree を作成し、新しいブランチを切る\ngit worktree add ../myapp-fix-login -b fix-login\n\n# 2. その中で Claude Code を起動\ncd ../myapp-fix-login\nclaude\n\u003c/code>\u003c/pre>\n\u003cp>別のターミナルを開き、次のタスクでも同じことをします。\u003c/p>\n\u003cpre>\u003ccode class=\"language-bash\">git worktree add ../myapp-search -b search-box\ncd ../myapp-search\nclaude\n\u003c/code>\u003c/pre>\n\u003cp>よく使うコマンドは次のとおりです。\u003c/p>\n\u003ctable>\n\u003cthead>\n\u003ctr>\n\u003cth>コマンド\u003c/th>\n\u003cth>内容\u003c/th>\n\u003c/tr>\n\u003c/thead>\n\u003ctbody>\u003ctr>\n\u003ctd>\u003ccode>git worktree list\u003c/code>\u003c/td>\n\u003ctd>すべての worktree のパス・コミット・ブランチを表示\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>\u003ccode>git worktree add &lt;パス&gt; -b &lt;新ブランチ&gt;\u003c/code>\u003c/td>\n\u003ctd>新しいフォルダと新しいブランチを作成\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>\u003ccode>git worktree add &lt;パス&gt; &lt;既存ブランチ&gt;\u003c/code>\u003c/td>\n\u003ctd>既存ブランチを新しいフォルダにチェックアウト\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>\u003ccode>git worktree remove &lt;パス&gt;\u003c/code>\u003c/td>\n\u003ctd>worktree を削除(未コミットの変更があると拒否。\u003ccode>--force\u003c/code> で強制)\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>\u003ccode>git worktree prune\u003c/code>\u003c/td>\n\u003ctd>手動で消したフォルダの worktree 記録を掃除\u003c/td>\n\u003c/tr>\n\u003c/tbody>\u003c/table>\n\u003cp>タスクが終わったら、いつもどおりマージするか MR / PR を作成し、worktree を削除します。\u003c/p>\n\u003ch2 id=\"git-worktree-の注意点は\">git worktree の注意点は?\u003ca class=\"h-anchor\" href=\"#git-worktree-の注意点は\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>ほとんどの手間は「新しい worktree には \u003cstrong>git が追跡しているファイルしかない\u003c/strong>」ことから来ます。\u003c/p>\n\u003col>\n\u003cli>\u003cstrong>依存関係は入っていません。\u003c/strong> \u003ccode>node_modules\u003c/code>、\u003ccode>target/\u003c/code>、\u003ccode>.venv\u003c/code> などは \u003ccode>.gitignore\u003c/code> 対象なので、worktree ごとにインストールやビルドが必要です。ディスク容量と初回ビルドの時間を見込んでおきましょう。\u003c/li>\n\u003cli>\u003cstrong>ローカル設定もありません。\u003c/strong> \u003ccode>.env\u003c/code> など無視されている設定ファイルは、各 worktree にコピーするかシンボリックリンクを張ります。\u003c/li>\n\u003cli>\u003cstrong>1 つのブランチは 1 つの worktree でしかチェックアウトできません。\u003c/strong> 「すでにチェックアウトされている」と言われたら、新しいブランチを作ります。\u003c/li>\n\u003cli>\u003cstrong>ポートが衝突します。\u003c/strong> 2 つの worktree から dev サーバーを起動すると同じポートを取り合うので、片方を変えます。\u003c/li>\n\u003cli>\u003cstrong>フォルダが溜まります。\u003c/strong> \u003ccode>rm -rf\u003c/code> でフォルダを消しても git は覚えているので、\u003ccode>git worktree prune\u003c/code> を実行します。\u003c/li>\n\u003c/ol>\n\u003cp>どれも致命的ではありませんが、毎回意識しておく必要があります。\u003c/p>\n\u003ch2 id=\"本当の課題は-5-つのターミナルを把握し続けること\">本当の課題は 5 つのターミナルを把握し続けること\u003ca class=\"h-anchor\" href=\"#本当の課題は-5-つのターミナルを把握し続けること\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>環境が整うと、今度は別の問題が出てきます。5 つのエージェントを 5 つのターミナルタブで動かすと、\u003c/p>\n\u003cul>\n\u003cli>どれが\u003cstrong>承認待ち\u003c/strong>なのか、タブを全部めくるまでわかりません。\u003c/li>\n\u003cli>どれが\u003cstrong>作業を終えて\u003c/strong>レビュー待ちなのかもわかりません。\u003c/li>\n\u003cli>どの worktree がどのブランチで、\u003ccode>main\u003c/code> からどれだけ離れているのか、だんだん追えなくなります。\u003c/li>\n\u003cli>2 つのエージェントが別々の worktree で\u003cstrong>同じファイルを編集\u003c/strong>していても、マージするまで気づけません。\u003c/li>\n\u003c/ul>\n\u003cp>tmux のようなツールでウィンドウは整理できますが、中のエージェントが何をしているかまではわかりません。その層を補うのが gtree です。\u003c/p>\n\u003ch2 id=\"gtree-で複数の-claude-code-を管理する\">gtree で複数の Claude Code を管理する\u003ca class=\"h-anchor\" href=\"#gtree-で複数の-claude-code-を管理する\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>\u003ca href=\"https://gtree.dobbylab.com/ja/\">gtree\u003c/a> は worktree を中心に設計されたネイティブのデスクトップアプリで、Claude Code と Codex に対応しています(最初に対応し、連携がもっとも深いのは Claude Code)。リポジトリを開くと、コマンドラインで作ったものも含め、すべての worktree がサイドバーのプロジェクトの下に並びます。どれかをクリックすると、その worktree のホームが開きます。セッションがあれば会話、なければその worktree の\u003cstrong>スタートページ\u003c/strong>で、次に何をすればいいかが書かれています。\u003c/p>\n\u003cp>\u003cstrong>worktree の作成:\u003c/strong> サイドバーの worktree を右クリックして「新規 worktree…」を選び、ブランチ名を入力します。gtree が \u003ccode>git worktree add\u003c/code> を実行し、リポジトリの隣に「&lt;リポジトリ名&gt;-&lt;ブランチ名&gt;」のフォルダを作ります。「worktree を削除…」も同じメニューにあり、確認つきで実行されます。ブランチがマージ済みなら、スタートページに「worktree を削除」ボタンが直接出ます。\u003c/p>\n\u003cp>\u003cstrong>エージェントの起動:\u003c/strong> スタートページで「Claude Code を新しく開く」をクリックするか、\u003cstrong>⌘T\u003c/strong> を押します(Codex をインストールしていれば、どちらを使うか選べます)。gtree の内蔵ターミナルで動くのは本物のエージェント CLI で、iTerm で使う Claude Code や Codex とまったく同じです。スラッシュコマンド、plan mode、承認プロンプト、MCP もそのまま使えます。同じ worktree でセッションを複数開くこともできます。見るためにクリックしただけでは、セッションが勝手に起動することはありません。\u003c/p>\n\u003cp>\u003cstrong>全セッションをひと目で:\u003c/strong> 設定で Claude Code(または Codex)に接続すると、サイドバーの各 worktree の行末に状態マークが 1 つだけ付きます。紫のアイコンが回転していればエージェントが作業中、赤いベルが点滅していればあなたの応答待ちです。ホバーすると詳細が出ます。文字を読まなくても、赤いベルを探すだけで済みます。詳しくは\u003ca href=\"/ja/blog/claude-code-waiting-for-approval-notifications/\">次の記事\u003c/a>で紹介します。\u003c/p>\n\u003cp>\u003cstrong>ブランチの状態:\u003c/strong> スタートページには、対応が必要なことだけが 1 行ずつ、それぞれのボタンと一緒に並びます。\u003c/p>\n\u003ctable>\n\u003cthead>\n\u003ctr>\n\u003cth>スタートページの表示\u003c/th>\n\u003cth>ボタン\u003c/th>\n\u003c/tr>\n\u003c/thead>\n\u003ctbody>\u003ctr>\n\u003ctd>このブランチはマージ済みです\u003c/td>\n\u003ctd>worktree を削除 / 新しいブランチで始める\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>N 件のファイルが別の場所でも変更されています\u003c/td>\n\u003ctd>どれか見る\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>未コミットのファイルが N 件あります\u003c/td>\n\u003ctd>変更を見る\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>リモートに新しいコミットが N 件あります\u003c/td>\n\u003ctd>プル\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>未プッシュのコミットが N 件あります\u003c/td>\n\u003ctd>プッシュ\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>リベース後、リモートのこのブランチと食い違っています\u003c/td>\n\u003ctd>プッシュ(リモートを上書き)\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>MR #N · 未マージ / MR はまだありません\u003c/td>\n\u003ctd>MR を開く / MR を作成\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>main より N コミット遅れています\u003c/td>\n\u003ctd>main にリベース\u003c/td>\n\u003c/tr>\n\u003c/tbody>\u003c/table>\n\u003cp>やることがなければ「最新です」と表示されます。サイドバーでは各ブランチの後ろに MR の状態も出ます。MR が開いている間は MR アイコン、マージ後は薄いマージアイコンです。情報はすでにログイン済みの \u003ccode>glab\u003c/code> または \u003ccode>gh\u003c/code> から取るので、GitHub でも GitLab(セルフホスト含む)でも使えます。Git の操作一式(コミット、プル、プッシュ、リベース、ブランチ切り替えなど)は右クリックメニューにあり、書き込みはすべて Mac 上の git を通すので SSH キーや hook もそのまま効きます。全ブランチの全体像は「コミット履歴」(⌘3)で確認でき、ブランチごとのレーンにチェックアウト先の worktree 名が付きます。\u003c/p>\n\u003c!-- TODO 截图:0.3.14「コミット履歴」(⌘3)泳道图(日文界面),分支标签上带 worktree 名 -->\n\n\u003cp>\u003cstrong>変更の確認:\u003c/strong> スタートページの「変更を見る」で、中央に差分が開きます。左に変更ファイル、右に内容です。マージ前にブランチ全体をレビューしたいときは、「コミット履歴 › 比較」が最初から「メインブランチ → 現在の worktree」で開くので、\u003ccode>git diff\u003c/code> を打つ必要はありません。\u003c/p>\n\u003cp>\u003cstrong>衝突の事前通知:\u003c/strong> 2 つの worktree が同じファイルを変更すると、(その行にセッションの状態アイコンが出ていなければ)サイドバーの行末に琥珀色の △ が付き、スタートページには必ず他の場所でも変更されているファイル数が出ます。「どれか見る」で一覧できます。どちらもまだコミットしていない場合は、「対応待ち」の「念のため確認」にも表示されます。同じ worktree の中ではさらに一歩進みます。2 つのエージェントが同じファイルを編集しようとすると、お互いの存在を知らされ、伝言を残し合って先にどちらが変更するかを決められます。詳しくは\u003ca href=\"/ja/blog/ai-agents-editing-same-file/\">2 つの AI エージェントが同じファイルを編集するとき\u003c/a>で説明します。\u003c/p>\n\u003ch3 id=\"手作業と-gtree-の比較\">手作業と gtree の比較\u003ca class=\"h-anchor\" href=\"#手作業と-gtree-の比較\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003ctable>\n\u003cthead>\n\u003ctr>\n\u003cth>\u003c/th>\n\u003cth>ターミナル + git\u003c/th>\n\u003cth>gtree\u003c/th>\n\u003c/tr>\n\u003c/thead>\n\u003ctbody>\u003ctr>\n\u003ctd>worktree の作成\u003c/td>\n\u003ctd>\u003ccode>git worktree add ../x -b x\u003c/code>\u003c/td>\n\u003ctd>右クリック →「新規 worktree…」\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>エージェントの起動\u003c/td>\n\u003ctd>新しいタブで \u003ccode>cd\u003c/code> + \u003ccode>claude\u003c/code>\u003c/td>\n\u003ctd>スタートページ → 新しいセッション(⌘T)\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>あなた待ちはどれ?\u003c/td>\n\u003ctd>タブを全部確認\u003c/td>\n\u003ctd>サイドバーのベル + 通知\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>ブランチの状態\u003c/td>\n\u003ctd>フォルダごとに \u003ccode>git status\u003c/code> / \u003ccode>git log\u003c/code>\u003c/td>\n\u003ctd>スタートページ + サイドバーの行末マーク\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>同じファイルの二重編集\u003c/td>\n\u003ctd>マージ時に発覚\u003c/td>\n\u003ctd>両方が変更した時点でマーク\u003c/td>\n\u003c/tr>\n\u003c/tbody>\u003c/table>\n\u003ch2 id=\"5-セッションまで無理なく回せるワークフロー\">5 セッションまで無理なく回せるワークフロー\u003ca class=\"h-anchor\" href=\"#5-セッションまで無理なく回せるワークフロー\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003col>\n\u003cli>メインフォルダは \u003ccode>main\u003c/code>(またはデフォルトブランチ)のままにし、AI には作業させない。\u003c/li>\n\u003cli>1 タスク = 1 worktree = 1 ブランチ。ブランチ名はタスクに合わせる。\u003c/li>\n\u003cli>各エージェントへのプロンプトで、担当するファイルや範囲を明確にする。\u003c/li>\n\u003cli>マージ前に \u003ccode>main\u003c/code> と比較してレビューし、終わったら worktree を削除する。\u003c/li>\n\u003cli>こまめにマージする。ブランチが長生きするほど差分は広がります。\u003c/li>\n\u003c/ol>\n\u003ch2 id=\"よくある質問\">よくある質問\u003ca class=\"h-anchor\" href=\"#よくある質問\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003ch3 id=\"claude-code-はいくつまで同時に動かせますか\">Claude Code はいくつまで同時に動かせますか?\u003ca class=\"h-anchor\" href=\"#claude-code-はいくつまで同時に動かせますか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>git 側に上限はありません。実際にはあなたの注意力、マシン性能(worktree ごとに依存関係やビルドが必要な場合があります)、ご利用のプランの利用上限で決まります。\u003c/p>\n\u003ch3 id=\"git-worktree-とブランチの違いは\">git worktree とブランチの違いは?\u003ca class=\"h-anchor\" href=\"#git-worktree-とブランチの違いは\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>ブランチはコミットの流れで、worktree はブランチをチェックアウトしたフォルダです。1 つのフォルダには一度に 1 つのブランチしかチェックアウトできません。worktree を使えば、それぞれ別のブランチをチェックアウトした複数のフォルダを持てて、履歴はすべて共有されます。\u003c/p>\n\u003ch3 id=\"worktree-はディスクを大量に使いますか\">worktree はディスクを大量に使いますか?\u003ca class=\"h-anchor\" href=\"#worktree-はディスクを大量に使いますか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>git の履歴は共有されるため、増えるのはチェックアウトされたファイルと、その中でインストール・ビルドしたものだけです。多くの場合 \u003ccode>node_modules\u003c/code> のような依存フォルダがいちばん大きくなります。\u003c/p>\n\u003ch3 id=\"gtree-がないと-worktree-で-claude-code-を使えませんか\">gtree がないと worktree で Claude Code を使えませんか?\u003ca class=\"h-anchor\" href=\"#gtree-がないと-worktree-で-claude-code-を使えませんか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>いいえ。上記はすべて git とターミナルだけで動きます。gtree が省くのは、worktree の作成、待っているセッション探し、編集の重なりの発見といった細かな作業です。\u003c/p>\n\u003ch3 id=\"gtree-は-claude-code-の代わりになりますか\">gtree は Claude Code の代わりになりますか?\u003ca class=\"h-anchor\" href=\"#gtree-は-claude-code-の代わりになりますか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>なりません。gtree は内蔵ターミナルで本物のエージェント CLI(Claude Code または Codex)を動かし、その状態を読み取るだけです。Claude Code の設定やサブスクリプションはそのままです。\u003c/p>\n\u003cp>gtree のローカル機能は無料で、登録も不要です。gtree があなたのコードをアップロードすることはありません。\u003ca href=\"https://gtree.dobbylab.com/ja/\">こちらからダウンロード\u003c/a>して、作業中のリポジトリを開いてみてください。既存の worktree がサイドバーに並んでいるはずです。\u003c/p>\n\u003cp>\u003cem>この記事は gtree 0.3.14 に合わせて更新しました(2026 年 10 月)。\u003c/em>\u003c/p>\n","more":[{"slug":"gtree-native-app-not-electron","title":"gtree が Electron を使わない理由 — 24 MB、0.2 秒でウィンドウ表示","date":"2026-10-25"},{"slug":"undo-claude-code-changes","title":"Claude Code の変更を元に戻す方法 — 閉じたセッションのターンも復元","date":"2026-10-22"},{"slug":"ai-agents-editing-same-file","title":"2 つの AI エージェントが同じファイルを編集するとき — 互いに上書きさせない方法","date":"2026-10-19"}]}</script>
+  </body>
+</html>

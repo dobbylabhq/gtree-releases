@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ja" data-lang="ja" data-root="../../../" data-path="blog/gtree-native-app-not-electron/" data-prerendered>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="../../../favicon.png" />
+    <link rel="apple-touch-icon" href="../../../logo.png" />
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0A0A0A" media="(prefers-color-scheme: dark)" />
+    <title>gtree が Electron を使わない理由 — 24 MB、0.2 秒でウィンドウ表示 · gtree</title>
+    <meta name="description" content="gtree は Rust で書かれ、画面は Zed エディタの GPU 描画フレームワーク GPUI で描いています。ブラウザも Node も同梱していません。ネイティブで何が得られるのか、実測値と測り方をまとめました。" />
+    <link rel="canonical" href="https://gtree.dobbylab.com/ja/blog/gtree-native-app-not-electron/" />
+    <link rel="alternate" hreflang="en" href="https://gtree.dobbylab.com/blog/gtree-native-app-not-electron/" />
+    <link rel="alternate" hreflang="ja" href="https://gtree.dobbylab.com/ja/blog/gtree-native-app-not-electron/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://gtree.dobbylab.com/zh/blog/gtree-native-app-not-electron/" />
+    <link rel="alternate" hreflang="x-default" href="https://gtree.dobbylab.com/blog/gtree-native-app-not-electron/" />
+    <link rel="alternate" type="application/rss+xml" title="ブログ · gtree" href="https://gtree.dobbylab.com/ja/blog/feed.xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="gtree" />
+    <meta property="og:title" content="gtree が Electron を使わない理由 — 24 MB、0.2 秒でウィンドウ表示" />
+    <meta property="og:description" content="gtree は Rust で書かれ、画面は Zed エディタの GPU 描画フレームワーク GPUI で描いています。ブラウザも Node も同梱していません。ネイティブで何が得られるのか、実測値と測り方をまとめました。" />
+    <meta property="og:url" content="https://gtree.dobbylab.com/ja/blog/gtree-native-app-not-electron/" />
+    <meta property="og:image" content="https://gtree.dobbylab.com/og-ja.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="zh_CN" />
+    <meta property="article:published_time" content="2026-10-25" />
+    <link rel="alternate" type="text/markdown" href="https://gtree.dobbylab.com/ja/blog/gtree-native-app-not-electron/index.md" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@dobbylabhq" />
+    <meta name="twitter:title" content="gtree が Electron を使わない理由 — 24 MB、0.2 秒でウィンドウ表示" />
+    <meta name="twitter:description" content="gtree は Rust で書かれ、画面は Zed エディタの GPU 描画フレームワーク GPUI で描いています。ブラウザも Node も同梱していません。ネイティブで何が得られるのか、実測値と測り方をまとめました。" />
+    <meta name="twitter:image" content="https://gtree.dobbylab.com/og-ja.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://dobbylab.com/#org","name":"DobbyLab","url":"https://dobbylab.com/","logo":"https://gtree.dobbylab.com/logo.png","email":"mailto:support@dobbylab.com","sameAs":["https://x.com/dobbylabhq","https://discord.gg/EnPJxrUEK5","https://github.com/dobbylabhq"]},{"@type":"BlogPosting","@id":"https://gtree.dobbylab.com/ja/blog/gtree-native-app-not-electron/#post","headline":"gtree が Electron を使わない理由 — 24 MB、0.2 秒でウィンドウ表示","description":"gtree は Rust で書かれ、画面は Zed エディタの GPU 描画フレームワーク GPUI で描いています。ブラウザも Node も同梱していません。ネイティブで何が得られるのか、実測値と測り方をまとめました。","datePublished":"2026-10-25","dateModified":"2026-10-25","inLanguage":"ja","image":"https://gtree.dobbylab.com/og-ja.png","url":"https://gtree.dobbylab.com/ja/blog/gtree-native-app-not-electron/","mainEntityOfPage":"https://gtree.dobbylab.com/ja/blog/gtree-native-app-not-electron/","keywords":"native-app, rust, gpui, performance, electron","author":{"@id":"https://dobbylab.com/#org"},"publisher":{"@id":"https://dobbylab.com/#org"},"about":{"@id":"https://gtree.dobbylab.com/#app"},"isPartOf":{"@id":"https://gtree.dobbylab.com/ja/blog/#blog"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://gtree.dobbylab.com/ja/"},{"@type":"ListItem","position":2,"name":"ブログ","item":"https://gtree.dobbylab.com/ja/blog/"},{"@type":"ListItem","position":3,"name":"gtree が Electron を使わない理由 — 24 MB、0.2 秒でウィンドウ表示","item":"https://gtree.dobbylab.com/ja/blog/gtree-native-app-not-electron/"}]}]}</script>
+    <script>
+      // 首次绘制前:① 套上用户选过的深浅色(没选过 = 跟随系统),避免闪屏;
+      // ② 语言:每种语言是独立的预渲染页面(/、/ja/、/zh/)。?lang=xx 视为显式选择 —— 记下并跳到对应页面;
+      //    子页面(/zh/blog/… 等)同理,跳到同一页面的另一种语言。
+      //    没有 ?lang 时,只有用户在页面上选过语言(localStorage 有值)且和当前页不同才跳。
+      //    没选过就不跳(不按浏览器语言猜);爬虫没有 localStorage,不会被重定向。
+      //    开发模式没有 data-prerendered,这段不跳(dev 用 ?lang= 由 main.jsx 读)。
+      try { var t = localStorage.getItem('gtree:theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t } catch (e) {}
+      try {
+        var d = document.documentElement, L = ['en', 'ja', 'zh'], cur = d.getAttribute('data-lang') || 'en'
+        if (d.hasAttribute('data-prerendered')) {
+          var q = new URLSearchParams(location.search).get('lang'), want = null
+          if (L.indexOf(q) >= 0) { want = q; try { localStorage.setItem('gtree:lang', q) } catch (e) {} }
+          else { var s = null; try { s = localStorage.getItem('gtree:lang') } catch (e) {} if (L.indexOf(s) >= 0) want = s }
+          // data-root:当前页到站点根的相对前缀;data-path:页面在语言根下的路径(博客文章等子页面换语言时留在同一页)
+          var root = d.getAttribute('data-root') || (cur === 'en' ? './' : '../'), sub = d.getAttribute('data-path') || ''
+          if (want && want !== cur) location.replace(new URL(root + (want === 'en' ? '' : want + '/') + sub + location.hash, location.href).href)
+          else if (L.indexOf(q) >= 0) history.replaceState(null, '', location.pathname + location.hash)
+        }
+      } catch (e) {}
+    </script>
+    <script>
+      // Cloudflare Web Analytics:按访客去重的访问量,不用 cookie。只在正式域名上加载 —— 本地开发、预览不上报。
+      // 官网在 GitHub Pages、DNS 不走代理,Cloudflare 没法自动注入,所以手动嵌(站点在控制台 Web Analytics 里)
+      if (location.hostname === 'gtree.dobbylab.com') {
+        var b = document.createElement('script')
+        b.defer = true
+        b.src = 'https://static.cloudflareinsights.com/beacon.min.js'
+        b.setAttribute('data-cf-beacon', '{"token": "db95a1c82680427f93b860b29b317f24"}')
+        document.head.appendChild(b)
+      }
+    </script>
+    <script type="module" crossorigin src="../../../assets/index-DpQD1bb3.js"></script>
+    <link rel="stylesheet" crossorigin href="../../../assets/index-B057dae2.css">
+  </head>
+  <body>
+    <div id="root"><header class="nav"><div class="wrap"><a class="brand" href="../../../ja/" aria-label="gtree"><img src="../../../logo.png" alt="" width="26" height="26"/>gtree</a><nav class="nav-links" aria-label="ページ内ナビゲーション"><a href="../../../ja/#features" class="">機能</a><a href="../../../ja/#compare" class="">比較</a><a href="../../../ja/#pricing" class="">料金</a><a href="../../../ja/#faq" class="">FAQ</a></nav><div class="nav-right"><span class="social"><a class="theme-btn" href="https://discord.gg/EnPJxrUEK5" target="_blank" rel="noopener noreferrer" aria-label="Discord — バグ報告・質問はこちら" title="Discord — バグ報告・質問はこちら"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.007.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg></a><a class="theme-btn" href="https://x.com/dobbylabhq" target="_blank" rel="noopener noreferrer" aria-label="X で @dobbylabhq をフォロー" title="X で @dobbylabhq をフォロー"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg></a></span><div class="lang  "><button type="button" class="lang-btn " aria-haspopup="menu" aria-expanded="false" aria-label="言語" title="言語"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg><span>日本語</span><svg viewBox="0 0 24 24" class="chev" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button><div class="lang-menu " role="menu" aria-label="言語"><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../blog/gtree-native-app-not-electron/" hrefLang="en" lang="en"><span>English</span></a><a role="menuitemradio" aria-checked="true" tabindex="-1" href="../../../ja/blog/gtree-native-app-not-electron/" hrefLang="ja" lang="ja"><span>日本語</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></a><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../zh/blog/gtree-native-app-not-electron/" hrefLang="zh-CN" lang="zh-CN"><span>中文</span></a></div></div><button type="button" class="theme-btn" title="テーマ:システムに合わせる(クリックでライトに切り替え)" aria-label="テーマ:システムに合わせる(クリックでライトに切り替え)"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"></rect><path d="M8 21h8"></path><path d="M12 17v4"></path></svg></button><a class="btn" href="../../../ja/#download">Mac 版を無料ダウンロード<svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M12 4v12"></path><path d="m7 11 5 5 5-5"></path><path d="M5 20h14"></path></svg></a><button class="nav-burger" type="button" aria-expanded="false" aria-label="メニュー"><svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path></svg></button></div></div><div class="nav-sheet "><a href="../../../ja/#features">機能</a><a href="../../../ja/#compare">比較</a><a href="../../../ja/#pricing">料金</a><a href="../../../ja/#faq">FAQ</a><a href="../../../ja/#download">Mac 版を無料ダウンロード</a><a class="nav-sheet-social" href="https://discord.gg/EnPJxrUEK5" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.007.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg>Discord — バグ報告・質問はこちら</a><a class="nav-sheet-social" href="https://x.com/dobbylabhq" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" class="logo-fill"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg>X で @dobbylabhq をフォロー</a></div></header><main id="top"><article class="doc wrap-doc"><nav class="doc-crumbs" aria-label="現在の位置"><ol><li><a href="../../../ja/">ホーム</a></li><li><a href="../../../ja/blog/">ブログ</a></li><li><span aria-current="page">gtree が Electron を使わない理由 — 24 MB、0.2 秒でウィンドウ表示</span></li></ol></nav><header class="doc-head"><h1>gtree が Electron を使わない理由 — 24 MB、0.2 秒でウィンドウ表示</h1><p class="doc-meta"><time dateTime="2026-10-25">2026年10月25日</time> · DobbyLab<!-- --> · <span class="doc-tag">native-app</span><span class="doc-tag">rust</span><span class="doc-tag">gpui</span><span class="doc-tag">performance</span><span class="doc-tag">electron</span></p></header><div class="prose"><p>gtree はネイティブのデスクトップアプリで、Electron でも Web ビューでもありません。Rust で書かれ、画面は <strong>GPUI</strong>(Zed エディタの UI フレームワーク)が GPU で描画し、パッケージにはブラウザエンジンも Node ランタイムも入っていません。ダウンロードは <strong>24 MB</strong>。Apple M4 での実測では、ウィンドウ表示まで<strong>約 0.2 秒</strong>(ウォームスタート)、アイドル時のメモリは<strong>約 100 MB</strong> です。本記事では、複数の AI コーディングエージェントを動かすときになぜこれが効くのか、中身はどうなっているのか、そして数字をどう測ったのかを説明します。</p>
+<!-- TODO 截图:0.3.14 主界面全景(侧栏 + 某条线的开始页),可配一张活动监视器里 gtree 内存列的特写 -->
+
+<h2 id="ai-エージェントを見守るツールは-なぜ軽くあるべきなのか">AI エージェントを見守るツールは、なぜ軽くあるべきなのか?<a class="h-anchor" href="#ai-エージェントを見守るツールは-なぜ軽くあるべきなのか" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>3〜4 つのエージェントが<a href="/ja/blog/run-multiple-claude-code-git-worktree/">それぞれ専用の git worktree で</a>作業していると、Mac はすでに忙しい状態です。どのエージェントもビルドやテスト、開発サーバーを動かし、worktree ごとに <code>node_modules</code> や <code>target/</code> があります。それらを見守るアプリは、できるだけリソースを使わないほうがいいはずです。</p>
+<p>gtree がネイティブなのは、この一点のためです。Electron 製のデスクトップアプリは Chromium と Node.js を丸ごと同梱し、ウィンドウはそれぞれ Web ページです。多くのアプリにとっては妥当なトレードオフですが、一日中開きっぱなしでコンパイラやエージェントと同じマシンを使うツールなら、メモリとディスクはあなたの作業に回したいと考えました。</p>
+<h2 id="gtree-は何で作られているのか">gtree は何で作られているのか<a class="h-anchor" href="#gtree-は何で作られているのか" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul>
+<li><strong>Rust</strong>。ネイティブの arm64 実行ファイル 1 つにコンパイルされます。</li>
+<li>画面は <strong>GPUI</strong>。Zed エディタと同じフレームワークで、GPU 上で <strong>Metal</strong> を使って描画します。Web ビューはありません。Electron でも Tauri でも WKWebView でもなく、アプリの Resources フォルダにあるのはアイコンファイル 1 つだけです。</li>
+<li>読み取りの大半(履歴、ブランチなど)には純 Rust 実装の <strong>gitoxide</strong>。一部の状態や差分のチェックは git を直接呼び出します。</li>
+<li>書き込み(コミット、プッシュ、プル、リベース)は<strong>お使いの <code>git</code></strong> を呼び出します。SSH キー、認証情報、git hook はターミナルで使うときとまったく同じように効きます。</li>
+<li><strong>内蔵ターミナル</strong>は自前の <code>gpui-term</code>。端末プロトコルの解析は <code>alacritty_terminal</code>、描画は GPUI です。中で動くのは本物のエージェント CLI(Claude Code または Codex)で、再実装ではありません。</li>
+<li><strong>検索</strong>は <code>git grep -F</code>。⌘P のファイル検索は、すでにメモリにあるファイルツリーを引くので、ディスクを読み直しません。</li>
+</ul>
+<h2 id="どれくらい速いのか-実測値">どれくらい速いのか:実測値<a class="h-anchor" href="#どれくらい速いのか-実測値" aria-hidden="true" tabindex="-1">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>実測値</th>
+<th>測り方</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ダウンロード(zip)</td>
+<td><strong>23.6 MB</strong></td>
+<td>GitHub Release 上の <code>gtree-0.3.14-macos-aarch64.zip</code> のサイズ</td>
+</tr>
+<tr>
+<td>インストール後のアプリ</td>
+<td><strong>73 MB</strong></td>
+<td>インストール済み <code>.app</code> に <code>du -sh</code>。ほぼすべてが 1 つの実行ファイルで、Resources は 1.1 MB のアイコンのみ</td>
+</tr>
+<tr>
+<td>起動からウィンドウ表示まで</td>
+<td><strong>162〜206 ms</strong>、中央値 176 ms(7 回)</td>
+<td>プロセスを起動してから、そのアプリの最初のウィンドウが画面に出るまでを 2 ms ごとに確認。<strong>ウォームキャッシュ</strong>で、再起動直後のコールドスタートではありません</td>
+</tr>
+<tr>
+<td>起動からリポジトリ読み込み完了まで</td>
+<td><strong>458〜574 ms</strong>(3 回)</td>
+<td>プロセス起動から、6 つの worktree・14 ブランチ・200 コミットの読み込み完了がログに出るまで</td>
+</tr>
+<tr>
+<td>アイドル時のメモリ</td>
+<td><strong>93〜99 MB</strong></td>
+<td>アクティビティモニタの「メモリ」(物理フットプリント)。起動 30 秒後から 2 秒ごとに 20 秒間計測</td>
+</tr>
+</tbody></table>
+<p><strong>計測環境</strong>:Apple M4(10 コア)、メモリ 24 GB、macOS 15.3.1、gtree 0.3.14 正式版。リポジトリは gtree 自身のリポジトリのローカルクローン(366 コミット、474 ファイル)に worktree を 5 つ追加したもので、それぞれに 1 コミットと 1 つの未コミット変更があり、サイドバーには 1 プロジェクト・6 つの worktree が並ぶ状態です。一時的なホームフォルダを使い、利用統計はオフにして、実際のプロジェクトや設定には触れていません。</p>
+<p>これは 1 台のマシンでの計測で、ベンチマークスイートではありません。リポジトリの大きさや開いているプロジェクトの数によって数字は変わります。</p>
+<h2 id="大きなリポジトリでも重くなりませんか">大きなリポジトリでも重くなりませんか?<a class="h-anchor" href="#大きなリポジトリでも重くなりませんか" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>ネイティブであることは一部にすぎません。残りはコードベースのいくつかのルールが支えています。</p>
+<ul>
+<li><strong>長いリストは見えている行だけを描く。</strong> コミット、ブランチ、差分の行、ファイル、過去の会話はすべて仮想スクロールなので、数千行のリストでも描くのは画面に見えている数十行だけです。</li>
+<li><strong>重い git 処理はバックグラウンドで。</strong> 履歴の読み込み、差分の計算、どのブランチがマージ済みかの判定はメインスレッドの外で行うので、その間もウィンドウは操作できます。</li>
+</ul>
+<h2 id="gtree-はコードをアップロードしますか">gtree はコードをアップロードしますか?<a class="h-anchor" href="#gtree-はコードをアップロードしますか" aria-hidden="true" tabindex="-1">#</a></h2>
+<p>しません。gtree がコードをアップロードすることはありません。ローカル機能は無料で、アカウントも不要です。エージェントは gtree がないときと同じように各自のサービスとやり取りし、gtree はお使いの Mac 上の hook を通じてその状態を読むだけです。</p>
+<p>権限については、gtree が求めるのは通知だけで、それも任意です。フルディスクアクセス、アクセシビリティ、画面収録は必要ありません。アップデートはリリースページからダウンロードし、SHA-256 チェックサムを照合してからアプリを置き換えます。</p>
+<h2 id="制限事項">制限事項<a class="h-anchor" href="#制限事項" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul>
+<li>現在は <strong>Apple Silicon の macOS のみ</strong>対応です。インストーラは arm64 です。</li>
+<li>現時点では<strong>オープンソースではありません</strong>。</li>
+<li><strong>この記事は起動時と静止時についてです。</strong> 「複数のエージェントが同時に動いているとき」の数字は、続報で公開します。</li>
+</ul>
+<h2 id="よくある質問">よくある質問<a class="h-anchor" href="#よくある質問" aria-hidden="true" tabindex="-1">#</a></h2>
+<h3 id="gtree-は-electron-や-tauri-で作られていますか">gtree は Electron や Tauri で作られていますか?<a class="h-anchor" href="#gtree-は-electron-や-tauri-で作られていますか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>どちらでもありません。Rust のネイティブアプリで、画面は GPUI が GPU(Metal)で描画します。中に Web ビューはありません。</p>
+<h3 id="gtree-のサイズは">gtree のサイズは?<a class="h-anchor" href="#gtree-のサイズは" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>ダウンロードは 23.6 MB、インストール後は 73 MB で、そのほとんどが 1 つのネイティブ実行ファイルです。</p>
+<h3 id="起動はどれくらい速いですか">起動はどれくらい速いですか?<a class="h-anchor" href="#起動はどれくらい速いですか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>Apple M4・ウォームキャッシュの条件で、ウィンドウ表示まで 162〜206 ms(中央値 176 ms)、6 つの worktree があるリポジトリの読み込み完了まで約 0.5 秒でした。</p>
+<h3 id="メモリはどれくらい使いますか">メモリはどれくらい使いますか?<a class="h-anchor" href="#メモリはどれくらい使いますか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>計測環境では、1 プロジェクト・6 つの worktree を開いた状態で、アイドル時に約 93〜99 MB(アクティビティモニタの値)でした。</p>
+<h3 id="どのエージェントに対応していますか">どのエージェントに対応していますか?<a class="h-anchor" href="#どのエージェントに対応していますか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>Claude Code と Codex です。最初に対応し、連携がもっとも深いのは Claude Code です。</p>
+<h3 id="intel-mac-windows-linux-で使えますか">Intel Mac、Windows、Linux で使えますか?<a class="h-anchor" href="#intel-mac-windows-linux-で使えますか" aria-hidden="true" tabindex="-1">#</a></h3>
+<p>まだ使えません。現在のリリースは Apple Silicon の macOS 向けです。</p>
+<p>gtree のローカル機能は無料で、登録も不要です。gtree があなたのコードをアップロードすることはありません。<a href="https://gtree.dobbylab.com/ja/">gtree をダウンロード</a>して、いま動かしているエージェントの横で使い心地を確かめてみてください。</p>
+</div><aside class="doc-cta"><div><h2>gtree を試す</h2><p>AI コーディングエージェントのための無料デスクトップアプリです。ローカル機能はずっと無料、ログイン不要、gtree はコードをアップロードしません。</p></div><a class="btn primary" href="../../../ja/#download"><svg viewBox="0 0 24 24" class="ico " aria-hidden="true"><path d="M12 4v12"></path><path d="m7 11 5 5 5-5"></path><path d="M5 20h14"></path></svg>Mac 版を無料ダウンロード</a></aside><nav class="doc-more" aria-label="ほかの記事"><h2>ほかの記事</h2><ul><li><a href="../../../ja/blog/undo-claude-code-changes/">Claude Code の変更を元に戻す方法 — 閉じたセッションのターンも復元</a> <span class="doc-meta"><time dateTime="2026-10-22">2026年10月22日</time></span></li><li><a href="../../../ja/blog/ai-agents-editing-same-file/">2 つの AI エージェントが同じファイルを編集するとき — 互いに上書きさせない方法</a> <span class="doc-meta"><time dateTime="2026-10-19">2026年10月19日</time></span></li><li><a href="../../../ja/blog/claude-code-waiting-for-approval-notifications/">Claude Code の承認待ちにすぐ気づく方法 — 通知と状態の見える化</a> <span class="doc-meta"><time dateTime="2026-10-13">2026年10月13日</time></span></li></ul></nav></article></main><footer class="site-footer"><div class="wrap"><div class="ft-top"><div class="ft-brand"><a class="brand" href="../../../ja/" aria-label="gtree"><img src="../../../logo.png" alt="" width="22" height="22"/>gtree</a><p>gtree は DobbyLab が開発する、複数の AI コーディングエージェントを同時に動かす人のためのデスクトップアプリです。ローカルで動き、gtree があなたのコードをアップロードすることはありません。</p></div><nav class="ft-col" aria-label="製品"><h2>製品</h2><ul><li><a href="../../../ja/#download">ダウンロード</a></li><li><a href="../../../ja/#pricing">料金</a></li><li><a href="../../../ja/release-notes/">リリースノート</a></li></ul></nav><nav class="ft-col" aria-label="リソース"><h2>リソース</h2><ul><li><a href="../../../ja/blog/">ブログ</a></li><li><a href="../../../ja/#faq">よくある質問</a></li><li><a href="../../../llms.txt">llms.txt</a></li></ul></nav><nav class="ft-col" aria-label="運営"><h2>運営</h2><ul><li><a href="../../../ja/privacy/">プライバシーポリシー</a></li><li><a href="mailto:support@dobbylab.com">support@dobbylab.com</a></li><li><a href="https://x.com/dobbylabhq" target="_blank" rel="noopener" class="x-link"><svg class="x-logo" viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>@<!-- -->dobbylabhq</a></li></ul></nav></div><div class="ft-bottom"><span>© 2026 <a href="https://dobbylab.com/">DobbyLab</a> · <!-- -->All rights reserved</span><div class="lang up ft-lang"><button type="button" class="lang-btn " aria-haspopup="menu" aria-expanded="false" aria-label="言語" title="言語"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg><span>日本語</span><svg viewBox="0 0 24 24" class="chev" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button><div class="lang-menu " role="menu" aria-label="言語"><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../blog/gtree-native-app-not-electron/" hrefLang="en" lang="en"><span>English</span></a><a role="menuitemradio" aria-checked="true" tabindex="-1" href="../../../ja/blog/gtree-native-app-not-electron/" hrefLang="ja" lang="ja"><span>日本語</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></a><a role="menuitemradio" aria-checked="false" tabindex="-1" href="../../../zh/blog/gtree-native-app-not-electron/" hrefLang="zh-CN" lang="zh-CN"><span>中文</span></a></div></div></div></div></footer></div>
+    <script id="page-data" type="application/json">{"kind":"post","path":"blog/gtree-native-app-not-electron/","slug":"gtree-native-app-not-electron","title":"gtree が Electron を使わない理由 — 24 MB、0.2 秒でウィンドウ表示","date":"2026-10-25","tags":["native-app","rust","gpui","performance","electron"],"html":"\u003cp>gtree はネイティブのデスクトップアプリで、Electron でも Web ビューでもありません。Rust で書かれ、画面は \u003cstrong>GPUI\u003c/strong>(Zed エディタの UI フレームワーク)が GPU で描画し、パッケージにはブラウザエンジンも Node ランタイムも入っていません。ダウンロードは \u003cstrong>24 MB\u003c/strong>。Apple M4 での実測では、ウィンドウ表示まで\u003cstrong>約 0.2 秒\u003c/strong>(ウォームスタート)、アイドル時のメモリは\u003cstrong>約 100 MB\u003c/strong> です。本記事では、複数の AI コーディングエージェントを動かすときになぜこれが効くのか、中身はどうなっているのか、そして数字をどう測ったのかを説明します。\u003c/p>\n\u003c!-- TODO 截图:0.3.14 主界面全景(侧栏 + 某条线的开始页),可配一张活动监视器里 gtree 内存列的特写 -->\n\n\u003ch2 id=\"ai-エージェントを見守るツールは-なぜ軽くあるべきなのか\">AI エージェントを見守るツールは、なぜ軽くあるべきなのか?\u003ca class=\"h-anchor\" href=\"#ai-エージェントを見守るツールは-なぜ軽くあるべきなのか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>3〜4 つのエージェントが\u003ca href=\"/ja/blog/run-multiple-claude-code-git-worktree/\">それぞれ専用の git worktree で\u003c/a>作業していると、Mac はすでに忙しい状態です。どのエージェントもビルドやテスト、開発サーバーを動かし、worktree ごとに \u003ccode>node_modules\u003c/code> や \u003ccode>target/\u003c/code> があります。それらを見守るアプリは、できるだけリソースを使わないほうがいいはずです。\u003c/p>\n\u003cp>gtree がネイティブなのは、この一点のためです。Electron 製のデスクトップアプリは Chromium と Node.js を丸ごと同梱し、ウィンドウはそれぞれ Web ページです。多くのアプリにとっては妥当なトレードオフですが、一日中開きっぱなしでコンパイラやエージェントと同じマシンを使うツールなら、メモリとディスクはあなたの作業に回したいと考えました。\u003c/p>\n\u003ch2 id=\"gtree-は何で作られているのか\">gtree は何で作られているのか\u003ca class=\"h-anchor\" href=\"#gtree-は何で作られているのか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cul>\n\u003cli>\u003cstrong>Rust\u003c/strong>。ネイティブの arm64 実行ファイル 1 つにコンパイルされます。\u003c/li>\n\u003cli>画面は \u003cstrong>GPUI\u003c/strong>。Zed エディタと同じフレームワークで、GPU 上で \u003cstrong>Metal\u003c/strong> を使って描画します。Web ビューはありません。Electron でも Tauri でも WKWebView でもなく、アプリの Resources フォルダにあるのはアイコンファイル 1 つだけです。\u003c/li>\n\u003cli>読み取りの大半(履歴、ブランチなど)には純 Rust 実装の \u003cstrong>gitoxide\u003c/strong>。一部の状態や差分のチェックは git を直接呼び出します。\u003c/li>\n\u003cli>書き込み(コミット、プッシュ、プル、リベース)は\u003cstrong>お使いの \u003ccode>git\u003c/code>\u003c/strong> を呼び出します。SSH キー、認証情報、git hook はターミナルで使うときとまったく同じように効きます。\u003c/li>\n\u003cli>\u003cstrong>内蔵ターミナル\u003c/strong>は自前の \u003ccode>gpui-term\u003c/code>。端末プロトコルの解析は \u003ccode>alacritty_terminal\u003c/code>、描画は GPUI です。中で動くのは本物のエージェント CLI(Claude Code または Codex)で、再実装ではありません。\u003c/li>\n\u003cli>\u003cstrong>検索\u003c/strong>は \u003ccode>git grep -F\u003c/code>。⌘P のファイル検索は、すでにメモリにあるファイルツリーを引くので、ディスクを読み直しません。\u003c/li>\n\u003c/ul>\n\u003ch2 id=\"どれくらい速いのか-実測値\">どれくらい速いのか:実測値\u003ca class=\"h-anchor\" href=\"#どれくらい速いのか-実測値\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003ctable>\n\u003cthead>\n\u003ctr>\n\u003cth>項目\u003c/th>\n\u003cth>実測値\u003c/th>\n\u003cth>測り方\u003c/th>\n\u003c/tr>\n\u003c/thead>\n\u003ctbody>\u003ctr>\n\u003ctd>ダウンロード(zip)\u003c/td>\n\u003ctd>\u003cstrong>23.6 MB\u003c/strong>\u003c/td>\n\u003ctd>GitHub Release 上の \u003ccode>gtree-0.3.14-macos-aarch64.zip\u003c/code> のサイズ\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>インストール後のアプリ\u003c/td>\n\u003ctd>\u003cstrong>73 MB\u003c/strong>\u003c/td>\n\u003ctd>インストール済み \u003ccode>.app\u003c/code> に \u003ccode>du -sh\u003c/code>。ほぼすべてが 1 つの実行ファイルで、Resources は 1.1 MB のアイコンのみ\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>起動からウィンドウ表示まで\u003c/td>\n\u003ctd>\u003cstrong>162〜206 ms\u003c/strong>、中央値 176 ms(7 回)\u003c/td>\n\u003ctd>プロセスを起動してから、そのアプリの最初のウィンドウが画面に出るまでを 2 ms ごとに確認。\u003cstrong>ウォームキャッシュ\u003c/strong>で、再起動直後のコールドスタートではありません\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>起動からリポジトリ読み込み完了まで\u003c/td>\n\u003ctd>\u003cstrong>458〜574 ms\u003c/strong>(3 回)\u003c/td>\n\u003ctd>プロセス起動から、6 つの worktree・14 ブランチ・200 コミットの読み込み完了がログに出るまで\u003c/td>\n\u003c/tr>\n\u003ctr>\n\u003ctd>アイドル時のメモリ\u003c/td>\n\u003ctd>\u003cstrong>93〜99 MB\u003c/strong>\u003c/td>\n\u003ctd>アクティビティモニタの「メモリ」(物理フットプリント)。起動 30 秒後から 2 秒ごとに 20 秒間計測\u003c/td>\n\u003c/tr>\n\u003c/tbody>\u003c/table>\n\u003cp>\u003cstrong>計測環境\u003c/strong>:Apple M4(10 コア)、メモリ 24 GB、macOS 15.3.1、gtree 0.3.14 正式版。リポジトリは gtree 自身のリポジトリのローカルクローン(366 コミット、474 ファイル)に worktree を 5 つ追加したもので、それぞれに 1 コミットと 1 つの未コミット変更があり、サイドバーには 1 プロジェクト・6 つの worktree が並ぶ状態です。一時的なホームフォルダを使い、利用統計はオフにして、実際のプロジェクトや設定には触れていません。\u003c/p>\n\u003cp>これは 1 台のマシンでの計測で、ベンチマークスイートではありません。リポジトリの大きさや開いているプロジェクトの数によって数字は変わります。\u003c/p>\n\u003ch2 id=\"大きなリポジトリでも重くなりませんか\">大きなリポジトリでも重くなりませんか?\u003ca class=\"h-anchor\" href=\"#大きなリポジトリでも重くなりませんか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>ネイティブであることは一部にすぎません。残りはコードベースのいくつかのルールが支えています。\u003c/p>\n\u003cul>\n\u003cli>\u003cstrong>長いリストは見えている行だけを描く。\u003c/strong> コミット、ブランチ、差分の行、ファイル、過去の会話はすべて仮想スクロールなので、数千行のリストでも描くのは画面に見えている数十行だけです。\u003c/li>\n\u003cli>\u003cstrong>重い git 処理はバックグラウンドで。\u003c/strong> 履歴の読み込み、差分の計算、どのブランチがマージ済みかの判定はメインスレッドの外で行うので、その間もウィンドウは操作できます。\u003c/li>\n\u003c/ul>\n\u003ch2 id=\"gtree-はコードをアップロードしますか\">gtree はコードをアップロードしますか?\u003ca class=\"h-anchor\" href=\"#gtree-はコードをアップロードしますか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cp>しません。gtree がコードをアップロードすることはありません。ローカル機能は無料で、アカウントも不要です。エージェントは gtree がないときと同じように各自のサービスとやり取りし、gtree はお使いの Mac 上の hook を通じてその状態を読むだけです。\u003c/p>\n\u003cp>権限については、gtree が求めるのは通知だけで、それも任意です。フルディスクアクセス、アクセシビリティ、画面収録は必要ありません。アップデートはリリースページからダウンロードし、SHA-256 チェックサムを照合してからアプリを置き換えます。\u003c/p>\n\u003ch2 id=\"制限事項\">制限事項\u003ca class=\"h-anchor\" href=\"#制限事項\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003cul>\n\u003cli>現在は \u003cstrong>Apple Silicon の macOS のみ\u003c/strong>対応です。インストーラは arm64 です。\u003c/li>\n\u003cli>現時点では\u003cstrong>オープンソースではありません\u003c/strong>。\u003c/li>\n\u003cli>\u003cstrong>この記事は起動時と静止時についてです。\u003c/strong> 「複数のエージェントが同時に動いているとき」の数字は、続報で公開します。\u003c/li>\n\u003c/ul>\n\u003ch2 id=\"よくある質問\">よくある質問\u003ca class=\"h-anchor\" href=\"#よくある質問\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h2>\n\u003ch3 id=\"gtree-は-electron-や-tauri-で作られていますか\">gtree は Electron や Tauri で作られていますか?\u003ca class=\"h-anchor\" href=\"#gtree-は-electron-や-tauri-で作られていますか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>どちらでもありません。Rust のネイティブアプリで、画面は GPUI が GPU(Metal)で描画します。中に Web ビューはありません。\u003c/p>\n\u003ch3 id=\"gtree-のサイズは\">gtree のサイズは?\u003ca class=\"h-anchor\" href=\"#gtree-のサイズは\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>ダウンロードは 23.6 MB、インストール後は 73 MB で、そのほとんどが 1 つのネイティブ実行ファイルです。\u003c/p>\n\u003ch3 id=\"起動はどれくらい速いですか\">起動はどれくらい速いですか?\u003ca class=\"h-anchor\" href=\"#起動はどれくらい速いですか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>Apple M4・ウォームキャッシュの条件で、ウィンドウ表示まで 162〜206 ms(中央値 176 ms)、6 つの worktree があるリポジトリの読み込み完了まで約 0.5 秒でした。\u003c/p>\n\u003ch3 id=\"メモリはどれくらい使いますか\">メモリはどれくらい使いますか?\u003ca class=\"h-anchor\" href=\"#メモリはどれくらい使いますか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>計測環境では、1 プロジェクト・6 つの worktree を開いた状態で、アイドル時に約 93〜99 MB(アクティビティモニタの値)でした。\u003c/p>\n\u003ch3 id=\"どのエージェントに対応していますか\">どのエージェントに対応していますか?\u003ca class=\"h-anchor\" href=\"#どのエージェントに対応していますか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>Claude Code と Codex です。最初に対応し、連携がもっとも深いのは Claude Code です。\u003c/p>\n\u003ch3 id=\"intel-mac-windows-linux-で使えますか\">Intel Mac、Windows、Linux で使えますか?\u003ca class=\"h-anchor\" href=\"#intel-mac-windows-linux-で使えますか\" aria-hidden=\"true\" tabindex=\"-1\">#\u003c/a>\u003c/h3>\n\u003cp>まだ使えません。現在のリリースは Apple Silicon の macOS 向けです。\u003c/p>\n\u003cp>gtree のローカル機能は無料で、登録も不要です。gtree があなたのコードをアップロードすることはありません。\u003ca href=\"https://gtree.dobbylab.com/ja/\">gtree をダウンロード\u003c/a>して、いま動かしているエージェントの横で使い心地を確かめてみてください。\u003c/p>\n","more":[{"slug":"undo-claude-code-changes","title":"Claude Code の変更を元に戻す方法 — 閉じたセッションのターンも復元","date":"2026-10-22"},{"slug":"ai-agents-editing-same-file","title":"2 つの AI エージェントが同じファイルを編集するとき — 互いに上書きさせない方法","date":"2026-10-19"},{"slug":"claude-code-waiting-for-approval-notifications","title":"Claude Code の承認待ちにすぐ気づく方法 — 通知と状態の見える化","date":"2026-10-13"}]}</script>
+  </body>
+</html>
