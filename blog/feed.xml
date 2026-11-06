@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>gtree Blog — Parallel Claude Code, git worktrees and AI teamwork</title>
+  <link>https://gtree.dobbylab.com/blog/</link>
+  <description>How to run several Claude Code sessions at once, isolate them with git worktrees, and keep two AI agents from editing the same file — guides and gtree features.</description>
+  <language>en</language>
+  <atom:link href="https://gtree.dobbylab.com/blog/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>Why gtree Isn't Electron: 24 MB, Window in 0.2 Seconds</title>
+    <link>https://gtree.dobbylab.com/blog/gtree-native-app-not-electron/</link>
+    <guid isPermaLink="true">https://gtree.dobbylab.com/blog/gtree-native-app-not-electron/</guid>
+    <pubDate>Sun, 25 Oct 2026 00:00:00 GMT</pubDate>
+    <description>A native Rust + GPUI app with no bundled browser or Node: 24 MB download, window in about 0.2 s, ~100 MB idle memory. Measured numbers and how we got them.</description>
+  </item>
+  <item>
+    <title>How to Undo Claude Code Changes, Even After the Session Ends</title>
+    <link>https://gtree.dobbylab.com/blog/undo-claude-code-changes/</link>
+    <guid isPermaLink="true">https://gtree.dobbylab.com/blog/undo-claude-code-changes/</guid>
+    <pubDate>Thu, 22 Oct 2026 00:00:00 GMT</pubDate>
+    <description>Undo AI coding changes three ways: git, Claude Code's /rewind, and gtree's per-turn checkpoints, which restore any turn's files even after the session is closed.</description>
+  </item>
+  <item>
+    <title>Two AI Agents, One File: Stop Them Overwriting Each Other</title>
+    <link>https://gtree.dobbylab.com/blog/ai-agents-editing-same-file/</link>
+    <guid isPermaLink="true">https://gtree.dobbylab.com/blog/ai-agents-editing-same-file/</guid>
+    <pubDate>Mon, 19 Oct 2026 00:00:00 GMT</pubDate>
+    <description>Two AI agents editing the same file? Spot overlaps with plain git, or let the agents message each other and agree who goes first. Works with Claude Code and Codex.</description>
+  </item>
+  <item>
+    <title>How to Know When Claude Code Is Waiting for Your Approval</title>
+    <link>https://gtree.dobbylab.com/blog/claude-code-waiting-for-approval-notifications/</link>
+    <guid isPermaLink="true">https://gtree.dobbylab.com/blog/claude-code-waiting-for-approval-notifications/</guid>
+    <pubDate>Tue, 13 Oct 2026 00:00:00 GMT</pubDate>
+    <description>Claude Code stops whenever it needs permission. Get notified with a Notification hook, and see which of your sessions is waiting on one screen.</description>
+  </item>
+  <item>
+    <title>How to Run Multiple Claude Code Sessions with Git Worktree</title>
+    <link>https://gtree.dobbylab.com/blog/run-multiple-claude-code-git-worktree/</link>
+    <guid isPermaLink="true">https://gtree.dobbylab.com/blog/run-multiple-claude-code-git-worktree/</guid>
+    <pubDate>Sat, 10 Oct 2026 00:00:00 GMT</pubDate>
+    <description>Give each Claude Code session its own git worktree so parallel AIs never share a folder. The exact commands, the gotchas, and how to skip the busywork.</description>
+  </item>
+</channel>
+</rss>

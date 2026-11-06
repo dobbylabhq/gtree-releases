@@ -1,0 +1,181 @@
+# gtree
+
+> A native desktop app for AI coding agents (Claude Code, Codex): agents know what the others are changing and agree before editing the same file; you get pulled in only when one needs you, with one Inbox for every project; any turn can be restored; agents can ask across projects; and you can watch your agent test your iOS app in the Simulator.
+
+- Website: https://gtree.dobbylab.com/
+- Other languages: https://gtree.dobbylab.com/ja/llms-full.txt, https://gtree.dobbylab.com/zh/llms-full.txt
+- Platform: macOS, Apple Silicon. Intel Mac / Windows / Linux: planned, no dates.
+- Install: `curl -fsSL https://gtree.dobbylab.com/install.sh | bash`
+- By: DobbyLab, support@dobbylab.com
+
+## Several agents at work. Know which one needs you.
+
+See which agents are working, which are waiting, and what files they touched. You get pulled in only when one needs you.
+
+## Five things gtree does
+
+- **Agents see each other** — Same file? They agree who goes first
+- **Pings only when needed** — One Inbox for every project
+- **Undo any turn** — Every turn is kept; restore in one click
+- **Ask across projects** — The frontend agent asks the backend one
+- **Watch it test iOS** — It drives the Simulator; you can take over
+
+### Agents see each other — Same file? The agents talk first.
+
+Your agents know what the others are changing, and agree before touching the same file.
+
+- **They talk it out** — One finishes, the other builds on it. Nobody overwrites anybody.
+- **Who’s changing it?** — Ask in any session, and the agent can tell who is changing which files.
+  - Sessions in other terminals and editors count too
+  - New sessions start knowing who else is working
+- When two worktrees touch the same file, the sidebar shows △. Click to compare.
+
+### Pings only when needed — Step away. It pings you when it needs you.
+
+Notified only when an agent needs a permission or an answer. Everything waiting on you sits at the top of the Inbox.
+
+- Pings only when needed, never while you’re watching
+- Click a notification to land in that session
+
+### Undo any turn
+
+A turn broke something? One click takes you back.
+
+- **Restore any turn** — See what each turn changed; restore in one click
+- **Find a conversation** — Search this repo’s chats; press Return to continue
+- **Replay old chats** — Replay past conversations, read-only
+
+### Ask across projects
+
+Unsure about an API? Your agent asks the agent on the other side, without interrupting its work.
+
+### Native and light
+
+Not a web wrapper. A 24 MB native app.
+
+- download: 24 MB
+- to open: ≈0.2 s
+- memory: ≈100 MB
+- Measured on an M4 Mac (macOS 15 · gtree 0.3.14). Open time is the median of 7 warm launches; memory is idle, as shown in Activity Monitor.
+
+### iOS Simulator — Watch your agent test your iOS app. (macOS · needs Xcode)
+
+- **Tap by text** — Say “tap Log in” and it lands; if not found, you get close matches
+- **Fewer tokens** — Screens and logs come back as a few key lines, not screenshots
+- **One-step run** — Build, install and launch in one go; crashes come with the reason
+- **One per worktree** — Each worktree gets its own simulator, isolated from the rest
+
+## What a few terminals can’t do.
+
+- Agents know what the others are changing, and agree before editing the same file (Terminals / tmux: Each edits away, unaware of the other)
+- Notified only when needed; one list for every project (Terminals / tmux: Tab through every terminal to find it)
+- Two worktrees changing the same file get flagged before anyone commits (Terminals / tmux: You find out at merge time)
+- An agent in one project asks the agent in another (Terminals / tmux: You relay messages back and forth)
+- Agents drive the iOS Simulator while you watch and can take over (Terminals / tmux: Screenshots only; the agent guesses coordinates)
+
+## A capable Git client, too.
+
+- **The start page tells you what’s next** — Not pushed, behind main, no MR yet — each comes with the matching button: Push, Rebase, Create MR.
+- **History and MR status** — Every branch on one lane graph, with AI turns layered in if you like. MR status sits right next to the branch in the sidebar.
+- **Compare any two points** — Pick any two branches or commits and see how they differ.
+
+## Pricing
+
+### Personal — $0 (forever)
+
+- Everything above, free
+- A full Git client too; Teammates is optional
+- No sign-up
+- gtree never uploads your code
+
+### Team — In development
+
+Everything in Personal, plus:
+- Team Diff & annotations (In development)
+- Real-time teammate sync (no waiting on git) (In design)
+- When teammates collide, both sides decide together (In design)
+- Team messages delivered in seconds through our relay — no waiting on git sync (In design)
+- Our relay server only forwards sync messages — it doesn’t store your data
+- Want it for your team, or need self-hosting? Tell us what you need. support@dobbylab.com
+
+## FAQ
+
+### Is the free version limited? Will it cost money later?
+
+Personal has no feature limits. Everything that runs on your Mac is free forever and won’t become paid; only team features that need a server will cost money.
+
+### Does my code get uploaded?
+
+No. gtree only reads and writes repositories on your Mac and never sends us your code, conversations or file paths; your own Claude Code or Codex talks to the AI, just as without gtree. Commits and pushes run through the git on your Mac, so your SSH keys and hooks work as usual.
+
+### How is this different from a few terminals or tmux?
+
+Terminals only manage windows. gtree knows whether each agent is working or waiting on you and which files it changed, and pulls you in only when needed. The terminals are still there, running claude or codex itself.
+
+### Which agents are supported?
+
+Claude Code and Codex; connect each once in Settings. Other agents aren’t supported yet; tell us which one you want. Being asked from another project and continuing old conversations are Claude Code only for now.
+
+### Can I see my teammates’ changes?
+
+Yes. Turn on Teammates (off by default) to see changes your teammates haven’t pushed, through your own git repository; your agent asks you before editing the same spot.
+
+### I only run one agent. Is it still useful?
+
+Yes. Restoring any turn, searching past conversations, new sessions that remember the last one, and the Git client all work just as well with a single agent.
+
+### Do I need Xcode for the iOS Simulator?
+
+Yes, and it’s macOS only. Installing Xcode is enough: no need to open Simulator.app, and no extra system permissions.
+
+### Do you collect data?
+
+Only anonymous usage and version counts that can’t be tied to you; you can turn it off in Settings anytime.
+
+### When is the Team plan coming? How much?
+
+It’s still in development, with no launch date or price yet. If your team wants it or needs self-hosting, email support@dobbylab.com.
+
+### When will Intel Macs, Windows and Linux be supported?
+
+Right now there’s only the Apple Silicon build for macOS. Intel Mac, Windows and Linux are planned, with no dates yet.
+
+## Blog
+
+- [Why gtree Isn't Electron: 24 MB, Window in 0.2 Seconds](https://gtree.dobbylab.com/blog/gtree-native-app-not-electron/index.md) (2026-10-25) — A native Rust + GPUI app with no bundled browser or Node: 24 MB download, window in about 0.2 s, ~100 MB idle memory. Measured numbers and how we got them.
+- [How to Undo Claude Code Changes, Even After the Session Ends](https://gtree.dobbylab.com/blog/undo-claude-code-changes/index.md) (2026-10-22) — Undo AI coding changes three ways: git, Claude Code's /rewind, and gtree's per-turn checkpoints, which restore any turn's files even after the session is closed.
+- [Two AI Agents, One File: Stop Them Overwriting Each Other](https://gtree.dobbylab.com/blog/ai-agents-editing-same-file/index.md) (2026-10-19) — Two AI agents editing the same file? Spot overlaps with plain git, or let the agents message each other and agree who goes first. Works with Claude Code and Codex.
+- [How to Know When Claude Code Is Waiting for Your Approval](https://gtree.dobbylab.com/blog/claude-code-waiting-for-approval-notifications/index.md) (2026-10-13) — Claude Code stops whenever it needs permission. Get notified with a Notification hook, and see which of your sessions is waiting on one screen.
+- [How to Run Multiple Claude Code Sessions with Git Worktree](https://gtree.dobbylab.com/blog/run-multiple-claude-code-git-worktree/index.md) (2026-10-10) — Give each Claude Code session its own git worktree so parallel AIs never share a folder. The exact commands, the gotchas, and how to skip the busywork.
+
+## Release notes
+
+- v0.3.23 (2026-11-06) — "See every agent on a line at a glance; stage changes hunk by hunk"
+- v0.3.22 (2026-11-05) — "Split panes and side-by-side files; open anything from the terminal with `gtree`"
+- v0.3.21 (2026-11-03) — "Split view: keep the terminal beside the file you're reading; type straight into the simulator"
+- v0.3.20 (2026-11-02) — A built-in iOS Simulator — watch your agent test the app on the right, and take over anytime
+- v0.3.19 (2026-10-28) — Hold ⌘ to see images in the terminal, open folders that aren't Git repositories, and reorder projects by dragging
+- v0.3.18 (2026-10-28) — Go to definition in the file view, search in the right panel, and a collapsible file list in Diff
+- v0.3.17 (2026-10-23) — Horizontal scrolling in Diff, a ⌘⇧P command palette and Markdown / PDF preview, and worktrees in use still visible under collapsed projects
+- v0.3.16 (2026-10-15) — Every changed file in one scroll, images and history in the file view, and project renaming
+- v0.3.15 (2026-10-15) — Lighter while agents work, and notes to your agents in English
+- v0.3.14 (2026-10-15) — Picks up where you left off, and one click shows the diff
+- v0.3.13 (2026-10-14) — A clearer right panel: tabs you can spot, and a commit box that grows
+- v0.3.12 (2026-10-14) — New layout: click a line to see what's next, and MR status in the sidebar
+- v0.3.11 (2026-10-13) — See what needs you first on the Workbench, and a rebuilt Inbox
+- v0.3.10 (2026-10-10) — Edit files right where you open them
+- v0.3.9 (2026-10-10) — Codex support, agents that sort it out between themselves, and Teammates
+- v0.3.8 (2026-10-09) — An Inbox, native notifications and four-item navigation
+- v0.3.7 (2026-10-09) — Move gtree anywhere without breaking Claude Code
+- v0.3.6 (2026-10-09) — New installs counted correctly in usage statistics
+- v0.3.5 (2026-10-09) — Reliable first launch for browser downloads
+- v0.3.3 (2026-10-09) — Set up the Claude Code integration from Settings
+- v0.3.2 (2026-10-09) — gtree now speaks English and Japanese, plus a welcome tour
+- v0.3.1 (2026-10-08) — New Settings panel with a usage statistics switch
+- v0.3.0 (2026-10-08) — Timeline — review and restore every AI turn
+- https://gtree.dobbylab.com/release-notes/index.md
+
+## Privacy Policy
+
+gtree runs locally on your Mac and never uploads your code. It sends only anonymous stats (random ID, version, CPU, macOS) that you can turn off.
+- https://gtree.dobbylab.com/privacy/index.md
