@@ -1,0 +1,27 @@
+# 搜索引擎与 AI 抓取都欢迎。给 AI 读的全文:/llms.txt、/llms-full.txt
+User-agent: *
+Allow: /
+
+# 明确放行常见 AI 抓取(GEO)
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-User
+Allow: /
+User-agent: Claude-SearchBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Perplexity-User
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://gtree.dobbylab.com/sitemap.xml
