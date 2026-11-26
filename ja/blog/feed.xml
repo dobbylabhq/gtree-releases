@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>gtree ブログ — Claude Code の並列実行、git worktree、AI との協働</title>
+  <link>https://gtree.dobbylab.com/ja/blog/</link>
+  <description>Claude Code を複数同時に動かす方法、git worktree での分離、2 つのエージェントが同じファイルを編集しないための工夫 —— gtree の機能解説と実践ガイド。</description>
+  <language>ja</language>
+  <atom:link href="https://gtree.dobbylab.com/ja/blog/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>gtree が Electron を使わない理由 — 24 MB、0.2 秒でウィンドウ表示</title>
+    <link>https://gtree.dobbylab.com/ja/blog/gtree-native-app-not-electron/</link>
+    <guid isPermaLink="true">https://gtree.dobbylab.com/ja/blog/gtree-native-app-not-electron/</guid>
+    <pubDate>Sun, 25 Oct 2026 00:00:00 GMT</pubDate>
+    <description>gtree は Rust で書かれ、画面は Zed エディタの GPU 描画フレームワーク GPUI で描いています。ブラウザも Node も同梱していません。ネイティブで何が得られるのか、実測値と測り方をまとめました。</description>
+  </item>
+  <item>
+    <title>Claude Code の変更を元に戻す方法 — 閉じたセッションのターンも復元</title>
+    <link>https://gtree.dobbylab.com/ja/blog/undo-claude-code-changes/</link>
+    <guid isPermaLink="true">https://gtree.dobbylab.com/ja/blog/undo-claude-code-changes/</guid>
+    <pubDate>Thu, 22 Oct 2026 00:00:00 GMT</pubDate>
+    <description>AI エージェントが 3 ターン前に何かを壊した? git、Claude Code の /rewind、そして gtree の「AI の各ターン」の 3 つの取り消し方を比較します。gtree ならどのターンのファイルも復元でき、新しいセッションは前回の続きを覚えています。</description>
+  </item>
+  <item>
+    <title>2 つの AI エージェントが同じファイルを編集するとき — 互いに上書きさせない方法</title>
+    <link>https://gtree.dobbylab.com/ja/blog/ai-agents-editing-same-file/</link>
+    <guid isPermaLink="true">https://gtree.dobbylab.com/ja/blog/ai-agents-editing-same-file/</guid>
+    <pubDate>Mon, 19 Oct 2026 00:00:00 GMT</pubDate>
+    <description>Claude Code や Codex を並列で動かすとき、2 つの AI エージェントが同じファイルを編集していることにどう気づくか。git での確認コマンドと、エージェント同士が声をかけ合って順番を決める gtree の仕組みを解説します。</description>
+  </item>
+  <item>
+    <title>Claude Code の承認待ちにすぐ気づく方法 — 通知と状態の見える化</title>
+    <link>https://gtree.dobbylab.com/ja/blog/claude-code-waiting-for-approval-notifications/</link>
+    <guid isPermaLink="true">https://gtree.dobbylab.com/ja/blog/claude-code-waiting-for-approval-notifications/</guid>
+    <pubDate>Tue, 13 Oct 2026 00:00:00 GMT</pubDate>
+    <description>Claude Code は許可が必要になると止まって待ち続けます。Notification hook で通知を出す方法と、複数並列でもどのセッションが待っているかをひと目で把握する方法を解説します。</description>
+  </item>
+  <item>
+    <title>Claude Code を複数並列で動かす方法 — git worktree 入門</title>
+    <link>https://gtree.dobbylab.com/ja/blog/run-multiple-claude-code-git-worktree/</link>
+    <guid isPermaLink="true">https://gtree.dobbylab.com/ja/blog/run-multiple-claude-code-git-worktree/</guid>
+    <pubDate>Sat, 10 Oct 2026 00:00:00 GMT</pubDate>
+    <description>複数の Claude Code を同じリポジトリで並列に動かすなら、セッションごとに git worktree を用意するのが確実です。実際のコマンド、つまずきやすい点、手間を省く方法をまとめました。</description>
+  </item>
+</channel>
+</rss>
